@@ -1,0 +1,28 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  grid-area: main;
+}
+
+.innerContainer {
+  padding: 40px 64px;
+  width: 100%;
+}
+
+.rightMenu {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  padding: 20px 0 32px;
+  background: var(--gray-dark);
+  margin-left: auto;
+  z-index: 20;
+}
+
+@media (max-width: 765px) {
+  .rightMenu {
+    display: none;
+  }
+}
