@@ -1,8 +1,8 @@
 export default function Login() {
   return (
     <div>
-      <input type="text" />
-      <input type="text" />
+      <input type="email" placeholder="Почта" />
+      <input type="password" placeholder="Пароль" />
     </div>
   );
 }

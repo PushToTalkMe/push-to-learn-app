@@ -1,7 +1,7 @@
 export default function Register() {
   return (
     <div>
-      <input type="text" />
+      <input type="email" placeholder="Почта" />
     </div>
   );
 }

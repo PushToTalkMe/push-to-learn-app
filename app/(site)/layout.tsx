@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Noto_Sans } from 'next/font/google';
 import './globals.css';
 import styles from './page.module.css';
+import LeftMenu from './components/left-menu/left-menu';
 
 const notoSans = Noto_Sans({ subsets: ['latin'] });
 
@@ -20,14 +21,10 @@ export default function RootLayout({
       <body className={notoSans.className}>
         <div className={styles.wrapper}>
           <div className={styles.header}>Header</div>
-          <nav className={styles.sidebar}>
-            <ul>
-              <li>Курсы</li>
-              <li>Профиль</li>
-              <li>Помощь</li>
-            </ul>
-          </nav>
-          {children}
+          <LeftMenu></LeftMenu>
+          <main className={styles.main}>
+            <div className={styles.innerContainer}>{children}</div>
+          </main>
         </div>
       </body>
     </html>

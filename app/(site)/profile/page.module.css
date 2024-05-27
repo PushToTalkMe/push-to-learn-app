@@ -1,6 +1,7 @@
-.page {
-  max-width: 100%;
-  transition: all 0.3s ease 0s;
+.innerContainer {
+  padding: 40px 64px;
+  min-width: 320px;
+  max-width: 1200px;
 }
 
 .rightMenu {
@@ -9,7 +10,7 @@
   top: 0;
   bottom: 0;
   width: 430px;
-  height: 100vh;
+  height: 100%;
   padding: 20px 0 32px;
   background: var(--gray-dark);
   margin-left: auto;
