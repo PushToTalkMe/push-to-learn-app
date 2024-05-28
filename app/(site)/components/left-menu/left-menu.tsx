@@ -11,7 +11,7 @@ import LogoIcon from './icons/logo.svg';
 import Avatar from './icons/user.svg';
 import AvatarMini from './icons/avatar_mini.svg';
 import cn from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../button/button';
 import { P } from '..';
 import Link from 'next/link';
@@ -19,13 +19,13 @@ import { usePathname } from 'next/navigation';
 
 const menu: ILeftMenu[] = [
   { route: 'courses', name: 'Курсы', icon: <CoursesIcon /> },
-  { route: 'profile', name: 'Профиль', icon: <ProfileIcon /> },
+  { route: 'profile/my', name: 'Профиль', icon: <ProfileIcon /> },
   { route: 'help', name: 'Помощь', icon: <HelpIcon /> },
   { route: 'auth/login', name: 'Выход', icon: <LogoutIcon /> },
 ];
 
 export default function LeftMenu() {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -66,7 +66,7 @@ export default function LeftMenu() {
               href={`/${menuItem.route}`}
               key={menuItem.route}
               className={cn(styles.route, {
-                [styles.active]: pathname == `/${menuItem.route}`,
+                [styles.active]: pathname.includes(menuItem.route),
               })}
             >
               <div className={cn(styles.routeItem)}>

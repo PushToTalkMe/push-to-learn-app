@@ -24,18 +24,9 @@
   }
 }
 
-.main {
-  display: flex;
-  flex-grow: 1;
-  max-width: 100%;
-}
-
 .innerContainer {
   padding: 40px 64px;
-  width: 100%;
-}
-
-.page {
+  min-width: 320px;
   max-width: 1200px;
 }
 
@@ -45,7 +36,7 @@
   top: 0;
   bottom: 0;
   width: 430px;
-  height: 100vh;
+  height: 100%;
   padding: 20px 0 32px;
   background: var(--gray-dark);
   margin-left: auto;

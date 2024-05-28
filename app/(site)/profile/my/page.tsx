@@ -1,4 +1,4 @@
-import { Button, Htag, P, Tag } from '../components';
+import { Button, Htag, P, Tag } from '../../components';
 import styles from './page.module.css';
 
 export default function Courses() {

@@ -1,0 +1,44 @@
+.rightMenu {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 72px;
+  height: 100vh;
+  padding: 20px 0 32px;
+  background: var(--gray-dark);
+  margin-left: auto;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.rightMenuExpanded {
+  justify-content: flex-start;
+  width: 430px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 15px;
+}
+
+.burger {
+  border: none !important;
+  width: 100%;
+}
+
+.buttonExpanded {
+  width: 60px;
+}
+
+@media (max-width: 765px) {
+  .rightMenu {
+    display: none;
+  }
+}

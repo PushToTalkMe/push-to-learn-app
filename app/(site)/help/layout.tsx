@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import { Noto_Sans } from 'next/font/google';
+import './globals.css';
 import styles from './page.module.css';
 import LeftMenu from './components/left-menu/left-menu';
 

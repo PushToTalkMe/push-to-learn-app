@@ -9,15 +9,15 @@ export const metadata: Metadata = {
 export default async function PageCourse({
   params,
 }: {
-  params: { index: string };
+  params: { indexCourse: string; indexSection: string; indexLesson: string };
 }) {
-  const course = await getCourse(params.index);
+  const course = await getCourse(params.indexCourse);
   if (!course) {
     notFound();
   }
   return (
     <div>
-      Курс по индексу {params.index}:{course.title}
+      Курс по индексу {params.indexCourse}:{course.title}
     </div>
   );
 }
