@@ -4,6 +4,6 @@ export const API = {
     byIndex: process.env.NEXT_PUBLIC_DOMAIN + '/api/course/',
   },
   auth: {
-    login: process.env.NEXT_PUBLIC_DOMAIN + '/api/login',
+    login: process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/login',
   },
 };

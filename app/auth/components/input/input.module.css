@@ -17,7 +17,7 @@
 }
 
 .inputContainer:focus-within .label {
-  transform: translateY(8px);
+  transform: translateY(6px);
   font-size: 12px;
 }
 
