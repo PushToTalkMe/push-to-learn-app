@@ -1,0 +1,602 @@
+openapi: 3.0.0
+paths:
+  /auth/sign-up:
+    post:
+      operationId: AuthController_signUp
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpBodyDto'
+      responses:
+        '201':
+          description: ''
+  /auth/delete:
+    delete:
+      operationId: AuthController_delete
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /auth/sign-in:
+    post:
+      operationId: AuthController_signIn
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInBodyDto'
+      responses:
+        '200':
+          description: ''
+  /auth/sign-out:
+    post:
+      operationId: AuthController_signOut
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /auth/session:
+    get:
+      operationId: AuthController_getSessionInfo
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionInfoDto'
+  /account:
+    get:
+      operationId: AccountController_getAccount
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+    patch:
+      operationId: AccountController_patchAccount
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchAccountDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+  /courses/create:
+    post:
+      operationId: CoursesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCourseDto'
+      responses:
+        '201':
+          description: ''
+  /courses/update/{courseId}:
+    patch:
+      operationId: CoursesController_patchCourse
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchCourseDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCourseDto'
+  /courses:
+    get:
+      operationId: CoursesController_getAllCourses
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+  /courses/{courseId}:
+    delete:
+      operationId: CoursesController_delete
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+  /courses/my:
+    get:
+      operationId: CoursesController_getMyCourses
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+  /courses/my/{courseId}:
+    get:
+      operationId: CoursesController_getCourseById
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+  /courses/my/{courseId}/sections/{sectionId}/lessons/{lessonId}:
+    get:
+      operationId: CoursesController_getPageLesson
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: sectionId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: lessonId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+  /sections/create:
+    post:
+      operationId: SectionsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSectionDto'
+      responses:
+        '201':
+          description: ''
+  /sections/update/{sectionId}:
+    patch:
+      operationId: SectionsController_patchSection
+      parameters:
+        - name: sectionId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSectionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionDto'
+  /sections/delete/{sectionId}:
+    delete:
+      operationId: SectionsController_deleteSection
+      parameters:
+        - name: sectionId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+  /lessons/create:
+    post:
+      operationId: LessonsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLessonDto'
+      responses:
+        '201':
+          description: ''
+  /lessons/update/{lessonId}:
+    patch:
+      operationId: LessonsController_patchCourse
+      parameters:
+        - name: lessonId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchLessonDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonDto'
+  /lessons/delete/{lessonId}:
+    delete:
+      operationId: LessonsController_deletelesson
+      parameters:
+        - name: lessonId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+  /buy/{courseId}:
+    post:
+      operationId: BuyController_buyCourse
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '201':
+          description: ''
+info:
+  title: server
+  description: ''
+  version: 1.0.0
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    SignUpBodyDto:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test@mail.ru
+        password:
+          type: string
+          example: '12345678'
+      required:
+        - email
+        - password
+    SignInBodyDto:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test@mail.ru
+        password:
+          type: string
+          example: '12345678'
+      required:
+        - email
+        - password
+    SessionInfoDto:
+      type: object
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+        role:
+          type: string
+        iat:
+          type: number
+        exp:
+          type: number
+      required:
+        - id
+        - email
+        - role
+        - iat
+        - exp
+    AccountDto:
+      type: object
+      properties:
+        id:
+          type: number
+        userId:
+          type: number
+        firstName:
+          type: string
+          example: Vlad
+        lastName:
+          type: string
+          example: Ilyin
+        username:
+          type: string
+          example: PushToTalk
+      required:
+        - id
+        - userId
+        - firstName
+        - lastName
+        - username
+    PatchAccountDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Vlad
+        lastName:
+          type: string
+          example: Ilyin
+        username:
+          type: string
+          example: PushToTalk
+      required:
+        - firstName
+        - lastName
+        - username
+    CreateCourseDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: NextJS + NestJS
+        img:
+          type: string
+          example: https://imgs.ru/img#23124123
+        duration:
+          type: string
+          example: 7.5 часов
+        tags:
+          example:
+            - Frontend
+            - Backend
+            - Fullstack
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          example: 3999
+      required:
+        - title
+        - img
+        - duration
+        - tags
+        - price
+    PatchCourseDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: NextJS + NestJS
+        img:
+          type: string
+          example: https://imgs.ru/img#23124123
+        duration:
+          type: string
+          example: 7.5 часов
+        tags:
+          example:
+            - Frontend
+            - Backend
+            - Fullstack
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          example: 3999
+        sequence:
+          type: number
+          example: '5'
+      required:
+        - title
+        - img
+        - duration
+        - tags
+        - price
+        - sequence
+    CreateCoursesDtoWithOwner:
+      type: object
+      properties:
+        title:
+          type: string
+          example: NextJS + NestJS
+        img:
+          type: string
+          example: https://imgs.ru/img#23124123
+        duration:
+          type: string
+          example: 7.5 часов
+        tags:
+          example:
+            - Frontend
+            - Backend
+            - Fullstack
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          example: 3999
+      required:
+        - title
+        - img
+        - duration
+        - tags
+        - price
+    CreateSectionDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Введение
+        courseId:
+          type: number
+          example: '1'
+      required:
+        - title
+        - courseId
+    PatchSectionDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Введение
+        sequence:
+          type: number
+          example: '5'
+      required:
+        - title
+        - sequence
+    SectionDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '1'
+        title:
+          type: string
+          example: Введение
+        courseId:
+          type: number
+          example: '1'
+        sequence:
+          type: number
+          example: '5'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - id
+        - title
+        - courseId
+        - sequence
+        - createdAt
+    CreateLessonDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Введение
+        text:
+          type: string
+          example: Текст в формате markdown
+        sectionId:
+          type: number
+          example: '1'
+      required:
+        - title
+        - text
+        - sectionId
+    PatchLessonDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Введение
+        text:
+          type: string
+          example: Текст в формате markdown
+        sequence:
+          type: number
+          example: '5'
+      required:
+        - title
+        - text
+        - sequence
+    LessonDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '5'
+        sectionId:
+          type: number
+          example: '1'
+        sequence:
+          type: number
+          example: '2'
+        title:
+          type: string
+          example: Что такое NestJS
+        text:
+          type: string
+          example: '## Что такое NestJS'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - id
+        - sectionId
+        - sequence
+        - title
+        - text
+        - createdAt

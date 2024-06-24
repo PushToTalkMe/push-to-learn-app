@@ -7,4 +7,13 @@ module.exports = {
     });
     return config;
   },
+  reactStrictMode: true,
+  rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:3000/:path*',
+      },
+    ];
+  },
 };

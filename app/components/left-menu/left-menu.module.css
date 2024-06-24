@@ -1,0 +1,123 @@
+.leftMenuExpanded {
+  min-width: 220px;
+  transition: all 0.2s ease-in-out;
+}
+
+.innerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.leftMenu {
+  padding: 20px 0 32px;
+  background: var(--left-menu);
+  width: 72px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.routes {
+  display: flex;
+  flex-direction: column;
+  margin-top: 125px;
+  height: 100%;
+}
+
+.route {
+  padding: 19px 21px;
+  border-radius: 0;
+}
+
+.route:hover {
+  background-color: var(--white);
+  opacity: 0.5;
+}
+
+.routeItem {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.signOut {
+  border: none;
+  margin-top: auto;
+}
+
+.signOutExpanded {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  color: var(--color);
+}
+
+.active {
+  border-right: 3px solid var(--primary);
+}
+
+.active svg path {
+  stroke: var(--primary);
+  stroke-width: 2;
+}
+
+.routesExpanded {
+  margin-top: 50px;
+}
+
+.burger {
+  width: 100%;
+}
+
+.buttonExpanded {
+  width: 60px;
+  align-self: flex-end;
+  margin-inline: 20px;
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  padding: 20px;
+}
+
+.logo svg path {
+  stroke: var(--primary);
+}
+
+.logoExpanded {
+  margin: 0 auto;
+  max-width: 240px;
+  width: 100%;
+  padding: 20px 30px;
+  color: var(--primary);
+}
+
+@media (max-width: 765px) {
+  .leftMenu {
+    display: none;
+  }
+}
