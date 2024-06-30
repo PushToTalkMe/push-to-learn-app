@@ -1,15 +1,19 @@
 .span {
+  display: inline-flex;
+}
+
+.number {
   font-size: 12px;
   margin: 0 0 0 4px;
   padding: 4px 7.5px;
   height: 20px;
   border-radius: 10px;
-  display: inline-flex;
   justify-content: center;
   align-items: center;
-  color: var(--gray);
+  color: var(--color);
 }
 
-.gray-dark {
-  background-color: var(--gray-dark);
+.text {
+  font-size: 14px;
+  color: var(--color);
 }

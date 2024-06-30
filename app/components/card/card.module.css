@@ -1,0 +1,69 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 387px;
+  height: 585px;
+  border-radius: 10px;
+  background: var(--card-background);
+}
+.img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 100%;
+}
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 18px;
+}
+
+.tags {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+}
+
+.duration {
+  display: flex;
+}
+
+.cardFooter {
+  background: var(--card-footer-background);
+  padding: 24px;
+  display: flex;
+  height: 102px;
+  width: 100%;
+  margin-top: auto;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.ghost {
+  border: 1px solid var(--gray-stroke) !important;
+}
+
+.buy {
+  /* width: 628px; */
+  /* height: 230px; */
+  width: 1200px;
+  height: 300px;
+  flex-direction: row;
+}
+
+.buy .img {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 0px;
+  width: 50%;
+}
+
+.buy .cardContent {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 18px;
+}

@@ -1,8 +1,19 @@
 .tag {
-  padding: 10px;
   text-align: center;
   border-radius: 20px;
   font-size: 14px;
-  border: 1px solid var(--gray-stroke);
-  color: var(--white);
+  border: 1px solid var(--primary);
+  color: var(--color);
+}
+
+.small {
+  padding: 5px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.medium {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 500;
 }

@@ -1,13 +1,14 @@
 .button {
   display: inline-block;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 20px;
   cursor: pointer;
   text-align: center;
   border: none;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 18px;
   transition: all 0.2s;
+  width: 100%;
 }
 
 .primary {
@@ -20,9 +21,7 @@
 }
 
 .ghost {
-  color: var(--gray);
   background: none;
-  border: 1px solid var(--gray-stroke);
 }
 
 .ghost:hover {

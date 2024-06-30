@@ -11,6 +11,7 @@
 }
 
 .leftMenu {
+  flex-shrink: 0;
   padding: 20px 0 32px;
   background: var(--left-menu);
   width: 72px;

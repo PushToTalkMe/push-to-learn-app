@@ -66,6 +66,7 @@ input {
 :root {
   --primary: #ea2845;
   --links: #a97bff;
+  --card-background: #ffffff;
   --gray-light: #dad9de;
   --secondary: #e47ad5;
   --total-black: #101114;
@@ -73,6 +74,7 @@ input {
   --color: #000000;
   --button-color: #ffffff;
   --button-ghost-hover-background: #d6d6d6;
+  --author-color: #8d8279;
   --input-color: #000000;
   --gray-dark: #1e1f29;
   --input-background: #ffffff;
@@ -89,6 +91,7 @@ input {
   );
   --left-menu: #ffffff;
   --right-menu: #ffffff;
+  --card-footer-background: #fafafa;
   --yellow: #fdf41a;
   --primary-hover: linear-gradient(90deg, #ea2845, #ea2868);
   --green: #38cc6c;

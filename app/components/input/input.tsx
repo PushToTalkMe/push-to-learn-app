@@ -11,11 +11,11 @@ export const Input = ({
   const id = useId();
 
   return (
-    <div className={styles.inputContainer}>
+    <div className={cn(className, styles.inputContainer)}>
       <label htmlFor={id} className={cn(styles.label)}>
         {label}
       </label>
-      <input id={id} className={cn(className, styles.input)} {...inputProps} />
+      <input id={id} className={cn(styles.input)} {...inputProps} />
     </div>
   );
 };

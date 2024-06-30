@@ -23,7 +23,6 @@
 
 .input {
   padding-left: 56px;
-  color-scheme: dark;
   box-sizing: border-box;
   padding: 18px 16px 6px;
   color: var(--input-color);

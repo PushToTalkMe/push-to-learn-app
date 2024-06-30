@@ -1,10 +1,10 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 export const apiInstance = axios.create({
-  baseURL: "/api",
+  baseURL: '/api',
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -18,5 +18,5 @@ export const createInstance = async <T>(
   }).then((r) => r.data);
 };
 
-export type BodyType<Data> = Data;
 export type ErrorType<Error> = AxiosError<Error>;
+export type BodyType<Data> = Data;

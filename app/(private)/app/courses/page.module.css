@@ -26,8 +26,8 @@
 
 .main {
   display: flex;
-  flex-grow: 1;
   max-width: 100%;
+  flex-grow: 1;
 }
 
 .innerContainer {
@@ -36,7 +36,9 @@
 }
 
 .page {
-  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .rightMenu {

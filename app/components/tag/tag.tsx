@@ -4,11 +4,18 @@ import cn from 'classnames';
 
 export const Tag = ({
   children,
+  size = 'small',
   className,
   ...props
 }: TagProps): JSX.Element => {
   return (
-    <div className={cn(styles.tag, className)} {...props}>
+    <div
+      className={cn(styles.tag, className, {
+        [styles.small]: size === 'small',
+        [styles.medium]: size === 'medium',
+      })}
+      {...props}
+    >
       {children}
     </div>
   );

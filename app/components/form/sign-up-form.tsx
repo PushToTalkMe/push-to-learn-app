@@ -2,7 +2,7 @@
 import { Button } from '@/app/components';
 import { Input } from '../input/input';
 import styles from './form.module.css';
-import { useSignUpForm } from '../../../hooks';
+import { useSignUpForm } from '../../../hooks/auth';
 import Link from 'next/link';
 import { ROUTES } from '@/constants/routes';
 

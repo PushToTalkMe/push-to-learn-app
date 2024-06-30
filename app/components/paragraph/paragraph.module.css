@@ -16,4 +16,9 @@
 .large {
   font-size: 18px;
   line-height: 29px;
+  font-weight: 500;
+}
+
+.authorColor {
+  color: var(--author-color);
 }

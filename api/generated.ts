@@ -6,15 +6,6 @@
  */
 import { createInstance } from './api-instance';
 import type { BodyType } from './api-instance';
-export interface LessonDto {
-  createdAt: string;
-  id: number;
-  sectionId: number;
-  sequence: number;
-  text: string;
-  title: string;
-}
-
 export interface PatchLessonDto {
   sequence: number;
   text: string;
@@ -45,10 +36,23 @@ export interface CreateSectionDto {
   title: string;
 }
 
-export interface CreateCoursesDtoWithOwner {
+export interface LessonDto {
+  createdAt: string;
+  id: number;
+  sectionId: number;
+  sequence: number;
+  text: string;
+  title: string;
+}
+
+export interface CourseDto {
+  author: string;
+  createdAt: string;
   duration: string;
+  id: number;
   img: string;
   price: number;
+  sequence: number;
   tags: string[];
   title: string;
 }
@@ -219,7 +223,7 @@ export const coursesControllerPatchCourse = (
 export const coursesControllerGetAllCourses = (
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CreateCoursesDtoWithOwner[]>(
+  return createInstance<CourseDto[]>(
     { url: `/courses`, method: 'GET' },
     options,
   );
@@ -229,8 +233,18 @@ export const coursesControllerDelete = (
   courseId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CreateCoursesDtoWithOwner[]>(
+  return createInstance<CourseDto>(
     { url: `/courses/${courseId}`, method: 'DELETE' },
+    options,
+  );
+};
+
+export const coursesControllerGetNotMyCourseById = (
+  courseId: number,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<CourseDto>(
+    { url: `/courses/notMy/${courseId}`, method: 'GET' },
     options,
   );
 };
@@ -238,7 +252,7 @@ export const coursesControllerDelete = (
 export const coursesControllerGetMyCourses = (
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CreateCoursesDtoWithOwner[]>(
+  return createInstance<CourseDto[]>(
     { url: `/courses/my`, method: 'GET' },
     options,
   );
@@ -248,7 +262,7 @@ export const coursesControllerGetCourseById = (
   courseId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CreateCoursesDtoWithOwner>(
+  return createInstance<CourseDto>(
     { url: `/courses/my/${courseId}`, method: 'GET' },
     options,
   );
@@ -260,7 +274,7 @@ export const coursesControllerGetPageLesson = (
   lessonId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CreateCoursesDtoWithOwner>(
+  return createInstance<LessonDto>(
     {
       url: `/courses/my/${courseId}/sections/${sectionId}/lessons/${lessonId}`,
       method: 'GET',
@@ -393,6 +407,9 @@ export type CoursesControllerGetAllCoursesResult = NonNullable<
 >;
 export type CoursesControllerDeleteResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerDelete>>
+>;
+export type CoursesControllerGetNotMyCourseByIdResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerGetNotMyCourseById>>
 >;
 export type CoursesControllerGetMyCoursesResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerGetMyCourses>>

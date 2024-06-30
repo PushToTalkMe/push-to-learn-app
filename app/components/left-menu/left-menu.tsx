@@ -16,7 +16,7 @@ import { Button } from '../button/button';
 import { P } from '..';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSignOut } from '@/hooks';
+import { useSignOut } from '@/hooks/auth';
 
 const menu: ILeftMenu[] = [
   { route: 'app/courses', name: 'Курсы', icon: <CoursesIcon /> },

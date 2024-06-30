@@ -129,7 +129,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+                  $ref: '#/components/schemas/CourseDto'
   /courses/{courseId}:
     delete:
       operationId: CoursesController_delete
@@ -145,9 +145,23 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+                $ref: '#/components/schemas/CourseDto'
+  /courses/notMy/{courseId}:
+    get:
+      operationId: CoursesController_getNotMyCourseById
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
   /courses/my:
     get:
       operationId: CoursesController_getMyCourses
@@ -160,7 +174,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+                  $ref: '#/components/schemas/CourseDto'
   /courses/my/{courseId}:
     get:
       operationId: CoursesController_getCourseById
@@ -176,7 +190,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+                $ref: '#/components/schemas/CourseDto'
   /courses/my/{courseId}/sections/{sectionId}/lessons/{lessonId}:
     get:
       operationId: CoursesController_getPageLesson
@@ -202,7 +216,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCoursesDtoWithOwner'
+                $ref: '#/components/schemas/LessonDto'
   /sections/create:
     post:
       operationId: SectionsController_create
@@ -461,35 +475,81 @@ components:
         - tags
         - price
         - sequence
-    CreateCoursesDtoWithOwner:
+    CourseDto:
       type: object
       properties:
+        id:
+          type: number
+          example: 1
         title:
           type: string
           example: NextJS + NestJS
+        author:
+          type: string
+          example: Vlad Ilyin
         img:
           type: string
-          example: https://imgs.ru/img#23124123
+          example: uri
         duration:
           type: string
           example: 7.5 часов
         tags:
           example:
+            - JavaScript
             - Frontend
             - Backend
-            - Fullstack
           type: array
           items:
             type: string
         price:
           type: number
-          example: 3999
+          example: 1
+        sequence:
+          type: number
+          example: 1
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
       required:
+        - id
         - title
+        - author
         - img
         - duration
         - tags
         - price
+        - sequence
+        - createdAt
+    LessonDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '5'
+        sectionId:
+          type: number
+          example: '1'
+        sequence:
+          type: number
+          example: '2'
+        title:
+          type: string
+          example: Что такое NestJS
+        text:
+          type: string
+          example: '## Что такое NestJS'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - id
+        - sectionId
+        - sequence
+        - title
+        - text
+        - createdAt
     CreateSectionDto:
       type: object
       properties:
@@ -571,32 +631,3 @@ components:
         - title
         - text
         - sequence
-    LessonDto:
-      type: object
-      properties:
-        id:
-          type: number
-          example: '5'
-        sectionId:
-          type: number
-          example: '1'
-        sequence:
-          type: number
-          example: '2'
-        title:
-          type: string
-          example: Что такое NestJS
-        text:
-          type: string
-          example: '## Что такое NestJS'
-        createdAt:
-          format: date-time
-          type: string
-          example: '2024-06-17T13:55:38.747Z'
-      required:
-        - id
-        - sectionId
-        - sequence
-        - title
-        - text
-        - createdAt
