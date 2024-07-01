@@ -6,16 +6,31 @@
  */
 import { createInstance } from './api-instance';
 import type { BodyType } from './api-instance';
+export type PatchLessonDtoData = { [key: string]: any };
+
 export interface PatchLessonDto {
+  data: PatchLessonDtoData;
   sequence: number;
-  text: string;
   title: string;
 }
 
+export type CreateLessonDtoType =
+  (typeof CreateLessonDtoType)[keyof typeof CreateLessonDtoType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const CreateLessonDtoType = {
+  Theory: 'Theory',
+  Test: 'Test',
+  Exercise: 'Exercise',
+} as const;
+
+export type CreateLessonDtoData = { [key: string]: any };
+
 export interface CreateLessonDto {
+  data: CreateLessonDtoData;
   sectionId: number;
-  text: string;
   title: string;
+  type: CreateLessonDtoType;
 }
 
 export interface SectionDto {
@@ -24,6 +39,7 @@ export interface SectionDto {
   id: number;
   sequence: number;
   title: string;
+  updatedAt: string;
 }
 
 export interface PatchSectionDto {
@@ -36,13 +52,40 @@ export interface CreateSectionDto {
   title: string;
 }
 
+export type LessonDtoType = (typeof LessonDtoType)[keyof typeof LessonDtoType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const LessonDtoType = {
+  Theory: 'Theory',
+  Test: 'Test',
+  Exercise: 'Exercise',
+} as const;
+
+export type LessonDtoData = { [key: string]: any };
+
 export interface LessonDto {
   createdAt: string;
+  data: LessonDtoData;
   id: number;
   sectionId: number;
   sequence: number;
-  text: string;
   title: string;
+  type: LessonDtoType;
+  updatedAt: string;
+}
+
+export interface CourseDtoWithSections {
+  author: string;
+  createdAt: string;
+  duration: string;
+  id: number;
+  img: string;
+  price: number;
+  sectionsWithLessonsTitleAndType: string[];
+  sequence: number;
+  tags: string[];
+  title: string;
+  updatedAt: string;
 }
 
 export interface CourseDto {
@@ -55,6 +98,7 @@ export interface CourseDto {
   sequence: number;
   tags: string[];
   title: string;
+  updatedAt: string;
 }
 
 export interface PatchCourseDto {
@@ -262,7 +306,7 @@ export const coursesControllerGetCourseById = (
   courseId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CourseDto>(
+  return createInstance<CourseDtoWithSections>(
     { url: `/courses/my/${courseId}`, method: 'GET' },
     options,
   );

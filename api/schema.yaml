@@ -190,7 +190,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CourseDto'
+                $ref: '#/components/schemas/CourseDtoWithSections'
   /courses/my/{courseId}/sections/{sectionId}/lessons/{lessonId}:
     get:
       operationId: CoursesController_getPageLesson
@@ -511,6 +511,10 @@ components:
           format: date-time
           type: string
           example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
       required:
         - id
         - title
@@ -521,6 +525,77 @@ components:
         - price
         - sequence
         - createdAt
+        - updatedAt
+    CourseDtoWithSections:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        title:
+          type: string
+          example: NextJS + NestJS
+        author:
+          type: string
+          example: Vlad Ilyin
+        img:
+          type: string
+          example: uri
+        duration:
+          type: string
+          example: 7.5 часов
+        tags:
+          example:
+            - JavaScript
+            - Frontend
+            - Backend
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          example: 1
+        sequence:
+          type: number
+          example: 1
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        sectionsWithLessonsTitleAndType:
+          example:
+            - id: 1
+              title: Введение
+              courseId: 1
+              sequence: 1
+              createdAt: '2024-07-01T10:23:15.094Z'
+              updatedAt: '2024-07-01T10:23:15.094Z'
+              lessonsTitleAndType:
+                - title: Введение
+                  type: Theory
+                - title: Упражнение по HTML
+                  type: Exercise
+                - title: Тест по HTML
+                  type: Test
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - title
+        - author
+        - img
+        - duration
+        - tags
+        - price
+        - sequence
+        - createdAt
+        - updatedAt
+        - sectionsWithLessonsTitleAndType
     LessonDto:
       type: object
       properties:
@@ -536,10 +611,21 @@ components:
         title:
           type: string
           example: Что такое NestJS
-        text:
+        data:
+          type: object
+          example:
+            content: '##Введение'
+        type:
           type: string
-          example: '## Что такое NestJS'
+          enum:
+            - Theory
+            - Test
+            - Exercise
         createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
           format: date-time
           type: string
           example: '2024-06-17T13:55:38.747Z'
@@ -548,8 +634,10 @@ components:
         - sectionId
         - sequence
         - title
-        - text
+        - data
+        - type
         - createdAt
+        - updatedAt
     CreateSectionDto:
       type: object
       properties:
@@ -593,27 +681,40 @@ components:
           format: date-time
           type: string
           example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
       required:
         - id
         - title
         - courseId
         - sequence
         - createdAt
+        - updatedAt
     CreateLessonDto:
       type: object
       properties:
         title:
           type: string
           example: Введение
-        text:
+        data:
+          type: object
+          example:
+            content: '##Введение'
+        type:
           type: string
-          example: Текст в формате markdown
+          enum:
+            - Theory
+            - Test
+            - Exercise
         sectionId:
           type: number
           example: '1'
       required:
         - title
-        - text
+        - data
+        - type
         - sectionId
     PatchLessonDto:
       type: object
@@ -621,13 +722,14 @@ components:
         title:
           type: string
           example: Введение
-        text:
-          type: string
-          example: Текст в формате markdown
+        data:
+          type: object
+          example:
+            content: '##Введение'
         sequence:
           type: number
           example: '5'
       required:
         - title
-        - text
+        - data
         - sequence
