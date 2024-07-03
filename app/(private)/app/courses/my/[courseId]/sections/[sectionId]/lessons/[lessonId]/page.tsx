@@ -8,11 +8,7 @@ export const metadata: Metadata = {
 export default async function PageLesson({
   params,
 }: {
-  params: { indexCourse: string; indexSection: string; indexLesson: string };
+  params: { courseId: number; sectionId: number; lessonId: number };
 }) {
-  const course = '';
-  if (!course) {
-    notFound();
-  }
   return <div>Урок</div>;
 }

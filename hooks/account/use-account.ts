@@ -1,9 +1,9 @@
 import { useAccountQuery } from '@/queries/account';
 
-export function useAccountUpdate() {
+export function useAccount() {
   const accountQuery = useAccountQuery();
-  const course = accountQuery.data;
+  const account = accountQuery.data;
   const error = accountQuery.error?.response?.data.message;
 
-  return { course, isPending: accountQuery.isPending, error };
+  return { account, isPending: accountQuery.isPending, error };
 }

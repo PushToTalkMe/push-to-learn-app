@@ -1,19 +1,11 @@
-import { Button, Htag, P, Tag } from '../../../../components';
+import { ProfileForm } from '@/app/components/form/profile-form';
 import styles from './page.module.css';
 
-export default function Courses() {
+export default function Profile() {
   return (
     <div className={styles.innerContainer}>
-      <Htag tag="h1">Текст</Htag>
-      <Button appearance="ghost">Начать</Button>
-      <Button appearance="primary" count={6}>
-        Начать
-      </Button>
-      <Button appearance="ghost" count={10}>
-        Начать
-      </Button>
-      <Tag>Frontend</Tag>
-      <P size="small">Текст</P>
+      <h1 className={styles.header}>Редактировать профиль</h1>
+      <ProfileForm />
     </div>
   );
 }

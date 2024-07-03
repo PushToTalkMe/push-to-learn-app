@@ -10,7 +10,7 @@
   border-radius: 10px;
   justify-content: center;
   align-items: center;
-  color: var(--color);
+  background-color: var(--span-number-background);
 }
 
 .text {

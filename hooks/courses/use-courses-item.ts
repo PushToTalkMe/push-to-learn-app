@@ -4,6 +4,6 @@ export function useCoursesItem(courseId: number) {
   const courseQuery = useCoursesItemQuery(courseId);
 
   const course = courseQuery.data;
-  const error = courseQuery.error?.response?.data.message;
+  const error = courseQuery.error?.response;
   return { course, isPending: courseQuery.isPending, error };
 }

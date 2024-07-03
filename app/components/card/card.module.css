@@ -67,3 +67,12 @@
   padding: 24px;
   gap: 18px;
 }
+
+.lessonCompleted {
+  display: flex;
+  flex-direction: column;
+}
+
+.lessonCompleted progress {
+  width: 100%;
+}

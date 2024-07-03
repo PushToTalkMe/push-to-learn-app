@@ -10,7 +10,7 @@ export function SignInForm(): JSX.Element {
     <form className={styles.form} onSubmit={handleSubmit}>
       <Input
         label="Email"
-        autoComplete="username"
+        autoComplete="email"
         inputProps={{ type: 'email', ...register('email', { required: true }) }}
       />
       <Input
@@ -30,7 +30,9 @@ export function SignInForm(): JSX.Element {
       >
         Войти
       </Button>
-      {errorMessage && <div className="text-rose-500">{errorMessage}</div>}
+      {errorMessage && (
+        <div className={styles.errorMessage}>{errorMessage}</div>
+      )}
     </form>
   );
 }

@@ -34,7 +34,7 @@
 }
 
 .buttonExpanded {
-  width: 60px;
+  width: 72px !important;
 }
 
 @media (max-width: 765px) {

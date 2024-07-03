@@ -6,6 +6,28 @@
  */
 import { createInstance } from './api-instance';
 import type { BodyType } from './api-instance';
+export type LessonDtoType = (typeof LessonDtoType)[keyof typeof LessonDtoType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const LessonDtoType = {
+  Theory: 'Theory',
+  Test: 'Test',
+  Exercise: 'Exercise',
+} as const;
+
+export type LessonDtoData = { [key: string]: any };
+
+export interface LessonDto {
+  createdAt: string;
+  data: LessonDtoData;
+  id: number;
+  sectionId: number;
+  sequence: number;
+  title: string;
+  type: LessonDtoType;
+  updatedAt: string;
+}
+
 export type PatchLessonDtoData = { [key: string]: any };
 
 export interface PatchLessonDto {
@@ -52,26 +74,28 @@ export interface CreateSectionDto {
   title: string;
 }
 
-export type LessonDtoType = (typeof LessonDtoType)[keyof typeof LessonDtoType];
+export type LessonDtoWithViewedType =
+  (typeof LessonDtoWithViewedType)[keyof typeof LessonDtoWithViewedType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const LessonDtoType = {
+export const LessonDtoWithViewedType = {
   Theory: 'Theory',
   Test: 'Test',
   Exercise: 'Exercise',
 } as const;
 
-export type LessonDtoData = { [key: string]: any };
+export type LessonDtoWithViewedData = { [key: string]: any };
 
-export interface LessonDto {
+export interface LessonDtoWithViewed {
   createdAt: string;
-  data: LessonDtoData;
+  data: LessonDtoWithViewedData;
   id: number;
   sectionId: number;
   sequence: number;
   title: string;
-  type: LessonDtoType;
+  type: LessonDtoWithViewedType;
   updatedAt: string;
+  viewed: boolean;
 }
 
 export interface CourseDtoWithSections {
@@ -82,6 +106,35 @@ export interface CourseDtoWithSections {
   img: string;
   price: number;
   sectionsWithLessonsTitleAndType: string[];
+  sequence: number;
+  tags: string[];
+  title: string;
+  updatedAt: string;
+}
+
+export interface CourseDtoWithUserStat {
+  author: string;
+  createdAt: string;
+  duration: string;
+  id: number;
+  img: string;
+  lessonCompleted: number;
+  lessonCount: number;
+  price: number;
+  sequence: number;
+  tags: string[];
+  title: string;
+  updatedAt: string;
+}
+
+export interface CourseDtoWithLessonCount {
+  author: string;
+  createdAt: string;
+  duration: string;
+  id: number;
+  img: string;
+  lessonCount: number;
+  price: number;
   sequence: number;
   tags: string[];
   title: string;
@@ -121,7 +174,7 @@ export interface CreateCourseDto {
 export interface PatchAccountDto {
   firstName: string;
   lastName: string;
-  username: string;
+  username?: string;
 }
 
 export interface AccountDto {
@@ -145,8 +198,15 @@ export interface SignInBodyDto {
   password: string;
 }
 
+export interface PatchUpdateRoleDto {
+  email: string;
+  role: string;
+}
+
 export interface SignUpBodyDto {
   email: string;
+  firstName: string;
+  lastName: string;
   password: string;
 }
 
@@ -162,6 +222,21 @@ export const authControllerSignUp = (
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: signUpBodyDto,
+    },
+    options,
+  );
+};
+
+export const authControllerUpdateRole = (
+  patchUpdateRoleDto: BodyType<PatchUpdateRoleDto>,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<void>(
+    {
+      url: `/auth/update`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: patchUpdateRoleDto,
     },
     options,
   );
@@ -287,7 +362,7 @@ export const coursesControllerGetNotMyCourseById = (
   courseId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CourseDto>(
+  return createInstance<CourseDtoWithLessonCount>(
     { url: `/courses/notMy/${courseId}`, method: 'GET' },
     options,
   );
@@ -296,7 +371,7 @@ export const coursesControllerGetNotMyCourseById = (
 export const coursesControllerGetMyCourses = (
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CourseDto[]>(
+  return createInstance<CourseDtoWithUserStat[]>(
     { url: `/courses/my`, method: 'GET' },
     options,
   );
@@ -318,10 +393,25 @@ export const coursesControllerGetPageLesson = (
   lessonId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<LessonDto>(
+  return createInstance<LessonDtoWithViewed>(
     {
       url: `/courses/my/${courseId}/sections/${sectionId}/lessons/${lessonId}`,
       method: 'GET',
+    },
+    options,
+  );
+};
+
+export const coursesControllerLessonViewed = (
+  courseId: number,
+  sectionId: number,
+  lessonId: number,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<boolean>(
+    {
+      url: `/courses/my/${courseId}/sections/${sectionId}/lessons/${lessonId}/viewed`,
+      method: 'PATCH',
     },
     options,
   );
@@ -422,6 +512,9 @@ export const buyControllerBuyCourse = (
 export type AuthControllerSignUpResult = NonNullable<
   Awaited<ReturnType<typeof authControllerSignUp>>
 >;
+export type AuthControllerUpdateRoleResult = NonNullable<
+  Awaited<ReturnType<typeof authControllerUpdateRole>>
+>;
 export type AuthControllerDeleteResult = NonNullable<
   Awaited<ReturnType<typeof authControllerDelete>>
 >;
@@ -463,6 +556,9 @@ export type CoursesControllerGetCourseByIdResult = NonNullable<
 >;
 export type CoursesControllerGetPageLessonResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerGetPageLesson>>
+>;
+export type CoursesControllerLessonViewedResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerLessonViewed>>
 >;
 export type SectionsControllerCreateResult = NonNullable<
   Awaited<ReturnType<typeof sectionsControllerCreate>>

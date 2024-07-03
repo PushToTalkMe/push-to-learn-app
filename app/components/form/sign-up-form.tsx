@@ -3,27 +3,39 @@ import { Button } from '@/app/components';
 import { Input } from '../input/input';
 import styles from './form.module.css';
 import { useSignUpForm } from '../../../hooks/auth';
-import Link from 'next/link';
-import { ROUTES } from '@/constants/routes';
 
 export function SignUpForm() {
   const { handleSubmit, isPending, register, errorMessage } = useSignUpForm();
-
   return (
-    <form className={styles.loginForm} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <Input
-        type="email"
-        label="Email"
-        autoComplete="email"
-        required
-        {...register('email', { required: true })}
+        label="Имя"
+        autoComplete="firstName"
+        inputProps={{
+          type: 'text',
+          ...register('firstName', { required: true }),
+        }}
       />
       <Input
-        type="password"
+        label="Фамилия"
+        autoComplete="lastName"
+        inputProps={{
+          type: 'text',
+          ...register('lastName', { required: true }),
+        }}
+      />
+      <Input
+        label="Email"
+        autoComplete="email"
+        inputProps={{ type: 'email', ...register('email', { required: true }) }}
+      />
+      <Input
         label="Пароль"
         autoComplete="current-password"
-        required
-        {...register('password', { required: true })}
+        inputProps={{
+          type: 'password',
+          ...register('password', { required: true }),
+        }}
       />
       <Button
         disabled={isPending}
@@ -32,11 +44,8 @@ export function SignUpForm() {
         className={styles.button}
         appearance="primary"
       >
-        Sign Up
+        Зарегистрироваться
       </Button>
-      <Link className="text-center" href={ROUTES.SIGN_UP}>
-        Sign In
-      </Link>
       {errorMessage && <div className="text-rose-500">{errorMessage}</div>}
     </form>
   );

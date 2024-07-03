@@ -1,6 +1,10 @@
 export const ROUTES = {
   HOME: '/',
-  APP: '/app/courses',
+  COURSES: '/app/courses',
+  APP: '/app/courses/my',
+  ALL_COURSES: '/app/courses/all',
+  PROFILE: '/app/profile/my',
+  HELP: '/app/help',
   SIGN_UP: '/auth/sign-up',
   SIGN_IN: '/auth/sign-in',
   BUY: '/app/buy',

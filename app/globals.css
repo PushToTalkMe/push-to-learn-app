@@ -67,13 +67,18 @@ input {
   --primary: #ea2845;
   --links: #a97bff;
   --card-background: #ffffff;
+  --tabs-container-background: #ffffff;
+  --tab-color: #ffffff;
   --gray-light: #dad9de;
   --secondary: #e47ad5;
   --total-black: #101114;
   --body-background: #e5e5e5;
+  --progress-background: #f0f0f0;
+  --span-number-background: #f0f0f0;
   --color: #000000;
   --button-color: #ffffff;
   --button-ghost-hover-background: #d6d6d6;
+  --tab-hover-background: #d6d6d6;
   --author-color: #8d8279;
   --input-color: #000000;
   --gray-dark: #1e1f29;

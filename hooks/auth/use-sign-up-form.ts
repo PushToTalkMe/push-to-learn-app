@@ -1,13 +1,15 @@
 import { authControllerSignUp } from '@/api/generated';
 import { ROUTES } from '@/constants/routes';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 export function useSignUpForm() {
   const router = useRouter();
 
   const { register, handleSubmit } = useForm<{
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
   }>();
@@ -15,7 +17,7 @@ export function useSignUpForm() {
   const signUpMutation = useMutation({
     mutationFn: authControllerSignUp,
     onSuccess() {
-      router.push(ROUTES.HOME);
+      router.push(ROUTES.ALL_COURSES);
     },
   });
 

@@ -11,3 +11,8 @@
   font-size: 18px;
   line-height: 120%;
 }
+
+.errorMessage {
+  text-align: center;
+  color: var(--primary);
+}

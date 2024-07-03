@@ -9,6 +9,8 @@ import { Tag } from '../tag/tag';
 import { Span } from '../span/span';
 import { P } from '../paragraph/paragraph';
 import { CardFooter } from './card-footer';
+import { Progress } from '..';
+import { progressValue } from '@/helpers/progress-value';
 export function Card({
   id,
   img,
@@ -17,6 +19,7 @@ export function Card({
   duration,
   tags,
   countLessons,
+  lessonCompleted,
   price,
   type,
   className,
@@ -27,6 +30,16 @@ export function Card({
     >
       <img className={cn(styles.img)} src={img} alt="card" />
       <div className={cn(styles.cardContent)}>
+        {(lessonCompleted || lessonCompleted === 0) && countLessons ? (
+          <div className={styles.lessonCompleted}>
+            <Span>
+              {lessonCompleted}/{countLessons}
+            </Span>
+            <Progress value={progressValue(lessonCompleted, countLessons)} />
+          </div>
+        ) : (
+          <></>
+        )}
         <Htag tag="h2">{title}</Htag>
         <P size="large" color="author">
           {'Влад Ильин'}
@@ -37,6 +50,11 @@ export function Card({
             <Tag key={index}>{tag}</Tag>
           ))}
         </div>
+        {countLessons && type === 'buy' ? (
+          <P>Количество уроков: {countLessons}</P>
+        ) : (
+          <></>
+        )}
       </div>
       <CardFooter type={type} courseId={+id} />
     </div>

@@ -17,18 +17,31 @@ import { P } from '..';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSignOut } from '@/hooks/auth';
+import { ROUTES } from '@/constants/routes';
+import { useAccount } from '@/hooks/account/';
+import { Loader } from '../loader/loader';
 
 const menu: ILeftMenu[] = [
-  { route: 'app/courses', name: 'Курсы', icon: <CoursesIcon /> },
-  { route: 'app/profile/my', name: 'Профиль', icon: <ProfileIcon /> },
-  { route: 'app/help', name: 'Помощь', icon: <HelpIcon /> },
+  {
+    route: ROUTES.APP,
+    name: 'Курсы',
+    metaname: 'courses',
+    icon: <CoursesIcon />,
+  },
+  {
+    route: ROUTES.PROFILE,
+    name: 'Профиль',
+    metaname: 'profile',
+    icon: <ProfileIcon />,
+  },
+  { route: ROUTES.HELP, name: 'Помощь', metaname: 'help', icon: <HelpIcon /> },
 ];
 
 export default function LeftMenu() {
+  const { account, isPending: isPendingAccount } = useAccount();
   const [expanded, setExpanded] = useState(false);
   const { isPending, signOut } = useSignOut();
   const pathname = usePathname();
-
   return (
     <div
       className={cn(styles.leftMenu, {
@@ -51,7 +64,13 @@ export default function LeftMenu() {
           {expanded ? (
             <div className={styles.user}>
               <Avatar />
-              <P size="medium">Влад Ильин</P>
+              <P size="medium">
+                {account ? (
+                  account.firstName + ' ' + account.lastName
+                ) : (
+                  <Loader />
+                )}
+              </P>
             </div>
           ) : (
             <AvatarMini />
@@ -64,10 +83,10 @@ export default function LeftMenu() {
         >
           {menu.map((menuItem) => (
             <Link
-              href={`/${menuItem.route}`}
+              href={`${menuItem.route}`}
               key={menuItem.route}
               className={cn(styles.route, {
-                [styles.active]: pathname.includes(menuItem.route),
+                [styles.active]: pathname.includes(menuItem.metaname),
               })}
             >
               <div className={cn(styles.routeItem)}>
