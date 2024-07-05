@@ -7,5 +7,6 @@ export const ROUTES = {
   HELP: '/app/help',
   SIGN_UP: '/auth/sign-up',
   SIGN_IN: '/auth/sign-in',
+  CREATE: '/app/create',
   BUY: '/app/buy',
 };

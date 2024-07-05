@@ -16,6 +16,11 @@
   background: var(--primary-gradient);
 }
 
+.disabled {
+  color: var(--color);
+  background: var(--button-disabled) !important;
+}
+
 .primary:hover {
   opacity: 0.9;
 }

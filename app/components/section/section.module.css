@@ -1,0 +1,22 @@
+.section {
+  border-bottom: 1px solid var(--color);
+}
+
+.title {
+  padding: 20px;
+  background: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.arrow {
+  transform: rotate(90deg) translateZ(0px);
+}
+
+.arrowDown {
+  transform-origin: center center;
+  transform: rotate(270deg) translateZ(0px);
+}

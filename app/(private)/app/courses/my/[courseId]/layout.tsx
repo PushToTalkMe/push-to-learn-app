@@ -1,7 +1,14 @@
-import cn from 'classnames';
-import styles from './layout.module.css';
-import { Htag, RightMenu } from '@/app/components';
+'use client';
+import {
+  Htag,
+  LessonTab,
+  Progress,
+  RightMenu,
+  Section,
+} from '@/app/components';
+import { Loader } from '@/app/components/loader/loader';
 import { idValidation } from '@/helpers/id-validation';
+import { useCoursesSectionsList } from '@/hooks/courses/use-courses-sections-list-query';
 import { notFound } from 'next/navigation';
 
 export default function RootLayout({
@@ -14,17 +21,34 @@ export default function RootLayout({
   if (!params.courseId || !idValidation(String(params.courseId))) {
     notFound();
   }
+  const { course, isPending, isSuccess } = useCoursesSectionsList(
+    params.courseId,
+  );
   return (
-    <div className={cn(styles.layout)}>
-      <main className={styles.main}>
-        <div className={styles.innerContainer}>
-          {children}
-          <RightMenu>
-            {<Htag tag="h2">Обновление</Htag>}
-            {<Htag tag="h3">Версия 1.0</Htag>}
-          </RightMenu>
-        </div>
-      </main>
-    </div>
+    <>
+      {children}
+      {isPending && <Loader />}
+      {isSuccess && course && (
+        <RightMenu
+          title={
+            <Progress
+              countLessons={course.lessonCount}
+              lessonCompleted={course.lessonCompleted}
+            />
+          }
+        >
+          {course.sectionsWithLessonsStat.map((section) => {
+            return (
+              <Section
+                key={section.id}
+                title={section.title}
+                sequence={section.sequence}
+                lessonsStat={section.lessonsStat}
+              />
+            );
+          })}
+        </RightMenu>
+      )}
+    </>
   );
 }

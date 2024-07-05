@@ -1,0 +1,22 @@
+.lessonTab {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.opened {
+  display: flex;
+  opacity: 1;
+  height: auto;
+  visibility: visible;
+}
+
+.title {
+  padding: 20px;
+  background: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}

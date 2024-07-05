@@ -10,6 +10,7 @@ export const Button = ({
   className,
   arrow = 'none',
   count = 'none',
+  disabled,
   ...props
 }: ButtonProps): JSX.Element => {
   return (
@@ -17,6 +18,7 @@ export const Button = ({
       className={cn(className, styles.button, {
         [styles.primary]: appearance === 'primary',
         [styles.ghost]: appearance === 'ghost',
+        [styles.disabled]: disabled === true,
       })}
       {...props}
     >

@@ -1,1 +1,6 @@
-export { useCoursesListQuery, useCoursesItemQuery } from './queries';
+export {
+  useCoursesMyListQuery,
+  useCoursesItemQuery,
+  useCoursesAllListQuery,
+  useCourseSectionsListQuery,
+} from './queries';

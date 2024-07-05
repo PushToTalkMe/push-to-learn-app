@@ -1,65 +1,104 @@
 'use client';
-import { Button } from '@/app/components';
+import { Button, Span } from '@/app/components';
 import { Input } from '../input/input';
 import styles from './form.module.css';
-import { useAccount, useAccountUpdate } from '@/hooks/account';
+import { useAccountUpdate } from '@/hooks/account';
 import { Loader } from '../loader/loader';
+import cn from 'classnames';
+import { useEffect } from 'react';
 
 export function ProfileForm() {
   const {
     handleSubmit,
-    setValue,
-    isPending,
+    isPendingUpdate,
+    isSuccessUpdate,
     isPendingAccount,
     register,
+    formState: { errors },
+    watch,
     errorMessage,
     account,
     isSuccess,
   } = useAccountUpdate();
+
   if (isPendingAccount) {
     return <Loader />;
   }
+
   if (isSuccess && account.data) {
-    setValue('firstName', account.data.firstName);
-    setValue('lastName', account.data.lastName);
-    setValue('username', account.data.username);
+    const [firstName, lastName, username] = watch([
+      'firstName',
+      'lastName',
+      'username',
+    ]);
 
     return (
       <form className={styles.form} onSubmit={handleSubmit}>
-        <Input
-          label="Имя"
-          autoComplete="firstName"
-          inputProps={{
-            type: 'text',
-            ...register('firstName', { required: true }),
-          }}
-        />
-        <Input
-          label="Фамилия"
-          autoComplete="lastName"
-          inputProps={{
-            type: 'text',
-            ...register('lastName', { required: true }),
-          }}
-        />
-        <Input
-          label="Никнейм"
-          autoComplete="username"
-          inputProps={{
-            type: 'text',
-            ...register('username'),
-          }}
-        />
+        <div className={styles.messages}>
+          <Input
+            label="Имя"
+            inputValue={firstName}
+            inputProps={{
+              autoComplete: 'firstName',
+              type: 'text',
+              ...register('firstName', {
+                required: 'Введите имя',
+              }),
+            }}
+          />
+          {errors.firstName && (
+            <Span className={styles.errorInput}>
+              {errors.firstName.message}
+            </Span>
+          )}
+        </div>
+        <div className={styles.messages}>
+          <Input
+            label="Фамилия"
+            inputValue={lastName}
+            inputProps={{
+              autoComplete: 'lastName',
+              type: 'text',
+              ...register('lastName', {
+                required: 'Введите фамилию',
+              }),
+            }}
+          />
+          {errors.lastName && (
+            <Span className={styles.errorInput}>{errors.lastName.message}</Span>
+          )}
+        </div>
+        <div className={styles.messages}>
+          <Input
+            label="Никнейм"
+            inputValue={username}
+            inputProps={{
+              autoComplete: 'username',
+              type: 'text',
+              ...register('username'),
+            }}
+          />
+        </div>
+
         <Button
-          disabled={isPending}
-          aria-disabled={isPending}
+          disabled={isPendingUpdate || !firstName || !lastName}
+          aria-disabled={isPendingUpdate || !firstName || !lastName}
           type="submit"
-          className={styles.button}
+          className={cn(styles.button)}
           appearance="primary"
         >
           Изменить
         </Button>
-        {errorMessage && <div className="text-rose-500">{errorMessage}</div>}
+        <div className={styles.messages}>
+          {errorMessage && (
+            <div className={cn(styles.errorMessage)}>{errorMessage}</div>
+          )}
+          {isSuccessUpdate && !errors.firstName && !errors.lastName && (
+            <div className={cn(styles.successMessage)}>
+              Имя успешно изменено
+            </div>
+          )}
+        </div>
       </form>
     );
   }

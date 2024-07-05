@@ -23,6 +23,8 @@ export function Card({
   price,
   type,
   className,
+  sectionId,
+  lessonId,
 }: CardProps): JSX.Element {
   return (
     <div
@@ -31,18 +33,16 @@ export function Card({
       <img className={cn(styles.img)} src={img} alt="card" />
       <div className={cn(styles.cardContent)}>
         {(lessonCompleted || lessonCompleted === 0) && countLessons ? (
-          <div className={styles.lessonCompleted}>
-            <Span>
-              {lessonCompleted}/{countLessons}
-            </Span>
-            <Progress value={progressValue(lessonCompleted, countLessons)} />
-          </div>
+          <Progress
+            lessonCompleted={lessonCompleted}
+            countLessons={countLessons}
+          />
         ) : (
           <></>
         )}
         <Htag tag="h2">{title}</Htag>
         <P size="large" color="author">
-          {'Влад Ильин'}
+          {author}
         </P>
         <Span className={cn(styles.duration)}>{duration}</Span>
         <div className={cn(styles.tags)}>
@@ -56,7 +56,12 @@ export function Card({
           <></>
         )}
       </div>
-      <CardFooter type={type} courseId={+id} />
+      <CardFooter
+        type={type}
+        courseId={+id}
+        sectionId={sectionId}
+        lessonId={lessonId}
+      />
     </div>
   );
 }

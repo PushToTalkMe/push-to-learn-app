@@ -11,3 +11,5 @@ export * from './form/sign-up-form';
 export * from './progress/progress';
 export * from './tabs/tabs';
 export * from './card/card';
+export * from './section/section';
+export * from './lesson-tab/lesson-tab';

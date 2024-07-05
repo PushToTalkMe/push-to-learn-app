@@ -1,4 +1,4 @@
-import { Htag, SignUpForm } from '@/app/components/';
+import { SignUpForm } from '@/app/components/';
 import styles from './page.module.css';
 import Link from 'next/link';
 import { ROUTES } from '@/constants/routes';

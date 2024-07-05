@@ -686,6 +686,12 @@ components:
         lessonCompleted:
           type: number
           example: 1
+        historySectionId:
+          type: number
+          example: 1
+        historyLessonId:
+          type: number
+          example: 1
       required:
         - id
         - title
@@ -699,6 +705,86 @@ components:
         - updatedAt
         - lessonCount
         - lessonCompleted
+        - historySectionId
+        - historyLessonId
+    LessonStat:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 5
+        title:
+          type: string
+          example: Что такое NestJS
+        type:
+          type: string
+          enum:
+            - Theory
+            - Test
+            - Exercise
+        viewed:
+          type: boolean
+          example: true
+        sequence:
+          type: number
+          example: 1
+      required:
+        - id
+        - title
+        - type
+        - viewed
+        - sequence
+    SectionsWithLessonsStatDto:
+      type: object
+      properties:
+        lessonsStat:
+          example:
+            - id: 1
+              title: Введение
+              type: Theory
+              viewed: true
+              sequence: 1
+            - id: 2
+              title: Упражнение по HTML
+              type: Exercise
+              viewed: false
+              sequence: 2
+            - id: 3
+              title: Тест по HTML
+              type: Test
+              viewed: false
+              sequence: 3
+          type: array
+          items:
+            $ref: '#/components/schemas/LessonStat'
+        id:
+          type: number
+          example: '1'
+        title:
+          type: string
+          example: Введение
+        courseId:
+          type: number
+          example: '2'
+        sequence:
+          type: number
+          example: '5'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - lessonsStat
+        - id
+        - title
+        - courseId
+        - sequence
+        - createdAt
+        - updatedAt
     CourseDtoWithSections:
       type: object
       properties:
@@ -739,7 +825,7 @@ components:
           format: date-time
           type: string
           example: '2024-06-17T13:55:38.747Z'
-        sectionsWithLessonsTitleAndType:
+        sectionsWithLessonsStat:
           example:
             - id: 1
               title: Введение
@@ -747,16 +833,31 @@ components:
               sequence: 1
               createdAt: '2024-07-01T10:23:15.094Z'
               updatedAt: '2024-07-01T10:23:15.094Z'
-              lessonsTitleAndType:
+              lessonsStat:
                 - title: Введение
                   type: Theory
+                  viewed: true
                 - title: Упражнение по HTML
                   type: Exercise
+                  viewed: false
                 - title: Тест по HTML
                   type: Test
+                  viewed: false
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/SectionsWithLessonsStatDto'
+        lessonCompleted:
+          type: number
+          example: 1
+        lessonCount:
+          type: number
+          example: 1
+        historySectionId:
+          type: number
+          example: 1
+        historyLessonId:
+          type: number
+          example: 1
       required:
         - id
         - title
@@ -768,19 +869,23 @@ components:
         - sequence
         - createdAt
         - updatedAt
-        - sectionsWithLessonsTitleAndType
+        - sectionsWithLessonsStat
+        - lessonCompleted
+        - lessonCount
+        - historySectionId
+        - historyLessonId
     LessonDtoWithViewed:
       type: object
       properties:
         id:
           type: number
-          example: '5'
+          example: 5
         sectionId:
           type: number
-          example: '1'
+          example: 1
         sequence:
           type: number
-          example: '2'
+          example: 2
         title:
           type: string
           example: Что такое NestJS
@@ -887,7 +992,7 @@ components:
             - Exercise
         sectionId:
           type: number
-          example: '1'
+          example: 5
       required:
         - title
         - data
@@ -905,7 +1010,7 @@ components:
             content: '##Введение'
         sequence:
           type: number
-          example: '5'
+          example: 1
       required:
         - title
         - data
@@ -915,13 +1020,13 @@ components:
       properties:
         id:
           type: number
-          example: '5'
+          example: 5
         sectionId:
           type: number
-          example: '1'
+          example: 1
         sequence:
           type: number
-          example: '2'
+          example: 2
         title:
           type: string
           example: Что такое NestJS

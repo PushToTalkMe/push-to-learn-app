@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 export function useSignInForm() {
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm<{
+  const { register, handleSubmit, watch, formState } = useForm<{
     email: string;
     password: string;
   }>();
@@ -26,5 +26,8 @@ export function useSignInForm() {
     errorMessage,
     handleSubmit: handleSubmit((data) => signInMutation.mutate(data)),
     isPending: signInMutation.isPending,
+    watch,
+    formState,
+    isSuccess: signInMutation.isSuccess,
   };
 }

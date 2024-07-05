@@ -12,4 +12,5 @@ export interface InputProps
   > {
   label?: string;
   inputProps?: PropsWithRef<InputHTMLAttributes<HTMLInputElement>>;
+  inputValue?: string;
 }

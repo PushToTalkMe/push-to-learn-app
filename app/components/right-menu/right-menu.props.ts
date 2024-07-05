@@ -1,6 +1,6 @@
-import { HTMLAttributes, DetailedHTMLProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-export interface RightMenuProps
-  extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
-  children: ReactNode[];
+export interface RightMenuProps {
+  title: ReactNode;
+  children: ReactNode;
 }

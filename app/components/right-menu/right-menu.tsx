@@ -3,12 +3,12 @@ import styles from './right-menu.module.css';
 import cn from 'classnames';
 import { useState } from 'react';
 import { Button } from '../button/button';
-import { usePathname } from 'next/navigation';
 import { RightMenuProps } from './right-menu.props';
 import BurgerIcon from './icons/burger.svg';
 import CloseIcon from './icons/close.svg';
+import { Htag } from '..';
 
-export const RightMenu = ({ children }: RightMenuProps) => {
+export const RightMenu = ({ title, children }: RightMenuProps) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ export const RightMenu = ({ children }: RightMenuProps) => {
       {expanded ? (
         <>
           <div className={styles.header}>
-            {children[0]}
+            {title}
             <Button
               appearance="ghost"
               className={cn(styles.burger, {
@@ -33,7 +33,7 @@ export const RightMenu = ({ children }: RightMenuProps) => {
               <CloseIcon />
             </Button>
           </div>
-          <div className={styles.innerContainer}>{children[1]}</div>
+          <div className={styles.innerContainer}>{children}</div>
         </>
       ) : (
         <Button

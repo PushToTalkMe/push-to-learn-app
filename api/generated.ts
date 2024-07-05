@@ -102,12 +102,44 @@ export interface CourseDtoWithSections {
   author: string;
   createdAt: string;
   duration: string;
+  historyLessonId: number;
+  historySectionId: number;
   id: number;
   img: string;
+  lessonCompleted: number;
+  lessonCount: number;
   price: number;
-  sectionsWithLessonsTitleAndType: string[];
+  sectionsWithLessonsStat: SectionsWithLessonsStatDto[];
   sequence: number;
   tags: string[];
+  title: string;
+  updatedAt: string;
+}
+
+export type LessonStatType =
+  (typeof LessonStatType)[keyof typeof LessonStatType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const LessonStatType = {
+  Theory: 'Theory',
+  Test: 'Test',
+  Exercise: 'Exercise',
+} as const;
+
+export interface LessonStat {
+  id: number;
+  sequence: number;
+  title: string;
+  type: LessonStatType;
+  viewed: boolean;
+}
+
+export interface SectionsWithLessonsStatDto {
+  courseId: number;
+  createdAt: string;
+  id: number;
+  lessonsStat: LessonStat[];
+  sequence: number;
   title: string;
   updatedAt: string;
 }
@@ -116,6 +148,8 @@ export interface CourseDtoWithUserStat {
   author: string;
   createdAt: string;
   duration: string;
+  historyLessonId: number;
+  historySectionId: number;
   id: number;
   img: string;
   lessonCompleted: number;
@@ -174,7 +208,7 @@ export interface CreateCourseDto {
 export interface PatchAccountDto {
   firstName: string;
   lastName: string;
-  username?: string;
+  username: string;
 }
 
 export interface AccountDto {

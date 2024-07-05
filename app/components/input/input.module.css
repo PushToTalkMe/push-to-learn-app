@@ -21,6 +21,11 @@
   font-size: 12px;
 }
 
+.labelFilled {
+  transform: translateY(6px);
+  font-size: 12px;
+}
+
 .input {
   padding-left: 56px;
   box-sizing: border-box;

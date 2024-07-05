@@ -10,6 +10,7 @@ import LogoutIcon from './icons/logout.svg';
 import LogoIcon from './icons/logo.svg';
 import Avatar from './icons/user.svg';
 import AvatarMini from './icons/avatar_mini.svg';
+import CreateIcon from './icons/create.svg';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import { Button } from '../button/button';
@@ -95,6 +96,20 @@ export default function LeftMenu() {
               </div>
             </Link>
           ))}
+          {account.role === 'admin' && (
+            <Link
+              href={ROUTES.CREATE}
+              key={ROUTES.CREATE}
+              className={cn(styles.route, {
+                [styles.active]: pathname.includes(ROUTES.CREATE),
+              })}
+            >
+              <div className={cn(styles.routeItem)}>
+                {<CreateIcon />}
+                {expanded ? <span>Создание</span> : null}
+              </div>
+            </Link>
+          )}
         </nav>
         <Button
           appearance="ghost"

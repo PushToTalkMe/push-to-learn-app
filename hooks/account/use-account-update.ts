@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 export function useAccountUpdate() {
   const accountQuery = useAccountQuery();
 
-  const { register, handleSubmit, setValue } = useForm<{
+  const { register, handleSubmit, watch, formState } = useForm<{
     firstName: string;
     lastName: string;
     username?: string;
@@ -13,15 +13,17 @@ export function useAccountUpdate() {
   const updateAccountMutation = useUpdateAccountMutation();
 
   const errorMessage = updateAccountMutation.error
-    ? 'Ошибка при регистрации'
+    ? 'Ошибка при отправке'
     : undefined;
 
   return {
-    isPending: updateAccountMutation.isPending,
+    isPendingUpdate: updateAccountMutation.isPending,
+    isSuccessUpdate: updateAccountMutation.isSuccess,
     isPendingAccount: accountQuery.isPending,
     register,
     handleSubmit: handleSubmit((data) => updateAccountMutation.mutate(data)),
-    setValue,
+    watch,
+    formState,
     account: accountQuery,
     isSuccess: accountQuery.isSuccess,
     errorMessage,

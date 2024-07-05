@@ -29,21 +29,22 @@ export default function MyCourses() {
             <Card
               type="myCourses"
               id={course.id}
+              lessonId={course.historyLessonId}
+              sectionId={course.historySectionId}
               author={course.author}
               title={course.title}
               duration={course.duration}
               tags={course.tags}
               price={course.price}
-              lessonCompleted={279}
+              lessonCompleted={course.lessonCompleted}
               countLessons={course.lessonCount}
               img="https://media.proglib.io/posts/2019/11/03/c236c35c960c7016e0d785b0558026c4.png"
               key={course.id}
             />
           ))}
       </div>
-      <RightMenu>
-        {<Htag tag="h2">Обновление</Htag>}
-        {<Htag tag="h3">Версия 1.0</Htag>}
+      <RightMenu title={<Htag tag="h2">Обновление</Htag>}>
+        <Htag tag="h2">Обновление</Htag>
       </RightMenu>
     </>
   );

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 export function useSignUpForm() {
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm<{
+  const { register, handleSubmit, watch, formState } = useForm<{
     firstName: string;
     lastName: string;
     email: string;
@@ -28,5 +28,8 @@ export function useSignUpForm() {
     errorMessage,
     handleSubmit: handleSubmit((data) => signUpMutation.mutate(data)),
     isPending: signUpMutation.isPending,
+    watch,
+    formState,
+    isSuccess: signUpMutation.isSuccess,
   };
 }
