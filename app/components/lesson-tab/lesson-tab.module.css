@@ -11,12 +11,25 @@
   visibility: visible;
 }
 
+.viewed {
+  background: var(--primary-gradient);
+}
+
 .title {
-  padding: 20px;
-  background: none;
+  padding: 20px 30px;
+  background: var(--lesson-tab-background);
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   cursor: pointer;
+}
+
+.active {
+  border-left: 3px solid var(--primary);
+}
+
+.active svg path {
+  stroke: var(--primary);
+  stroke-width: 2;
 }

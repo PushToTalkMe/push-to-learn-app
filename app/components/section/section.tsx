@@ -7,6 +7,8 @@ import ArrowIcon from '../button/arrow.svg';
 import cn from 'classnames';
 
 export function Section({
+  id,
+  courseId,
   title,
   sequence,
   lessonsStat,
@@ -31,18 +33,24 @@ export function Section({
           <ArrowIcon />
         </div>
       </button>
-      {lessonsStat.map((lesson) => {
-        return (
-          <LessonTab
-            key={lesson.id}
-            title={lesson.title}
-            type={lesson.type}
-            viewed={lesson.viewed}
-            sequence={lesson.sequence}
-            opened={opened}
-          />
-        );
-      })}
+      <div className={styles.lessons}>
+        {lessonsStat.map((lesson) => {
+          return (
+            <LessonTab
+              id={lesson.id}
+              sectionId={id}
+              courseId={courseId}
+              key={lesson.id}
+              title={lesson.title}
+              type={lesson.type}
+              viewed={lesson.viewed}
+              sequence={lesson.sequence}
+              sectionSequence={sequence}
+              opened={opened}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

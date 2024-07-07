@@ -15,7 +15,7 @@ export const LessonDtoType = {
   Exercise: 'Exercise',
 } as const;
 
-export type LessonDtoData = { [key: string]: any };
+export type LessonDtoData = TheoryDto | TestDto | ExerciseDto;
 
 export interface LessonDto {
   createdAt: string;
@@ -28,7 +28,7 @@ export interface LessonDto {
   updatedAt: string;
 }
 
-export type PatchLessonDtoData = { [key: string]: any };
+export type PatchLessonDtoData = TheoryDto | TestDto | ExerciseDto;
 
 export interface PatchLessonDto {
   data: PatchLessonDtoData;
@@ -84,8 +84,6 @@ export const LessonDtoWithViewedType = {
   Exercise: 'Exercise',
 } as const;
 
-export type LessonDtoWithViewedData = { [key: string]: any };
-
 export interface LessonDtoWithViewed {
   createdAt: string;
   data: LessonDtoWithViewedData;
@@ -97,6 +95,32 @@ export interface LessonDtoWithViewed {
   updatedAt: string;
   viewed: boolean;
 }
+
+export interface ExerciseDto {
+  createdAt: string;
+  id: number;
+  lessonId: number;
+  tasks: string;
+  updatedAt: string;
+}
+
+export interface TestDto {
+  createdAt: string;
+  id: number;
+  lessonId: number;
+  questions: string;
+  updatedAt: string;
+}
+
+export interface TheoryDto {
+  content: string;
+  createdAt: string;
+  id: number;
+  lessonId: number;
+  updatedAt: string;
+}
+
+export type LessonDtoWithViewedData = TheoryDto | TestDto | ExerciseDto;
 
 export interface CourseDtoWithSections {
   author: string;

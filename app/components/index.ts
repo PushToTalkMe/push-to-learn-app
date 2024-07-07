@@ -13,3 +13,7 @@ export * from './tabs/tabs';
 export * from './card/card';
 export * from './section/section';
 export * from './lesson-tab/lesson-tab';
+export * from './theory/theory';
+export * from './exercise/exercise';
+export * from './test/test';
+export * from './loader/loader';

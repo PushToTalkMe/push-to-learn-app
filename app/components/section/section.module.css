@@ -20,3 +20,9 @@
   transform-origin: center center;
   transform: rotate(270deg) translateZ(0px);
 }
+
+.lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

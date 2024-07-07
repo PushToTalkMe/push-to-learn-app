@@ -1,12 +1,12 @@
+'use client';
+import { Exercise, Test, Theory } from '@/app/components';
+import { Loader } from '@/app/components/loader/loader';
 import { idValidation } from '@/helpers/id-validation';
+import { useLessonItem } from '@/hooks/courses/use-lesson-item';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: `Урок`,
-};
-
-export default async function PageLesson({
+export default function PageLesson({
   params,
 }: {
   params: { courseId: number; sectionId: number; lessonId: number };
@@ -21,5 +21,24 @@ export default async function PageLesson({
   ) {
     notFound();
   }
-  return <div>Урок</div>;
+  const { lesson, isPending, isSuccess } = useLessonItem(
+    params.courseId,
+    params.sectionId,
+    params.lessonId,
+  );
+  if (lesson) {
+    console.log(lesson);
+  }
+  return (
+    <>
+      {isPending && <Loader />}
+      {isSuccess && lesson && (
+        <>
+          {lesson.type === 'Theory' && <Theory lesson={lesson} />}
+          {lesson.type === 'Exercise' && <Exercise lesson={lesson} />}
+          {lesson.type === 'Test' && <Test lesson={lesson} />}
+        </>
+      )}
+    </>
+  );
 }

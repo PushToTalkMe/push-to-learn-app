@@ -3,6 +3,7 @@ import {
   coursesControllerGetCourseById,
   coursesControllerGetMyCourses,
   coursesControllerGetNotMyCourseById,
+  coursesControllerGetPageLesson,
 } from '@/api/generated';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -10,6 +11,7 @@ const coursesAllListKey = ['coursesAllList'] as unknown[];
 const coursesMyListKey = ['coursesMyList'] as unknown[];
 const coursesItemKey = ['coursesItem'] as unknown[];
 const coursesSectionsListKey = ['coursesSections'] as unknown[];
+const lessonItemKey = ['lessonItem'] as unknown[];
 
 export function useCoursesAllListQuery() {
   return useQuery({
@@ -36,6 +38,17 @@ export function useCoursesItemQuery(courseId: number) {
   return useQuery({
     queryKey: [coursesItemKey, courseId],
     queryFn: () => coursesControllerGetNotMyCourseById(courseId),
-    retry: 0,
+  });
+}
+
+export function useLessonItemQuery(
+  courseId: number,
+  sectionId: number,
+  lessonId: number,
+) {
+  return useQuery({
+    queryKey: [lessonItemKey, courseId, sectionId, lessonId],
+    queryFn: () =>
+      coursesControllerGetPageLesson(courseId, sectionId, lessonId),
   });
 }

@@ -874,6 +874,84 @@ components:
         - lessonCount
         - historySectionId
         - historyLessonId
+    TheoryDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '5'
+        lessonId:
+          type: number
+          example: '1'
+        content:
+          type: string
+          example: Текст формата markdown
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - id
+        - lessonId
+        - content
+        - createdAt
+        - updatedAt
+    TestDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '5'
+        lessonId:
+          type: number
+          example: '1'
+        questions:
+          type: string
+          example: Текст формата markdown
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - id
+        - lessonId
+        - questions
+        - createdAt
+        - updatedAt
+    ExerciseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '5'
+        lessonId:
+          type: number
+          example: '1'
+        tasks:
+          type: string
+          example: Текст формата markdown
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - id
+        - lessonId
+        - tasks
+        - createdAt
+        - updatedAt
     LessonDtoWithViewed:
       type: object
       properties:
@@ -890,9 +968,12 @@ components:
           type: string
           example: Что такое NestJS
         data:
-          type: object
           example:
             content: '##Введение'
+          oneOf:
+            - $ref: '#/components/schemas/TheoryDto'
+            - $ref: '#/components/schemas/TestDto'
+            - $ref: '#/components/schemas/ExerciseDto'
         type:
           type: string
           enum:
@@ -1005,9 +1086,12 @@ components:
           type: string
           example: Введение
         data:
-          type: object
           example:
             content: '##Введение'
+          oneOf:
+            - $ref: '#/components/schemas/TheoryDto'
+            - $ref: '#/components/schemas/TestDto'
+            - $ref: '#/components/schemas/ExerciseDto'
         sequence:
           type: number
           example: 1
@@ -1031,9 +1115,12 @@ components:
           type: string
           example: Что такое NestJS
         data:
-          type: object
           example:
             content: '##Введение'
+          oneOf:
+            - $ref: '#/components/schemas/TheoryDto'
+            - $ref: '#/components/schemas/TestDto'
+            - $ref: '#/components/schemas/ExerciseDto'
         type:
           type: string
           enum:

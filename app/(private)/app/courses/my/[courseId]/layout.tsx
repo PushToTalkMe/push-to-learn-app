@@ -40,6 +40,8 @@ export default function RootLayout({
           {course.sectionsWithLessonsStat.map((section) => {
             return (
               <Section
+                id={section.id}
+                courseId={course.id}
                 key={section.id}
                 title={section.title}
                 sequence={section.sequence}
