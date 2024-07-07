@@ -1,10 +1,12 @@
 'use client';
-import { Exercise, Test, Theory } from '@/app/components';
+import { Exercise, Test, Theory, Comment, CommentForm } from '@/app/components';
 import { Loader } from '@/app/components/loader/loader';
 import { idValidation } from '@/helpers/id-validation';
 import { useLessonItem } from '@/hooks/courses/use-lesson-item';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import styles from './page.module.css';
+import cn from 'classnames';
 
 export default function PageLesson({
   params,
@@ -26,18 +28,25 @@ export default function PageLesson({
     params.sectionId,
     params.lessonId,
   );
-  if (lesson) {
-    console.log(lesson);
-  }
   return (
     <>
       {isPending && <Loader />}
       {isSuccess && lesson && (
-        <>
+        <div className={cn(styles.page)}>
           {lesson.type === 'Theory' && <Theory lesson={lesson} />}
           {lesson.type === 'Exercise' && <Exercise lesson={lesson} />}
           {lesson.type === 'Test' && <Test lesson={lesson} />}
-        </>
+          {/* {lesson.comments.length > 0 &&
+            lesson.comments.map((comment) => (
+              <Comment
+                firstName={comment.firstName}
+                lastName={comment.lastName}
+                createdAt={comment.createdAt}
+                text={comment.text}
+              />
+            ))} */}
+          <CommentForm />
+        </div>
       )}
     </>
   );

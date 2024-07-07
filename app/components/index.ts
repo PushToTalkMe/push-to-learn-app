@@ -17,3 +17,5 @@ export * from './theory/theory';
 export * from './exercise/exercise';
 export * from './test/test';
 export * from './loader/loader';
+export * from './comment/comment';
+export * from './form/comment-form';

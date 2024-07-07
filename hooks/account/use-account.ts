@@ -11,6 +11,7 @@ export function useAccount() {
   return {
     account: { ...account, ...session },
     isPending: accountQuery.isPending,
+    isSuccess: accountQuery.isSuccess,
     error,
   };
 }
