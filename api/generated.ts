@@ -6,6 +6,19 @@
  */
 import { createInstance } from './api-instance';
 import type { BodyType } from './api-instance';
+export interface GetCommentDto {
+  createdAt: string;
+  firstName: string;
+  id: number;
+  lastName: string;
+  text: string;
+}
+
+export interface CreateCommentDto {
+  lessonId: number;
+  text: string;
+}
+
 export type LessonDtoType = (typeof LessonDtoType)[keyof typeof LessonDtoType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -229,6 +242,10 @@ export interface CreateCourseDto {
   title: string;
 }
 
+export interface PatchAvatarDto {
+  file: Blob;
+}
+
 export interface PatchAccountDto {
   firstName: string;
   lastName: string;
@@ -236,6 +253,7 @@ export interface PatchAccountDto {
 }
 
 export interface AccountDto {
+  avatar: string;
   firstName: string;
   id: number;
   lastName: string;
@@ -361,6 +379,33 @@ export const accountControllerPatchAccount = (
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: patchAccountDto,
+    },
+    options,
+  );
+};
+
+export const accountControllerGetAvatar = (
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<void>(
+    { url: `/account/download/*`, method: 'GET' },
+    options,
+  );
+};
+
+export const accountControllerPatchAvatar = (
+  patchAvatarDto: BodyType<PatchAvatarDto>,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  const formData = new FormData();
+  formData.append('file', patchAvatarDto.file);
+
+  return createInstance<AccountDto>(
+    {
+      url: `/account/avatar`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: formData,
     },
     options,
   );
@@ -567,6 +612,31 @@ export const buyControllerBuyCourse = (
   );
 };
 
+export const commentsControllerCreate = (
+  createCommentDto: BodyType<CreateCommentDto>,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<void>(
+    {
+      url: `/comments/create`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createCommentDto,
+    },
+    options,
+  );
+};
+
+export const commentsControllerGetComments = (
+  lessonId: number,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<GetCommentDto[]>(
+    { url: `/comments/${lessonId}`, method: 'GET' },
+    options,
+  );
+};
+
 export type AuthControllerSignUpResult = NonNullable<
   Awaited<ReturnType<typeof authControllerSignUp>>
 >;
@@ -590,6 +660,12 @@ export type AccountControllerGetAccountResult = NonNullable<
 >;
 export type AccountControllerPatchAccountResult = NonNullable<
   Awaited<ReturnType<typeof accountControllerPatchAccount>>
+>;
+export type AccountControllerGetAvatarResult = NonNullable<
+  Awaited<ReturnType<typeof accountControllerGetAvatar>>
+>;
+export type AccountControllerPatchAvatarResult = NonNullable<
+  Awaited<ReturnType<typeof accountControllerPatchAvatar>>
 >;
 export type CoursesControllerCreateResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerCreate>>
@@ -638,4 +714,10 @@ export type LessonsControllerDeletelessonResult = NonNullable<
 >;
 export type BuyControllerBuyCourseResult = NonNullable<
   Awaited<ReturnType<typeof buyControllerBuyCourse>>
+>;
+export type CommentsControllerCreateResult = NonNullable<
+  Awaited<ReturnType<typeof commentsControllerCreate>>
+>;
+export type CommentsControllerGetCommentsResult = NonNullable<
+  Awaited<ReturnType<typeof commentsControllerGetComments>>
 >;

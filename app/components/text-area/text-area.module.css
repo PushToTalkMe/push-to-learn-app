@@ -1,0 +1,42 @@
+.textAreaContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.label {
+  left: 56px;
+  position: absolute;
+  pointer-events: none;
+  transform: translateY(20px);
+  transform-origin: top left;
+  transition: 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+  color: var(--label);
+  font-size: 16px;
+  left: 16px;
+}
+
+.textAreaContainer:focus-within .label {
+  transform: translateY(2px);
+  font-size: 12px;
+}
+
+.labelFilled {
+  transform: translateY(2px);
+  font-size: 12px;
+}
+
+.textArea {
+  padding-left: 56px;
+  box-sizing: border-box;
+  padding: 18px 16px 6px;
+  color: var(--textarea-color);
+  border: none;
+  border-radius: 10px;
+  background: var(--textarea-background);
+  height: 58px;
+  font-size: 18px;
+  line-height: 21px;
+  transition: 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+  resize: vertical;
+}

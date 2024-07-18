@@ -4,6 +4,6 @@ export interface CommentProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   firstName: string;
   lastName: string;
-  createdAt: Date;
+  createdAt: string;
   text: string;
 }

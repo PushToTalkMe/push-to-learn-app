@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 export function useAccountUpdate() {
   const accountQuery = useAccountQuery();
 
-  const { register, handleSubmit, watch, formState } = useForm<{
+  const { register, handleSubmit, watch, formState, reset } = useForm<{
     firstName: string;
     lastName: string;
-    username?: string;
+    username: string;
   }>();
 
   const updateAccountMutation = useUpdateAccountMutation();
@@ -21,7 +21,10 @@ export function useAccountUpdate() {
     isSuccessUpdate: updateAccountMutation.isSuccess,
     isPendingAccount: accountQuery.isPending,
     register,
-    handleSubmit: handleSubmit((data) => updateAccountMutation.mutate(data)),
+    handleSubmit: handleSubmit((data) => {
+      reset();
+      return updateAccountMutation.mutate(data);
+    }),
     watch,
     formState,
     account: accountQuery,

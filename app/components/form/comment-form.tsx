@@ -1,67 +1,62 @@
 'use client';
-import { Button, Span } from '@/app/components';
+import { Button, Span, TextArea } from '@/app/components';
 import { Input } from '../input/input';
 import styles from './form.module.css';
 import { useAccount } from '@/hooks/account';
 import { Loader } from '../loader/loader';
 import cn from 'classnames';
 import { useEffect } from 'react';
+import { useCommentCreate } from '@/hooks/comment';
 
-export function CommentForm() {
+export function CommentForm({ lessonId }: { lessonId: number }) {
   const {
-    account,
-    isPending: isPendingAccount,
+    register,
+    errorMessage,
+    handleSubmit,
+    isPending,
+    watch,
+    formState: { errors },
     isSuccess,
-    error,
-  } = useAccount();
-  // const { comment, isPending, isSuccess, error } = useCommentCreate();
+  } = useCommentCreate(lessonId);
 
-  if (isPendingAccount) {
-    return <Loader />;
-  }
+  const [text] = watch(['text']);
+  return (
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.messages}>
+        <TextArea
+          label="Комментарий"
+          textAreaValue={text}
+          textAreaProps={{
+            autoComplete: 'text',
+            ...register('text', {
+              required: 'Введите комментарий',
+            }),
+          }}
+        />
+        {errors.text && (
+          <Span className={styles.errorInput}>{errors.text.message}</Span>
+        )}
+      </div>
+      <div className={cn(styles.buttonContainer)}>
+        <Button
+          disabled={isPending || !text}
+          aria-disabled={isPending || !text}
+          type="submit"
+          className={cn(styles.button)}
+          appearance="primary"
+        >
+          Опубликовать
+        </Button>
+      </div>
 
-  if (isSuccess && account) {
-    // const [text] = watch(['text']);
-    // return (
-    //   <form className={styles.form} onSubmit={handleSubmit}>
-    //     <div className={styles.messages}>
-    //       <Input
-    //         label="Имя"
-    //         inputValue={text}
-    //         inputProps={{
-    //           autoComplete: 'firstName',
-    //           type: 'text',
-    //           ...register('firstName', {
-    //             required: 'Введите имя',
-    //           }),
-    //         }}
-    //       />
-    //       {errors.firstName && (
-    //         <Span className={styles.errorInput}>
-    //           {errors.firstName.message}
-    //         </Span>
-    //       )}
-    //     </div>
-    //     <Button
-    //       disabled={isPendingUpdate || !firstName || !lastName}
-    //       aria-disabled={isPendingUpdate || !firstName || !lastName}
-    //       type="submit"
-    //       className={cn(styles.button)}
-    //       appearance="primary"
-    //     >
-    //       Изменить
-    //     </Button>
-    //     <div className={styles.messages}>
-    //       {errorMessage && (
-    //         <div className={cn(styles.errorMessage)}>{errorMessage}</div>
-    //       )}
-    //       {isSuccessUpdate && !errors.firstName && !errors.lastName && (
-    //         <div className={cn(styles.successMessage)}>
-    //           Имя успешно изменено
-    //         </div>
-    //       )}
-    //     </div>
-    //   </form>
-    // );
-  }
+      <div className={styles.messages}>
+        {errorMessage && (
+          <div className={cn(styles.errorMessage)}>{errorMessage}</div>
+        )}
+        {isSuccess && !errors.text && (
+          <div className={cn(styles.successMessage)}>Комментарий добавлен!</div>
+        )}
+      </div>
+    </form>
+  );
 }

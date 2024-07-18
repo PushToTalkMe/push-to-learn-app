@@ -19,8 +19,6 @@ export function Card({
   duration,
   tags,
   countLessons,
-  lessonCompleted,
-  price,
   type,
   className,
   sectionId,
@@ -32,14 +30,7 @@ export function Card({
     >
       <img className={cn(styles.img)} src={img} alt="card" />
       <div className={cn(styles.cardContent)}>
-        {(lessonCompleted || lessonCompleted === 0) && countLessons ? (
-          <Progress
-            lessonCompleted={lessonCompleted}
-            countLessons={countLessons}
-          />
-        ) : (
-          <></>
-        )}
+        {type === 'myCourses' ? <Progress courseId={id} /> : <></>}
         <Htag tag="h2">{title}</Htag>
         <P size="large" color="author">
           {author}

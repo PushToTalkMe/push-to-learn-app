@@ -24,7 +24,6 @@ export default function Buy() {
     isPending: isPendingBuy,
     handleClick,
   } = useBuyCourse(+courseId);
-
   return (
     <>
       {isPending && <Loader />}

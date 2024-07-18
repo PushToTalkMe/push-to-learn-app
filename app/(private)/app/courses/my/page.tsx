@@ -6,10 +6,6 @@ import { useCoursesMyItems } from '@/hooks/courses/use-courses-my-items';
 import { Card } from '@/app/components/card/card';
 import { Tabs } from '@/app/components/tabs/tabs';
 
-// export const metadata: Metadata = {
-//   title: 'Курсы',
-// };
-
 export default function MyCourses() {
   const { isPending, courses } = useCoursesMyItems();
   const isLoader = isPending;
@@ -36,7 +32,6 @@ export default function MyCourses() {
               duration={course.duration}
               tags={course.tags}
               price={course.price}
-              lessonCompleted={course.lessonCompleted}
               countLessons={course.lessonCount}
               img="https://media.proglib.io/posts/2019/11/03/c236c35c960c7016e0d785b0558026c4.png"
               key={course.id}

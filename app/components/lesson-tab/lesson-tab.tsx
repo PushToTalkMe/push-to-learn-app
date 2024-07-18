@@ -1,13 +1,16 @@
 'use client';
+//Настроить active и viewed (поменять местами)
 import React from 'react';
 import { LessonTabProps } from './lesson-tab.props';
 import styles from './lesson-tab.module.css';
-import { P } from '..';
+import { Loader, P } from '..';
 import cn from 'classnames';
 import { usePathname, useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/routes';
 import ExerciseIcon from './icons/exercise.svg';
 import TheoryIcon from './icons/theory.svg';
+import { queryClient } from '@/api/query-client';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function LessonTab({
   id,
@@ -15,14 +18,13 @@ export function LessonTab({
   courseId,
   title,
   sequence,
+  viewed,
   sectionSequence,
   type,
-  viewed,
   opened,
 }: LessonTabProps): JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
-
   const handleClickButton = () => {
     router.push(
       `${ROUTES.APP}/${courseId}/sections/${sectionId}/lessons/${id}`,
@@ -33,12 +35,16 @@ export function LessonTab({
       className={cn(styles.lessonTab, {
         [styles.opened]: opened === true,
         [styles.viewed]: viewed === true,
-        [styles.active]: pathname.includes(
-          `sections/${sectionId}/lessons/${id}`,
-        ),
       })}
     >
-      <button className={cn(styles.title)} onClick={handleClickButton}>
+      <button
+        className={cn(styles.title, {
+          [styles.active]: pathname.includes(
+            `sections/${sectionId}/lessons/${id}`,
+          ),
+        })}
+        onClick={handleClickButton}
+      >
         <P size="large">
           {sectionSequence}.{sequence} {title}
         </P>

@@ -1,1 +1,1 @@
-export { useAccountQuery, useUpdateAccountMutation } from "./queries";
+export { useAccountQuery, useUpdateAccountMutation } from './queries';

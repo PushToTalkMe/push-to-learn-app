@@ -6,4 +6,5 @@ export interface SectionProps {
   title: string;
   sequence: number;
   lessonsStat: LessonStat[];
+  paramsSectionId: number;
 }

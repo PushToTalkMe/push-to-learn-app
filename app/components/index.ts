@@ -19,3 +19,6 @@ export * from './test/test';
 export * from './loader/loader';
 export * from './comment/comment';
 export * from './form/comment-form';
+export * from './text-area/text-area';
+export * from './avatar/avatar';
+export * from './popup/popup';

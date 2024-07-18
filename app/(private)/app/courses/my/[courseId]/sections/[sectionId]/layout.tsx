@@ -8,7 +8,7 @@ import {
 } from '@/app/components';
 import { Loader } from '@/app/components/loader/loader';
 import { idValidation } from '@/helpers/id-validation';
-import { useCoursesSectionsList } from '@/hooks/courses/use-courses-sections-list-query';
+import { useCoursesSectionsList } from '@/hooks/courses/use-courses-sections-list';
 import { notFound } from 'next/navigation';
 
 export default function RootLayout({
@@ -16,13 +16,18 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-  params: { courseId: number };
+  params: { courseId: string; sectionId: string };
 }>) {
-  if (!params.courseId || !idValidation(String(params.courseId))) {
+  if (
+    !params.courseId ||
+    !params.sectionId ||
+    !idValidation(params.courseId) ||
+    !idValidation(params.sectionId)
+  ) {
     notFound();
   }
   const { course, isPending, isSuccess } = useCoursesSectionsList(
-    params.courseId,
+    +params.courseId,
   );
   return (
     <>
@@ -30,17 +35,14 @@ export default function RootLayout({
       {isPending && <Loader />}
       {isSuccess && course && (
         <RightMenu
-          title={
-            <Progress
-              countLessons={course.lessonCount}
-              lessonCompleted={course.lessonCompleted}
-            />
-          }
+          expandedFromParent={true}
+          title={<Progress courseId={+params.courseId} />}
         >
           {course.sectionsWithLessonsStat.map((section) => {
             return (
               <Section
                 id={section.id}
+                paramsSectionId={+params.sectionId}
                 courseId={course.id}
                 key={section.id}
                 title={section.title}

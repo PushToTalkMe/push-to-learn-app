@@ -7,6 +7,17 @@ body {
   color: var(--color);
 }
 
+pre {
+  background-color: var(--pre-background);
+  border-radius: 5px;
+  border: 1px solid var(--pre-border);
+  padding: 10px;
+}
+
+textarea {
+  font-family: 'Noto Sans', sans-serif;
+}
+
 button svg path {
   stroke: var(--color);
 }
@@ -65,17 +76,26 @@ input {
 
 :root {
   --primary: #ea2845;
+  --pre-background: #f5f5f5;
+  --pre-border: #dbdbdb;
   --links: #a97bff;
   --card-background: #ffffff;
   --tabs-container-background: #ffffff;
+  --comment-background: #ffffff;
+  --textarea-background: #ffffff;
+  --avatar-background: #ffffff;
+  --textarea-color: #000000;
   --lesson-tab-background: #eeeeee;
+  --button-not-viewed-bacground: #ffffff;
   --tab-color: #ffffff;
   --gray-light: #dad9de;
-  --secondary: #e47ad5;
+  --secondary: #da581c;
   --total-black: #101114;
   --body-background: #e5e5e5;
   --progress-background: #f0f0f0;
   --span-number-background: #f0f0f0;
+  --viewed-color: #ffffff;
+  --lesson-tab-active-color: #ffffff;
   --color: #000000;
   --button-color: #ffffff;
   --button-ghost-hover-background: #d6d6d6;
@@ -90,12 +110,7 @@ input {
   --gray-stroke: #4d5064;
   --label: #000000;
   --primary-gradient: linear-gradient(90deg, #ea2845, #ea2868);
-  --gradient-opacity: linear-gradient(
-    93.33deg,
-    rgba(215, 123, 230, 0.3) 9.26%,
-    rgba(190, 99, 230, 0.3) 42.32%,
-    rgba(108, 56, 204, 0.3) 104.58%
-  );
+  --gradient-opacity: linear-gradient(270deg, #ea2845, #ea286998);
   --left-menu: #ffffff;
   --right-menu: #ffffff;
   --card-footer-background: #fafafa;

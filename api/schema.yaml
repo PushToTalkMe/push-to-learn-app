@@ -95,6 +95,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountDto'
+  /account/download/*:
+    get:
+      operationId: AccountController_getAvatar
+      parameters:
+        - name: '0'
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+  /account/avatar:
+    patch:
+      operationId: AccountController_patchAvatar
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchAvatarDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
   /courses/create:
     post:
       operationId: CoursesController_create
@@ -362,6 +391,37 @@ paths:
       responses:
         '201':
           description: ''
+  /comments/create:
+    post:
+      operationId: CommentsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentDto'
+      responses:
+        '201':
+          description: ''
+  /comments/{lessonId}:
+    get:
+      operationId: CommentsController_getComments
+      parameters:
+        - name: lessonId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetCommentDto'
 info:
   title: server
   description: ''
@@ -450,12 +510,16 @@ components:
         username:
           type: string
           example: PushToTalk
+        avatar:
+          type: string
+          example: /uploads/avatar/avatar.png
       required:
         - id
         - userId
         - firstName
         - lastName
         - username
+        - avatar
     PatchAccountDto:
       type: object
       properties:
@@ -472,6 +536,14 @@ components:
         - firstName
         - lastName
         - username
+    PatchAvatarDto:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+      required:
+        - file
     CreateCourseDto:
       type: object
       properties:
@@ -969,7 +1041,34 @@ components:
           example: Что такое NestJS
         data:
           example:
-            content: '##Введение'
+            content: >
+
+              # Работа с данными в MongoDB Compass
+
+
+              ---
+
+
+              ## Работа с данными в MongoDB Compass
+
+
+              В предыдущих темах рассматривалась работа с сервером MongoDB через
+              консольную оболочку **mongosh**. Но также мы можем работать с
+              данными через графический клиент **MongoDB Compass**. Данный
+              графический клиент довольно прост и инутивно понятен в
+              использовании, а графическое представление данных для кого-то
+              может быть проще для понимание. Соответственно кому-то, возможно,
+              через графический клиент будет проще и удобнее работать.
+
+
+              Для базовых операций, как то: создание/удаление коллекций,
+              добавление, просмотр, изменения и удаления документов есть
+              соответствующие элементы графического интерфейса:
+
+
+              <p align="center">
+                <img alt="Скриншот результата выполнения кода сверху" src="./img/2.9.png"/>
+              </p>
           oneOf:
             - $ref: '#/components/schemas/TheoryDto'
             - $ref: '#/components/schemas/TestDto'
@@ -1064,7 +1163,40 @@ components:
         data:
           type: object
           example:
-            content: '##Введение'
+            content: >-
+
+              # Работа с данными в MongoDB Compass
+
+
+              ---
+
+
+              ## Работа с данными в MongoDB Compass
+
+
+              В предыдущих темах рассматривалась работа с сервером MongoDB через
+              консольную оболочку **mongosh**. Но также мы можем работать с
+              данными через графический клиент **MongoDB Compass**. Данный
+              графический клиент довольно прост и инутивно понятен в
+              использовании, а графическое представление данных для кого-то
+              может быть проще для понимание. Соответственно кому-то, возможно,
+              через графический клиент будет проще и удобнее работать.
+
+
+              Для базовых операций, как то: создание/удаление коллекций,
+              добавление, просмотр, изменения и удаления документов есть
+              соответствующие элементы графического интерфейса:
+
+
+              <p align="center">
+                <img alt="Скриншот результата выполнения кода сверху" src="./img/2.9.png"/>
+              </p>
+
+              ```js
+
+              const a = 123
+
+              ```    
         type:
           type: string
           enum:
@@ -1116,7 +1248,34 @@ components:
           example: Что такое NestJS
         data:
           example:
-            content: '##Введение'
+            content: >
+
+              # Работа с данными в MongoDB Compass
+
+
+              ---
+
+
+              ## Работа с данными в MongoDB Compass
+
+
+              В предыдущих темах рассматривалась работа с сервером MongoDB через
+              консольную оболочку **mongosh**. Но также мы можем работать с
+              данными через графический клиент **MongoDB Compass**. Данный
+              графический клиент довольно прост и инутивно понятен в
+              использовании, а графическое представление данных для кого-то
+              может быть проще для понимание. Соответственно кому-то, возможно,
+              через графический клиент будет проще и удобнее работать.
+
+
+              Для базовых операций, как то: создание/удаление коллекций,
+              добавление, просмотр, изменения и удаления документов есть
+              соответствующие элементы графического интерфейса:
+
+
+              <p align="center">
+                <img alt="Скриншот результата выполнения кода сверху" src="./img/2.9.png"/>
+              </p>
           oneOf:
             - $ref: '#/components/schemas/TheoryDto'
             - $ref: '#/components/schemas/TestDto'
@@ -1144,3 +1303,40 @@ components:
         - type
         - createdAt
         - updatedAt
+    CreateCommentDto:
+      type: object
+      properties:
+        lessonId:
+          type: number
+          example: 1
+        text:
+          type: string
+          example: Комментарий
+      required:
+        - lessonId
+        - text
+    GetCommentDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        firstName:
+          type: string
+          example: Имя
+        lastName:
+          type: string
+          example: Фамилия
+        text:
+          type: string
+          example: Комментарий
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-07-01T10:23:15.094Z'
+      required:
+        - id
+        - firstName
+        - lastName
+        - text
+        - createdAt

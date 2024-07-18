@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionProps } from './section.props';
 import styles from './section.module.css';
 import { Htag, LessonTab } from '..';
@@ -12,12 +12,19 @@ export function Section({
   title,
   sequence,
   lessonsStat,
+  paramsSectionId,
 }: SectionProps): JSX.Element {
   const [opened, setOpened] = useState(false);
 
   const handleClickButton = () => {
     setOpened(() => !opened);
   };
+
+  useEffect(() => {
+    if (paramsSectionId === id) {
+      setOpened(true);
+    }
+  }, []);
 
   return (
     <div className={styles.section}>

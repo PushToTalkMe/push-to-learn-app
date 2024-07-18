@@ -1,0 +1,23 @@
+.comment {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header h4 {
+  margin: 0;
+}
+
+.text {
+  height: auto;
+  word-wrap: break-word;
+  border-radius: 10px;
+  margin: 6px 0 0;
+  padding: 8px 8px 13px 30px;
+  background: var(--comment-background);
+}

@@ -1,8 +1,19 @@
+.edit {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
 .form {
   display: flex;
   gap: 16px;
   flex-direction: column;
   width: 100%;
+}
+
+.buttonContainer {
+  width: 200px;
 }
 
 .button {
@@ -30,4 +41,71 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+}
+
+.avatar:hover {
+  opacity: 0.5;
+}
+
+.avatarForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.buttonAvatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  cursor: pointer;
+  background-color: var(--avatar-background);
+  font-size: 32px;
+}
+
+.buttonChangeAvatar {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.buttonChangeAvatar:hover {
+  opacity: 0.5;
+}
+
+.imgContainer {
+  width: 100%;
+  text-align: center;
+}
+
+.img {
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+}
+
+.inputFile {
+  display: none;
+}
+
+.labelFile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  cursor: pointer;
+}
+
+.labelFile:hover {
+  opacity: 0.5;
 }

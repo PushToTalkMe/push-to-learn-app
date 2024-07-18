@@ -6,11 +6,13 @@ import { Button } from '../button/button';
 import { RightMenuProps } from './right-menu.props';
 import BurgerIcon from './icons/burger.svg';
 import CloseIcon from './icons/close.svg';
-import { Htag } from '..';
 
-export const RightMenu = ({ title, children }: RightMenuProps) => {
-  const [expanded, setExpanded] = useState(false);
-
+export const RightMenu = ({
+  title,
+  children,
+  expandedFromParent,
+}: RightMenuProps) => {
+  const [expanded, setExpanded] = useState(expandedFromParent);
   return (
     <div
       className={cn(styles.rightMenu, {

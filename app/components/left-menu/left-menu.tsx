@@ -8,8 +8,6 @@ import CloseIcon from './icons/close.svg';
 import HelpIcon from './icons/help.svg';
 import LogoutIcon from './icons/logout.svg';
 import LogoIcon from './icons/logo.svg';
-import Avatar from './icons/user.svg';
-import AvatarMini from './icons/avatar_mini.svg';
 import CreateIcon from './icons/create.svg';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
@@ -21,6 +19,7 @@ import { useSignOut } from '@/hooks/auth';
 import { ROUTES } from '@/constants/routes';
 import { useAccount } from '@/hooks/account/';
 import { Loader } from '../loader/loader';
+import { Avatar } from '..';
 
 const menu: ILeftMenu[] = [
   {
@@ -64,8 +63,8 @@ export default function LeftMenu() {
           </Button>
           {expanded ? (
             <div className={styles.user}>
-              <Avatar />
-              <P size="medium">
+              {account && <Avatar url={account.avatar} />}
+              <P size="large">
                 {account ? (
                   account.firstName + ' ' + account.lastName
                 ) : (
@@ -74,7 +73,7 @@ export default function LeftMenu() {
               </P>
             </div>
           ) : (
-            <AvatarMini />
+            <>{account && <Avatar url={account.avatar} mini={true} />}</>
           )}
         </div>
         <nav

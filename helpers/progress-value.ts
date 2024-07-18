@@ -1,3 +1,4 @@
 export function progressValue(value: number, max: number) {
-  return Math.ceil((value / max) * 100);
+  const percentage = Math.ceil((value / max) * 100);
+  return percentage > 100 ? 100 : percentage;
 }
