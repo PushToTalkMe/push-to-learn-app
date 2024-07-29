@@ -34,3 +34,8 @@
 .viewed {
   border-left: 3px solid var(--secondary);
 }
+
+/* edit */
+.tabForAdmin {
+  gap: 5px;
+}

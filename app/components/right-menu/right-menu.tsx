@@ -11,6 +11,7 @@ export const RightMenu = ({
   title,
   children,
   expandedFromParent,
+  withoutButton,
 }: RightMenuProps) => {
   const [expanded, setExpanded] = useState(expandedFromParent);
   return (
@@ -21,19 +22,27 @@ export const RightMenu = ({
     >
       {expanded ? (
         <>
-          <div className={styles.header}>
+          <div
+            className={cn(styles.header, {
+              [styles.withoutButton]: withoutButton === true,
+            })}
+          >
             {title}
-            <Button
-              appearance="ghost"
-              className={cn(styles.burger, {
-                [styles.buttonExpanded]: expanded,
-              })}
-              onClick={() => {
-                setExpanded(!expanded);
-              }}
-            >
-              <CloseIcon />
-            </Button>
+            {withoutButton ? (
+              <></>
+            ) : (
+              <Button
+                appearance="ghost"
+                className={cn(styles.burger, {
+                  [styles.buttonExpanded]: expanded,
+                })}
+                onClick={() => {
+                  setExpanded(!expanded);
+                }}
+              >
+                <CloseIcon />
+              </Button>
+            )}
           </div>
           <div className={styles.innerContainer}>{children}</div>
         </>

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 export interface RightMenuProps {
   title: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   expandedFromParent?: boolean;
+  withoutButton?: boolean;
 }

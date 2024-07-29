@@ -95,6 +95,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountDto'
+  /account/info:
+    get:
+      operationId: AccountController_getInfoAboutAllUsers
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InfoAboutAllUsers'
   /account/download/*:
     get:
       operationId: AccountController_getAvatar
@@ -137,6 +150,18 @@ paths:
       responses:
         '201':
           description: ''
+  /courses/download/*:
+    get:
+      operationId: CoursesController_getImage
+      parameters:
+        - name: '0'
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
   /courses/update/{courseId}:
     patch:
       operationId: CoursesController_patchCourse
@@ -158,7 +183,58 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCourseDto'
+                $ref: '#/components/schemas/CourseDto'
+  /courses/update/image/{courseId}:
+    patch:
+      operationId: CoursesController_patchCourseImage
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchCourseImageDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
+  /courses/release/{courseId}:
+    patch:
+      operationId: CoursesController_releaseCourse
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
+  /courses/all:
+    get:
+      operationId: CoursesController_getAllCoursesForEdit
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseDtoLastLessons'
   /courses:
     get:
       operationId: CoursesController_getAllCourses
@@ -233,6 +309,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CourseDtoWithSections'
+  /courses/edit/{courseId}:
+    get:
+      operationId: CoursesController_getCourseByIdForEdit
+      parameters:
+        - name: courseId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseWithSectionsForEdit'
   /courses/my/{courseId}/sections/{sectionId}/lessons/{lessonId}:
     get:
       operationId: CoursesController_getPageLesson
@@ -320,6 +412,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SectionDto'
+  /sections/update/sequences:
+    post:
+      operationId: SectionsController_patchSequences
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSequences'
+      responses:
+        '200':
+          description: ''
   /sections/delete/{sectionId}:
     delete:
       operationId: SectionsController_deleteSection
@@ -520,6 +625,34 @@ components:
         - lastName
         - username
         - avatar
+    InfoAboutAllUsers:
+      type: object
+      properties:
+        userId:
+          type: number
+          example: 1
+        email:
+          type: string
+          example: test@mail.ru
+        firstName:
+          type: string
+          example: Иван
+        lastName:
+          type: string
+          example: Иванов
+        countCourses:
+          type: number
+          example: 0
+        role:
+          type: string
+          example: student
+      required:
+        - userId
+        - email
+        - firstName
+        - lastName
+        - countCourses
+        - role
     PatchAccountDto:
       type: object
       properties:
@@ -550,9 +683,6 @@ components:
         title:
           type: string
           example: NextJS + NestJS
-        img:
-          type: string
-          example: https://imgs.ru/img#23124123
         duration:
           type: string
           example: 7.5 часов
@@ -569,7 +699,6 @@ components:
           example: 3999
       required:
         - title
-        - img
         - duration
         - tags
         - price
@@ -579,9 +708,6 @@ components:
         title:
           type: string
           example: NextJS + NestJS
-        img:
-          type: string
-          example: https://imgs.ru/img#23124123
         duration:
           type: string
           example: 7.5 часов
@@ -596,16 +722,11 @@ components:
         price:
           type: number
           example: 3999
-        sequence:
-          type: number
-          example: '5'
       required:
         - title
-        - img
         - duration
         - tags
         - price
-        - sequence
     CourseDto:
       type: object
       properties:
@@ -635,9 +756,9 @@ components:
         price:
           type: number
           example: 1
-        sequence:
-          type: number
-          example: 1
+        inDeveloping:
+          type: boolean
+          example: false
         createdAt:
           format: date-time
           type: string
@@ -654,9 +775,76 @@ components:
         - duration
         - tags
         - price
-        - sequence
+        - inDeveloping
         - createdAt
         - updatedAt
+    PatchCourseImageDto:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+      required:
+        - file
+    CourseDtoLastLessons:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        title:
+          type: string
+          example: NextJS + NestJS
+        author:
+          type: string
+          example: Vlad Ilyin
+        img:
+          type: string
+          example: uri
+        duration:
+          type: string
+          example: 7.5 часов
+        tags:
+          example:
+            - JavaScript
+            - Frontend
+            - Backend
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          example: 1
+        inDeveloping:
+          type: boolean
+          example: false
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        lastSectionId:
+          type: number
+          example: 1
+        lastLessonId:
+          type: number
+          example: 1
+      required:
+        - id
+        - title
+        - author
+        - img
+        - duration
+        - tags
+        - price
+        - inDeveloping
+        - createdAt
+        - updatedAt
+        - lastSectionId
+        - lastLessonId
     CourseDtoWithLessonCount:
       type: object
       properties:
@@ -686,9 +874,9 @@ components:
         price:
           type: number
           example: 1
-        sequence:
-          type: number
-          example: 1
+        inDeveloping:
+          type: boolean
+          example: false
         createdAt:
           format: date-time
           type: string
@@ -708,7 +896,7 @@ components:
         - duration
         - tags
         - price
-        - sequence
+        - inDeveloping
         - createdAt
         - updatedAt
         - lessonCount
@@ -741,9 +929,9 @@ components:
         price:
           type: number
           example: 1
-        sequence:
-          type: number
-          example: 1
+        inDeveloping:
+          type: boolean
+          example: false
         createdAt:
           format: date-time
           type: string
@@ -772,7 +960,7 @@ components:
         - duration
         - tags
         - price
-        - sequence
+        - inDeveloping
         - createdAt
         - updatedAt
         - lessonCount
@@ -886,9 +1074,9 @@ components:
         price:
           type: number
           example: 1
-        sequence:
-          type: number
-          example: 1
+        inDeveloping:
+          type: boolean
+          example: false
         createdAt:
           format: date-time
           type: string
@@ -938,7 +1126,7 @@ components:
         - duration
         - tags
         - price
-        - sequence
+        - inDeveloping
         - createdAt
         - updatedAt
         - sectionsWithLessonsStat
@@ -946,6 +1134,134 @@ components:
         - lessonCount
         - historySectionId
         - historyLessonId
+    LessonsWithoutContent:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 5
+        sectionId:
+          type: number
+          example: 1
+        sequence:
+          type: number
+          example: 2
+        title:
+          type: string
+          example: Что такое NestJS
+        type:
+          type: string
+          enum:
+            - Theory
+            - Test
+            - Exercise
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+      required:
+        - id
+        - sectionId
+        - sequence
+        - title
+        - type
+        - createdAt
+        - updatedAt
+    SectionWithLessons:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '1'
+        title:
+          type: string
+          example: Введение
+        courseId:
+          type: number
+          example: '1'
+        sequence:
+          type: number
+          example: '5'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        lessons:
+          type: array
+          items:
+            $ref: '#/components/schemas/LessonsWithoutContent'
+      required:
+        - id
+        - title
+        - courseId
+        - sequence
+        - createdAt
+        - updatedAt
+        - lessons
+    CourseWithSectionsForEdit:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        title:
+          type: string
+          example: NextJS + NestJS
+        author:
+          type: string
+          example: Vlad Ilyin
+        img:
+          type: string
+          example: uri
+        duration:
+          type: string
+          example: 7.5 часов
+        tags:
+          example:
+            - JavaScript
+            - Frontend
+            - Backend
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          example: 1
+        inDeveloping:
+          type: boolean
+          example: false
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-06-17T13:55:38.747Z'
+        sectionsWithLessons:
+          type: array
+          items:
+            $ref: '#/components/schemas/SectionWithLessons'
+      required:
+        - id
+        - title
+        - author
+        - img
+        - duration
+        - tags
+        - price
+        - inDeveloping
+        - createdAt
+        - updatedAt
+        - sectionsWithLessons
     TheoryDto:
       type: object
       properties:
@@ -1154,6 +1470,27 @@ components:
         - sequence
         - createdAt
         - updatedAt
+    PatchSequence:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 5
+        sequence:
+          type: number
+          example: 5
+      required:
+        - id
+        - sequence
+    PatchSequences:
+      type: object
+      properties:
+        patch:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatchSequence'
+      required:
+        - patch
     CreateLessonDto:
       type: object
       properties:

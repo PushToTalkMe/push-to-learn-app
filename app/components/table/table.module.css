@@ -1,0 +1,27 @@
+.table {
+  width: 100%;
+  caption-side: top;
+  empty-cells: show;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 20px;
+  border-spacing: 0px;
+  cursor: default;
+}
+
+.table caption {
+  font-size: 24px;
+}
+
+.tableRowHeader {
+  font-size: 22px;
+  border-bottom: 1px solid black;
+}
+
+.tableCellHeader {
+  border-right: 1px solid black;
+}
+
+.tableCellHeader:last-child {
+  border: none;
+}

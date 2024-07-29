@@ -5,9 +5,9 @@ export function useAccountUpdate() {
   const accountQuery = useAccountQuery();
 
   const { register, handleSubmit, watch, formState, reset } = useForm<{
-    firstName: string;
-    lastName: string;
-    username: string;
+    firstName?: string;
+    lastName?: string;
+    username?: string;
   }>();
 
   const updateAccountMutation = useUpdateAccountMutation();
@@ -22,8 +22,23 @@ export function useAccountUpdate() {
     isPendingAccount: accountQuery.isPending,
     register,
     handleSubmit: handleSubmit((data) => {
-      reset();
-      return updateAccountMutation.mutate(data);
+      const dto: { firstName?: string; lastName?: string; username?: string } =
+        {};
+      if (data.firstName) {
+        dto.firstName = data.firstName;
+      }
+      if (data.lastName) {
+        dto.lastName = data.lastName;
+      }
+      if (data.username) {
+        dto.username = data.username;
+      }
+      if (dto.firstName || dto.lastName || dto.username) {
+        reset();
+        return updateAccountMutation.mutate(dto);
+      } else {
+        return;
+      }
     }),
     watch,
     formState,

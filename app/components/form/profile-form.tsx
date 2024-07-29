@@ -37,7 +37,7 @@ export function ProfileForm() {
     return (
       <div className={cn(styles.edit)}>
         {editAvatar ? (
-          <Popup setExpanded={setEditAvatar}>
+          <Popup setExpanded={setEditAvatar} avatar={true}>
             <AvatarEditForm />
           </Popup>
         ) : null}
@@ -46,7 +46,7 @@ export function ProfileForm() {
             className={cn(styles.buttonAvatar)}
             onClick={() => setEditAvatar(!editAvatar)}
           >
-            +
+            📷
           </button>
         </div>
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -57,16 +57,9 @@ export function ProfileForm() {
               inputProps={{
                 autoComplete: 'firstName',
                 type: 'text',
-                ...register('firstName', {
-                  required: 'Введите имя',
-                }),
+                ...register('firstName'),
               }}
             />
-            {errors.firstName && (
-              <Span className={styles.errorInput}>
-                {errors.firstName.message}
-              </Span>
-            )}
           </div>
           <div className={styles.messages}>
             <Input
@@ -75,16 +68,9 @@ export function ProfileForm() {
               inputProps={{
                 autoComplete: 'lastName',
                 type: 'text',
-                ...register('lastName', {
-                  required: 'Введите фамилию',
-                }),
+                ...register('lastName'),
               }}
             />
-            {errors.lastName && (
-              <Span className={styles.errorInput}>
-                {errors.lastName.message}
-              </Span>
-            )}
           </div>
           <div className={styles.messages}>
             <Input
@@ -98,8 +84,10 @@ export function ProfileForm() {
             />
           </div>
           <Button
-            disabled={isPendingUpdate || !firstName || !lastName}
-            aria-disabled={isPendingUpdate || !firstName || !lastName}
+            disabled={isPendingUpdate || (!firstName && !lastName && !username)}
+            aria-disabled={
+              isPendingUpdate || (!firstName && !lastName && !username)
+            }
             type="submit"
             className={cn(styles.button)}
             appearance="primary"
@@ -107,6 +95,11 @@ export function ProfileForm() {
             Изменить
           </Button>
           <div className={styles.messages}>
+            {!firstName && !lastName && !username && (
+              <Span className={styles.errorInput}>
+                Для изменения данных заполните хотя бы одно поле
+              </Span>
+            )}
             {errorMessage && (
               <div className={cn(styles.errorMessage)}>{errorMessage}</div>
             )}

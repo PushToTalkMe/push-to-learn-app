@@ -1,0 +1,18 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  padding: 40px 60px;
+  gap: 20px;
+  flex-grow: 1;
+}
+
+.currentLesson {
+  width: 100%;
+  background-color: white;
+}
+
+.textBlock {
+  width: 100%;
+  background-color: white;
+}

@@ -8,7 +8,7 @@ import CloseIcon from './icons/close.svg';
 import HelpIcon from './icons/help.svg';
 import LogoutIcon from './icons/logout.svg';
 import LogoIcon from './icons/logo.svg';
-import CreateIcon from './icons/create.svg';
+import DashboardIcon from '@/public/icons/dashboard.svg';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import { Button } from '../button/button';
@@ -97,15 +97,18 @@ export default function LeftMenu() {
           ))}
           {account.role === 'admin' && (
             <Link
-              href={ROUTES.CREATE}
-              key={ROUTES.CREATE}
+              href={ROUTES.DASHBOARD}
+              key={ROUTES.DASHBOARD}
               className={cn(styles.route, {
-                [styles.active]: pathname.includes(ROUTES.CREATE),
+                [styles.active]: pathname.includes(ROUTES.DASHBOARD),
               })}
             >
-              <div className={cn(styles.routeItem)}>
-                {<CreateIcon />}
-                {expanded ? <span>Создание</span> : null}
+              <div
+                className={cn(styles.routeItem)}
+                style={{ alignItems: 'center' }}
+              >
+                {<DashboardIcon />}
+                {expanded ? <span>Панель управления</span> : null}
               </div>
             </Link>
           )}

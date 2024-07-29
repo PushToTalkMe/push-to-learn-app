@@ -1,0 +1,19 @@
+.addCourse {
+  color: var(--button-color);
+  background: var(--primary-gradient);
+  cursor: pointer;
+  padding: 20px;
+  font-weight: 600;
+  font-size: 22px;
+  margin: 0;
+}
+
+.addCourse:hover {
+  opacity: 0.9;
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}

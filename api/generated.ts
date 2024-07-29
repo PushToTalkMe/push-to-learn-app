@@ -68,6 +68,15 @@ export interface CreateLessonDto {
   type: CreateLessonDtoType;
 }
 
+export interface PatchSequence {
+  id: number;
+  sequence: number;
+}
+
+export interface PatchSequences {
+  patch: PatchSequence[];
+}
+
 export interface SectionDto {
   courseId: number;
   createdAt: string;
@@ -135,19 +144,45 @@ export interface TheoryDto {
 
 export type LessonDtoWithViewedData = TheoryDto | TestDto | ExerciseDto;
 
-export interface CourseDtoWithSections {
+export type LessonsWithoutContentType =
+  (typeof LessonsWithoutContentType)[keyof typeof LessonsWithoutContentType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const LessonsWithoutContentType = {
+  Theory: 'Theory',
+  Test: 'Test',
+  Exercise: 'Exercise',
+} as const;
+
+export interface LessonsWithoutContent {
+  createdAt: string;
+  id: number;
+  sectionId: number;
+  sequence: number;
+  title: string;
+  type: LessonsWithoutContentType;
+  updatedAt: string;
+}
+
+export interface SectionWithLessons {
+  courseId: number;
+  createdAt: string;
+  id: number;
+  lessons: LessonsWithoutContent[];
+  sequence: number;
+  title: string;
+  updatedAt: string;
+}
+
+export interface CourseWithSectionsForEdit {
   author: string;
   createdAt: string;
   duration: string;
-  historyLessonId: number;
-  historySectionId: number;
   id: number;
   img: string;
-  lessonCompleted: number;
-  lessonCount: number;
+  inDeveloping: boolean;
   price: number;
-  sectionsWithLessonsStat: SectionsWithLessonsStatDto[];
-  sequence: number;
+  sectionsWithLessons: SectionWithLessons[];
   tags: string[];
   title: string;
   updatedAt: string;
@@ -181,6 +216,24 @@ export interface SectionsWithLessonsStatDto {
   updatedAt: string;
 }
 
+export interface CourseDtoWithSections {
+  author: string;
+  createdAt: string;
+  duration: string;
+  historyLessonId: number;
+  historySectionId: number;
+  id: number;
+  img: string;
+  inDeveloping: boolean;
+  lessonCompleted: number;
+  lessonCount: number;
+  price: number;
+  sectionsWithLessonsStat: SectionsWithLessonsStatDto[];
+  tags: string[];
+  title: string;
+  updatedAt: string;
+}
+
 export interface CourseDtoWithUserStat {
   author: string;
   createdAt: string;
@@ -189,10 +242,10 @@ export interface CourseDtoWithUserStat {
   historySectionId: number;
   id: number;
   img: string;
+  inDeveloping: boolean;
   lessonCompleted: number;
   lessonCount: number;
   price: number;
-  sequence: number;
   tags: string[];
   title: string;
   updatedAt: string;
@@ -204,12 +257,31 @@ export interface CourseDtoWithLessonCount {
   duration: string;
   id: number;
   img: string;
+  inDeveloping: boolean;
   lessonCount: number;
   price: number;
-  sequence: number;
   tags: string[];
   title: string;
   updatedAt: string;
+}
+
+export interface CourseDtoLastLessons {
+  author: string;
+  createdAt: string;
+  duration: string;
+  id: number;
+  img: string;
+  inDeveloping: boolean;
+  lastLessonId: number;
+  lastSectionId: number;
+  price: number;
+  tags: string[];
+  title: string;
+  updatedAt: string;
+}
+
+export interface PatchCourseImageDto {
+  file: Blob;
 }
 
 export interface CourseDto {
@@ -218,8 +290,8 @@ export interface CourseDto {
   duration: string;
   id: number;
   img: string;
+  inDeveloping: boolean;
   price: number;
-  sequence: number;
   tags: string[];
   title: string;
   updatedAt: string;
@@ -227,16 +299,13 @@ export interface CourseDto {
 
 export interface PatchCourseDto {
   duration: string;
-  img: string;
   price: number;
-  sequence: number;
   tags: string[];
   title: string;
 }
 
 export interface CreateCourseDto {
   duration: string;
-  img: string;
   price: number;
   tags: string[];
   title: string;
@@ -250,6 +319,15 @@ export interface PatchAccountDto {
   firstName: string;
   lastName: string;
   username: string;
+}
+
+export interface InfoAboutAllUsers {
+  countCourses: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  userId: number;
 }
 
 export interface AccountDto {
@@ -384,6 +462,15 @@ export const accountControllerPatchAccount = (
   );
 };
 
+export const accountControllerGetInfoAboutAllUsers = (
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<InfoAboutAllUsers[]>(
+    { url: `/account/info`, method: 'GET' },
+    options,
+  );
+};
+
 export const accountControllerGetAvatar = (
   options?: SecondParameter<typeof createInstance>,
 ) => {
@@ -426,18 +513,65 @@ export const coursesControllerCreate = (
   );
 };
 
+export const coursesControllerGetImage = (
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<void>(
+    { url: `/courses/download/*`, method: 'GET' },
+    options,
+  );
+};
+
 export const coursesControllerPatchCourse = (
   courseId: number,
   patchCourseDto: BodyType<PatchCourseDto>,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<CreateCourseDto>(
+  return createInstance<CourseDto>(
     {
       url: `/courses/update/${courseId}`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: patchCourseDto,
     },
+    options,
+  );
+};
+
+export const coursesControllerPatchCourseImage = (
+  courseId: number,
+  patchCourseImageDto: BodyType<PatchCourseImageDto>,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  const formData = new FormData();
+  formData.append('file', patchCourseImageDto.file);
+
+  return createInstance<CourseDto>(
+    {
+      url: `/courses/update/image/${courseId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: formData,
+    },
+    options,
+  );
+};
+
+export const coursesControllerReleaseCourse = (
+  courseId: number,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<CourseDto>(
+    { url: `/courses/release/${courseId}`, method: 'PATCH' },
+    options,
+  );
+};
+
+export const coursesControllerGetAllCoursesForEdit = (
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<CourseDtoLastLessons[]>(
+    { url: `/courses/all`, method: 'GET' },
     options,
   );
 };
@@ -490,6 +624,16 @@ export const coursesControllerGetCourseById = (
   );
 };
 
+export const coursesControllerGetCourseByIdForEdit = (
+  courseId: number,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<CourseWithSectionsForEdit>(
+    { url: `/courses/edit/${courseId}`, method: 'GET' },
+    options,
+  );
+};
+
 export const coursesControllerGetPageLesson = (
   courseId: number,
   sectionId: number,
@@ -524,7 +668,7 @@ export const sectionsControllerCreate = (
   createSectionDto: BodyType<CreateSectionDto>,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<void>(
+  return createInstance<SectionDto>(
     {
       url: `/sections/create`,
       method: 'POST',
@@ -546,6 +690,21 @@ export const sectionsControllerPatchSection = (
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: patchSectionDto,
+    },
+    options,
+  );
+};
+
+export const sectionsControllerPatchSequences = (
+  patchSequences: BodyType<PatchSequences>,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<void>(
+    {
+      url: `/sections/update/sequences`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: patchSequences,
     },
     options,
   );
@@ -661,6 +820,9 @@ export type AccountControllerGetAccountResult = NonNullable<
 export type AccountControllerPatchAccountResult = NonNullable<
   Awaited<ReturnType<typeof accountControllerPatchAccount>>
 >;
+export type AccountControllerGetInfoAboutAllUsersResult = NonNullable<
+  Awaited<ReturnType<typeof accountControllerGetInfoAboutAllUsers>>
+>;
 export type AccountControllerGetAvatarResult = NonNullable<
   Awaited<ReturnType<typeof accountControllerGetAvatar>>
 >;
@@ -670,8 +832,20 @@ export type AccountControllerPatchAvatarResult = NonNullable<
 export type CoursesControllerCreateResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerCreate>>
 >;
+export type CoursesControllerGetImageResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerGetImage>>
+>;
 export type CoursesControllerPatchCourseResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerPatchCourse>>
+>;
+export type CoursesControllerPatchCourseImageResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerPatchCourseImage>>
+>;
+export type CoursesControllerReleaseCourseResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerReleaseCourse>>
+>;
+export type CoursesControllerGetAllCoursesForEditResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerGetAllCoursesForEdit>>
 >;
 export type CoursesControllerGetAllCoursesResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerGetAllCourses>>
@@ -688,6 +862,9 @@ export type CoursesControllerGetMyCoursesResult = NonNullable<
 export type CoursesControllerGetCourseByIdResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerGetCourseById>>
 >;
+export type CoursesControllerGetCourseByIdForEditResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerGetCourseByIdForEdit>>
+>;
 export type CoursesControllerGetPageLessonResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerGetPageLesson>>
 >;
@@ -699,6 +876,9 @@ export type SectionsControllerCreateResult = NonNullable<
 >;
 export type SectionsControllerPatchSectionResult = NonNullable<
   Awaited<ReturnType<typeof sectionsControllerPatchSection>>
+>;
+export type SectionsControllerPatchSequencesResult = NonNullable<
+  Awaited<ReturnType<typeof sectionsControllerPatchSequences>>
 >;
 export type SectionsControllerDeleteSectionResult = NonNullable<
   Awaited<ReturnType<typeof sectionsControllerDeleteSection>>

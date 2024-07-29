@@ -10,6 +10,7 @@ export interface CardProps {
   countLessons?: number;
   lessonCompleted?: number | 0;
   price?: number;
+  inDeveloping?: boolean;
   type?: 'myCourses' | 'notMyCourses' | 'buy';
   className?: string;
 }

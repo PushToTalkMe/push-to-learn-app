@@ -9,26 +9,34 @@ import { Tag } from '../tag/tag';
 import { Span } from '../span/span';
 import { P } from '../paragraph/paragraph';
 import { CardFooter } from './card-footer';
-import { Progress } from '..';
-import { progressValue } from '@/helpers/progress-value';
+import { ImageCourse, Progress } from '..';
+import InDevelopingIcon from '@/public/icons/in-developing.svg';
 export function Card({
   id,
-  img,
   title,
   author,
   duration,
   tags,
   countLessons,
+  price,
   type,
   className,
+  inDeveloping,
   sectionId,
   lessonId,
 }: CardProps): JSX.Element {
   return (
     <div
-      className={cn(styles.card, className, { [styles.buy]: type === 'buy' })}
+      className={cn(styles.card, className, {
+        [styles.buy]: type === 'buy',
+      })}
     >
-      <img className={cn(styles.img)} src={img} alt="card" />
+      {inDeveloping && (
+        <div className={cn(styles.stub)}>
+          <InDevelopingIcon />
+        </div>
+      )}
+      <ImageCourse type={type} />
       <div className={cn(styles.cardContent)}>
         {type === 'myCourses' ? <Progress courseId={id} /> : <></>}
         <Htag tag="h2">{title}</Htag>
@@ -41,18 +49,25 @@ export function Card({
             <Tag key={index}>{tag}</Tag>
           ))}
         </div>
+        {type === 'myCourses' ? <></> : <Htag tag="h3">{price} руб.</Htag>}
         {countLessons && type === 'buy' ? (
           <P>Количество уроков: {countLessons}</P>
         ) : (
           <></>
         )}
       </div>
-      <CardFooter
-        type={type}
-        courseId={+id}
-        sectionId={sectionId}
-        lessonId={lessonId}
-      />
+      {inDeveloping ? (
+        <div className={cn(styles.cardFooter, styles.cardFooterHtag)}>
+          <Htag tag="h1">Курс в разработке</Htag>
+        </div>
+      ) : (
+        <CardFooter
+          type={type}
+          courseId={+id}
+          sectionId={sectionId}
+          lessonId={lessonId}
+        />
+      )}
     </div>
   );
 }

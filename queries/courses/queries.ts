@@ -1,26 +1,44 @@
 import {
+  coursesControllerCreate,
   coursesControllerGetAllCourses,
+  coursesControllerGetAllCoursesForEdit,
   coursesControllerGetCourseById,
+  coursesControllerGetCourseByIdForEdit,
   coursesControllerGetMyCourses,
   coursesControllerGetNotMyCourseById,
   coursesControllerGetPageLesson,
   coursesControllerLessonViewed,
+  CourseWithSectionsForEdit,
+  CreateSectionDto,
+  PatchSequences,
+  SectionDto,
+  sectionsControllerCreate,
+  sectionsControllerPatchSequences,
 } from '@/api/generated';
-import { ROUTES } from '@/constants/routes';
+import { queryClient } from '@/api/query-client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
 interface ProgressProps {
   lessonCompleted: number;
   lessonCount: number;
 }
 
+const coursesAllForEdit = ['coursesAllForEdit'] as unknown[];
 const coursesAllListKey = ['coursesAllList'] as unknown[];
 const coursesMyListKey = ['coursesMyList'] as unknown[];
 const coursesItemKey = ['coursesItem'] as unknown[];
+const coursesItemCreateKey = ['coursesItemCreate'] as unknown[];
 const coursesSectionsListKey = ['coursesSections'] as unknown[];
+const courseWithSectionsForEditKey = ['courseWithSectionsForEdit'] as unknown[];
 const lessonItemKey = ['lessonItem'] as unknown[];
 const coursesProgressListKey = ['progress'];
+
+export function useCoursesAllQuery() {
+  return useQuery({
+    queryKey: coursesAllForEdit,
+    queryFn: coursesControllerGetAllCoursesForEdit,
+  });
+}
 
 export function useCoursesAllListQuery() {
   return useQuery({
@@ -40,6 +58,13 @@ export function useCourseSectionsListQuery(courseId: number) {
   return useQuery({
     queryKey: [coursesSectionsListKey, courseId],
     queryFn: () => coursesControllerGetCourseById(courseId),
+  });
+}
+
+export function useCourseSectionsListForEditQuery(courseId: number) {
+  return useQuery({
+    queryKey: [courseWithSectionsForEditKey, courseId],
+    queryFn: () => coursesControllerGetCourseByIdForEdit(courseId),
   });
 }
 
@@ -125,6 +150,38 @@ export function useLessonViewedMutation(
       await queryClient.invalidateQueries({
         queryKey: [lessonItemKey, courseId, sectionId, lessonId],
       });
+    },
+  });
+}
+
+export function useSectionsPatchSequencesMutation() {
+  return useMutation({
+    mutationFn: (patchSequences: PatchSequences) =>
+      sectionsControllerPatchSequences(patchSequences),
+  });
+}
+
+export function useSectionsCreateMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: CreateSectionDto) => sectionsControllerCreate(body),
+    onSuccess(data: SectionDto) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        data.courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections = [
+          ...resCourseWithSectionsForEdit.sectionsWithLessons,
+          { ...data, lessons: [] },
+        ];
+        queryClient.setQueryData(
+          [courseWithSectionsForEditKey, data.courseId],
+          { ...resCourseWithSectionsForEdit, sectionsWithLessons: newSections },
+        );
+      }
     },
   });
 }

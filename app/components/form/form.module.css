@@ -43,6 +43,8 @@
   gap: 2px;
 }
 
+/* profile-form */
+
 .avatar {
   width: 100px;
   height: 100px;
@@ -52,6 +54,8 @@
 .avatar:hover {
   opacity: 0.5;
 }
+
+/* avatar-edit-form */
 
 .avatarForm {
   display: flex;
@@ -108,4 +112,113 @@
 
 .labelFile:hover {
   opacity: 0.5;
+}
+
+/* course-create-form */
+
+.courseCreate {
+  display: flex;
+  flex-direction: column;
+  width: 387px;
+  border-radius: 10px;
+  background: var(--card-background);
+}
+
+.courseInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 18px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 24px;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.tags {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tags button {
+  cursor: pointer;
+}
+
+.append {
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid var(--primary);
+  padding: 5px;
+  color: var(--color);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  width: 80px;
+  height: 53px;
+}
+
+.tagInput {
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid var(--primary);
+  padding: 5px;
+  color: var(--color);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  width: 80px;
+}
+
+.duration {
+  display: inline-flex;
+  font-size: 14px;
+  color: var(--color);
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.remove {
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  background: none;
+}
+.remove svg:hover {
+  opacity: 0.5;
+  border-radius: 100px;
+}
+
+.priceBlock {
+  display: flex;
+  align-items: flex-end;
+}
+
+.price {
+  border: none;
+  width: 60px;
+  font-weight: 600;
+  font-size: 22px;
+  margin: 0;
+  padding: 0;
+}
+
+.price::-webkit-outer-spin-button,
+.price::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

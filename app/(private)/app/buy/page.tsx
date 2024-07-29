@@ -33,32 +33,34 @@ export default function Buy() {
           <p>Статус-код: {error.status}</p>
         </div>
       )}
-      {course && (
-        <div className={cn(styles.buy)}>
-          <Card
-            id={course.id}
-            author={course.author}
-            title={course.title}
-            duration={course.duration}
-            tags={course.tags}
-            price={course.price}
-            img="https://media.proglib.io/posts/2019/11/03/c236c35c960c7016e0d785b0558026c4.png"
-            key={course.id}
-            countLessons={course.lessonCount}
-            type={'buy'}
-          />
-          <div className={cn(styles.button)}>
-            <Button
-              appearance="primary"
-              onClick={handleClick}
-              disabled={isPendingBuy}
-            >
-              Купить
-            </Button>
-          </div>
-          {errorMessage && <div>Ошибка покупки</div>}
-        </div>
-      )}
+      {course && course.inDeveloping
+        ? notFound()
+        : course && (
+            <div className={cn(styles.buy)}>
+              <Card
+                id={course.id}
+                author={course.author}
+                title={course.title}
+                duration={course.duration}
+                tags={course.tags}
+                price={course.price}
+                img={course.img}
+                key={course.id}
+                countLessons={course.lessonCount}
+                type={'buy'}
+              />
+              <div className={cn(styles.button)}>
+                <Button
+                  appearance="primary"
+                  onClick={handleClick}
+                  disabled={isPendingBuy}
+                >
+                  Купить
+                </Button>
+              </div>
+              {errorMessage && <div>Ошибка покупки</div>}
+            </div>
+          )}
     </>
   );
 }

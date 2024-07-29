@@ -1,1 +1,5 @@
-export { useAccountQuery, useUpdateAccountMutation } from './queries';
+export {
+  useAccountQuery,
+  useUpdateAccountMutation,
+  useAccountGetInfoAboutAllUsersQuery,
+} from './queries';

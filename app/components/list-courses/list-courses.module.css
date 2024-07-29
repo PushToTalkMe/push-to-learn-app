@@ -1,0 +1,19 @@
+.tableRow {
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 20px;
+}
+
+.tableRow:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.tableCell {
+  text-align: center;
+  border-right: 1px solid black;
+}
+
+.tableCell:last-child {
+  border: none;
+}

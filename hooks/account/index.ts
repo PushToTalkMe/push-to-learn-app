@@ -1,4 +1,3 @@
-import { useAccount } from './use-account';
-import { useAccountUpdate } from './use-account-update';
-
-export { useAccount, useAccountUpdate };
+export * from './use-account-info-about-users';
+export * from './use-account-update';
+export * from './use-account';

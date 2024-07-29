@@ -1,12 +1,14 @@
 import {
   accountControllerGetAccount,
   accountControllerGetAvatar,
+  accountControllerGetInfoAboutAllUsers,
   accountControllerPatchAccount,
   accountControllerPatchAvatar,
 } from '@/api/generated';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const accountKey = ['account'];
+const infoAboutUsers = ['info'];
 const accountAvatarKey = ['accountAvatar'];
 
 export function useAccountQuery() {
@@ -38,5 +40,12 @@ export function useAccountAvatarUpdateQuery() {
     async onSettled() {
       await queryClient.invalidateQueries({ queryKey: accountAvatarKey });
     },
+  });
+}
+
+export function useAccountGetInfoAboutAllUsersQuery() {
+  return useQuery({
+    queryKey: infoAboutUsers,
+    queryFn: accountControllerGetInfoAboutAllUsers,
   });
 }

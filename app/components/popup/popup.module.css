@@ -22,9 +22,28 @@
 }
 
 .module {
+  display: flex;
   background-color: white;
   width: 500px;
   border-radius: 20px;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar {
+  padding: 0;
+}
+
+.editCourse {
+  width: 90%;
+  height: auto;
+  overflow: auto;
+}
+
+.body {
+  background: var(--body-background);
 }
 
 .avatarForm {

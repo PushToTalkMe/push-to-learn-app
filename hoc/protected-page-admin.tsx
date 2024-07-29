@@ -18,6 +18,8 @@ export function protectedPageAdmin<P>(Component: (props: P) => ReactElement) {
 
     if (isSuccess && data.role === 'admin') {
       return <Component {...props} />;
+    } else {
+      redirect(ROUTES.ALL_COURSES);
     }
   };
 }
