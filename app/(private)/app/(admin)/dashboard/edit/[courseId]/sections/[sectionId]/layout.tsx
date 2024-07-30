@@ -18,7 +18,7 @@ import {
   Draggable,
   OnDragEndResponder,
 } from '@hello-pangea/dnd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SectionWithLessons } from '@/api/generated';
 import { DroppableProvider } from '@/app/providers/droppable.provider';
 import { DraggableProvider } from '@/app/providers/draggable.provider';

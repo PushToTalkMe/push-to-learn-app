@@ -155,9 +155,45 @@ export function useLessonViewedMutation(
 }
 
 export function useSectionsPatchSequencesMutation() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (patchSequences: PatchSequences) =>
       sectionsControllerPatchSequences(patchSequences),
+    onSuccess(data: any) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        data[0].courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections =
+          resCourseWithSectionsForEdit.sectionsWithLessons.map(
+            (section, index) => {
+              const newSections = data
+                .map((newSection: any) => {
+                  if (section.id === newSection.id) {
+                    return { ...section, sequence: newSection.sequence };
+                  }
+                  return null;
+                })
+                .filter((newSection: any) => newSection !== null);
+
+              return newSections[0];
+            },
+          );
+        const sortedNewSection = newSections.sort(
+          (a, b) => a.sequence - b.sequence,
+        );
+        queryClient.setQueryData(
+          [courseWithSectionsForEditKey, data[0].courseId],
+          {
+            ...resCourseWithSectionsForEdit,
+            sectionsWithLessons: sortedNewSection,
+          },
+        );
+      }
+    },
   });
 }
 

@@ -6,7 +6,7 @@ import {
   SectionProps,
 } from './section.props';
 import styles from './section.module.css';
-import { Htag, LessonTab } from '..';
+import { Button, Htag, LessonTab } from '..';
 import ArrowIcon from '../button/arrow.svg';
 import cn from 'classnames';
 import { Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd';
@@ -231,6 +231,19 @@ function SectionForAdmin({
         ) : (
           <></>
         )}
+        <Button
+          appearance="primary"
+          className={cn(styles.addLesson, {
+            [styles.opened]: opened === true,
+          })}
+          disabled={false}
+          onClick={() => {
+            // handleCreateLesson({ courseId, title: 'Новый раздел' });
+            console.log(lessons);
+          }}
+        >
+          Добавить урок
+        </Button>
       </div>
     </div>
   );
