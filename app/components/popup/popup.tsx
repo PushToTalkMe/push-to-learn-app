@@ -7,6 +7,7 @@ export const Popup = ({
   background,
   avatar,
   editCourse,
+  createLessons,
   setExpanded,
 }: PopupProps): JSX.Element => {
   return (
@@ -20,6 +21,7 @@ export const Popup = ({
           [styles.body]: background === 'body',
           [styles.avatar]: avatar === true,
           [styles.editCourse]: editCourse === true,
+          [styles.createLessons]: createLessons === true,
         })}
       >
         {children}

@@ -1,3 +1,4 @@
+'use client';
 import {
   coursesControllerCreate,
   coursesControllerGetAllCourses,
@@ -9,14 +10,27 @@ import {
   coursesControllerGetPageLesson,
   coursesControllerLessonViewed,
   CourseWithSectionsForEdit,
+  CreateLessonDto,
   CreateSectionDto,
+  LessonDto,
+  lessonsControllerCreate,
+  lessonsControllerDeletelesson,
+  lessonsControllerPatchLesson,
+  lessonsControllerPatchSequences,
+  PatchSectionDto,
   PatchSequences,
   SectionDto,
   sectionsControllerCreate,
+  sectionsControllerDeleteSection,
+  sectionsControllerPatchSection,
   sectionsControllerPatchSequences,
+  PatchLessonDto,
 } from '@/api/generated';
 import { queryClient } from '@/api/query-client';
+import { Section } from '@/app/components';
+import { ROUTES } from '@/constants/routes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 interface ProgressProps {
   lessonCompleted: number;
@@ -197,6 +211,112 @@ export function useSectionsPatchSequencesMutation() {
   });
 }
 
+export function useLessonsPatchSequencesMutation(
+  courseId: number,
+  sectionId: number,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (patchSequences: PatchSequences) =>
+      lessonsControllerPatchSequences(patchSequences),
+    onSuccess(data: any) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections =
+          resCourseWithSectionsForEdit.sectionsWithLessons.map(
+            (section, index) => {
+              if (section.id === sectionId) {
+                const sortedLessons = data.sort(
+                  (a, b) => a.sequence - b.sequence,
+                );
+                return { ...section, lessons: sortedLessons };
+              }
+              return section;
+            },
+          );
+        queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+          ...resCourseWithSectionsForEdit,
+          sectionsWithLessons: newSections,
+        });
+      }
+    },
+  });
+}
+
+export function useSectionsPatchTitleMutation(sectionId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (patchSectionDto: PatchSectionDto) =>
+      sectionsControllerPatchSection(sectionId, patchSectionDto),
+    onSuccess(data: SectionDto) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        data.courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections =
+          resCourseWithSectionsForEdit.sectionsWithLessons.map((section) => {
+            if (section.id === sectionId) {
+              return { ...section, title: data.title };
+            }
+            return section;
+          });
+        queryClient.setQueryData(
+          [courseWithSectionsForEditKey, data.courseId],
+          { ...resCourseWithSectionsForEdit, sectionsWithLessons: newSections },
+        );
+      }
+    },
+  });
+}
+
+export function useLessonPatchTitleMutation(
+  courseId: number,
+  lessonId: number,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (patchLessonDto: PatchLessonDto) =>
+      lessonsControllerPatchLesson(lessonId, patchLessonDto),
+    onSuccess(data: LessonDto) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections =
+          resCourseWithSectionsForEdit.sectionsWithLessons.map((section) => {
+            if (section.id === data.sectionId) {
+              return {
+                ...section,
+                lessons: section.lessons.map((lesson) => {
+                  if (lesson.id === data.id) {
+                    return { ...lesson, title: data.title };
+                  }
+                  return lesson;
+                }),
+              };
+            }
+            return section;
+          });
+        queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+          ...resCourseWithSectionsForEdit,
+          sectionsWithLessons: newSections,
+        });
+      }
+    },
+  });
+}
+
 export function useSectionsCreateMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -217,6 +337,115 @@ export function useSectionsCreateMutation() {
           [courseWithSectionsForEditKey, data.courseId],
           { ...resCourseWithSectionsForEdit, sectionsWithLessons: newSections },
         );
+      }
+    },
+  });
+}
+
+export function useLessonCreateMutation(courseId: number) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: (body: CreateLessonDto) => lessonsControllerCreate(body),
+    onSuccess(data: LessonDto) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections =
+          resCourseWithSectionsForEdit.sectionsWithLessons.map((section) => {
+            if (section.id === data.sectionId) {
+              return {
+                ...section,
+                lessons: [
+                  ...section.lessons,
+                  {
+                    id: data.id,
+                    title: data.title,
+                    sequence: data.sequence,
+                    sectionId: data.sectionId,
+                    type: data.type,
+                    createdAt: data.createdAt,
+                    updatedAt: data.updatedAt,
+                  },
+                ],
+              };
+            }
+            return section;
+          });
+        queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+          ...resCourseWithSectionsForEdit,
+          sectionsWithLessons: newSections,
+        });
+      }
+      router.push(
+        ROUTES.EDIT_COURSE +
+          `/${courseId}` +
+          '/sections' +
+          `/${data.sectionId}` +
+          '/lessons' +
+          `/${data.id}`,
+      );
+    },
+  });
+}
+
+export function useSectionsDeleteMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (sectionId: number) =>
+      sectionsControllerDeleteSection(sectionId),
+    onSuccess(data: SectionDto) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        data.courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections = resCourseWithSectionsForEdit.sectionsWithLessons
+          .filter((section) => section.id !== data.id)
+          .map((section, index) => ({ ...section, sequence: index + 1 }));
+        queryClient.setQueryData(
+          [courseWithSectionsForEditKey, data.courseId],
+          { ...resCourseWithSectionsForEdit, sectionsWithLessons: newSections },
+        );
+      }
+    },
+  });
+}
+
+export function useLessonsDeleteMutation(courseId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (lessonId: number) => lessonsControllerDeletelesson(lessonId),
+    onSuccess(data: LessonDto) {
+      const resCourseWithSectionsForEdit:
+        | CourseWithSectionsForEdit
+        | undefined = queryClient.getQueryData([
+        courseWithSectionsForEditKey,
+        courseId,
+      ]);
+      if (resCourseWithSectionsForEdit) {
+        const newSections =
+          resCourseWithSectionsForEdit.sectionsWithLessons.map((section) => {
+            if (section.id === data.sectionId) {
+              return {
+                ...section,
+                lessons: section.lessons
+                  .filter((lesson) => lesson.id !== data.id)
+                  .map((lesson, index) => ({ ...lesson, sequence: index + 1 })),
+              };
+            }
+            return section;
+          });
+        queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+          ...resCourseWithSectionsForEdit,
+          sectionsWithLessons: newSections,
+        });
       }
     },
   });

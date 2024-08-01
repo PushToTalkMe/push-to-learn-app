@@ -11,6 +11,21 @@
   visibility: visible;
 }
 
+.buttons {
+  background: var(--lesson-tab-background);
+  display: flex;
+  gap: 10px;
+}
+
+.buttonForLessonTab {
+  cursor: pointer;
+  background: none;
+}
+
+.buttonForLessonTab:hover {
+  opacity: 0.5;
+}
+
 .active {
   background: var(--gradient-opacity) !important;
   color: var(--viewed-color);
@@ -21,7 +36,21 @@
   stroke-width: 2;
 }
 
-.title {
+.activeButtons {
+  background: var(--primary) !important;
+  color: var(--viewed-color);
+}
+
+.activeButtons svg path {
+  stroke: var(--lesson-tab-active-color);
+  stroke-width: 2;
+}
+
+.activeInput {
+  color: var(--viewed-color);
+}
+
+.titleAndType {
   padding: 20px 30px;
   background: var(--lesson-tab-background);
   display: flex;
@@ -29,13 +58,45 @@
   align-items: center;
   width: 100%;
   cursor: pointer;
+  font-size: 18px;
+  line-height: 29px;
+  font-weight: 500;
+}
+
+.title {
+  display: flex;
 }
 
 .viewed {
   border-left: 3px solid var(--secondary);
 }
 
-/* edit */
-.tabForAdmin {
-  gap: 5px;
+.errorMessage {
+  text-align: center;
+  color: var(--primary);
+}
+
+.inputForLesson {
+  border: none;
+  margin: 0;
+  font-size: 18px;
+  line-height: 29px;
+  font-weight: 500;
+  background: none;
+}
+
+.inputForLesson:hover {
+  background: var(--gray-light);
+  color: var(--color);
+}
+
+.inputForLesson:focus {
+  background: var(--gray-light);
+  color: var(--color);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

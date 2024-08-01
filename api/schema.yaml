@@ -437,6 +437,10 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionDto'
   /lessons/create:
     post:
       operationId: LessonsController_create
@@ -472,6 +476,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LessonDto'
+  /lessons/update/sequences:
+    post:
+      operationId: LessonsController_patchSequences
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSequences'
+      responses:
+        '200':
+          description: ''
   /lessons/delete/{lessonId}:
     delete:
       operationId: LessonsController_deletelesson
@@ -1434,12 +1451,8 @@ components:
         title:
           type: string
           example: Введение
-        sequence:
-          type: number
-          example: '5'
       required:
         - title
-        - sequence
     SectionDto:
       type: object
       properties:

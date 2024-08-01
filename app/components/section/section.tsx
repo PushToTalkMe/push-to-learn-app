@@ -6,12 +6,17 @@ import {
   SectionProps,
 } from './section.props';
 import styles from './section.module.css';
-import { Button, Htag, LessonTab } from '..';
-import ArrowIcon from '../button/arrow.svg';
+import { Button, Htag, LessonsCreate, LessonTab, Popup, Span } from '..';
+import AngleDown from '@/public/icons/angle-down.svg';
+import AngleUp from '@/public/icons/angle-up.svg';
+import TrashIcon from '@/public/icons/trash.svg';
 import cn from 'classnames';
 import { Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd';
 import { DroppableProvider } from '@/app/providers/droppable.provider';
 import { DraggableProvider } from '@/app/providers/draggable.provider';
+import { useSectionDelete } from '@/hooks/courses/use-section-delete';
+import { useSectionsPatchTitle } from '@/hooks/courses/use-section-patch-title';
+import { useLessonsPatchSequences } from '@/hooks/courses/use-lessons-patch-sequences copy';
 
 export function Section({
   id,
@@ -79,12 +84,8 @@ function SectionForUser({
         <Htag tag="h3">
           {sequence}. {title}
         </Htag>
-        <div
-          className={cn(styles.arrow, {
-            [styles.arrowDown]: opened === true,
-          })}
-        >
-          <ArrowIcon />
+        <div className={cn(styles.buttonForSectionTab)}>
+          {opened ? <AngleUp /> : <AngleDown />}
         </div>
       </button>
       <div className={styles.lessons}>
@@ -125,6 +126,27 @@ function SectionForAdmin({
   provided,
 }: SectionForAdminProps): JSX.Element {
   const [opened, setOpened] = useState(false);
+  const [createLesson, setCreateLesson] = useState(false);
+
+  const {
+    handlePatchSequences,
+    isPending: isPendingLessonsPatchSequences,
+    isSuccess: isSuccessLessonsPatchSequences,
+    error: errorLessonPatchSequences,
+  } = useLessonsPatchSequences(courseId, id);
+
+  const {
+    error: errorPatchTitle,
+    register,
+    watch,
+    formState: { errors },
+    handleSubmit,
+  } = useSectionsPatchTitle(id);
+
+  const [titleSectionForInput] = watch(['titleSectionForInput']);
+
+  const { handleDeleteSection, isPending, isSuccess, error } =
+    useSectionDelete();
 
   useEffect(() => {
     if (paramsSectionId === id) {
@@ -150,7 +172,11 @@ function SectionForAdmin({
       lesson.sequence = index + 1;
       return lesson;
     });
-
+    const patchSequences = newLessons.map((lessons) => ({
+      id: lessons.id,
+      sequence: lessons.sequence,
+    }));
+    handlePatchSequences({ patch: patchSequences });
     setSections((state) =>
       state.map((section) => {
         if (section.id === id) {
@@ -180,71 +206,116 @@ function SectionForAdmin({
     }
   };
   return (
-    <div className={cn(styles.sectionForAdmin)}>
-      {/* Вместо div сделать input для название. С Sequence также будем играться через dnd. */}
-      <div
-        className={styles.contentForAdmin}
-        onClick={handleClickButton}
-        {...provided.dragHandleProps}
-      >
-        <div className={cn(styles.titleForAdmin)}>
-          {sequence}. {title}
-        </div>
-        <div
-          className={cn(styles.arrow, {
-            [styles.arrowDown]: opened === true,
-          })}
+    <>
+      {createLesson ? (
+        <Popup
+          setExpanded={setCreateLesson}
+          background="body"
+          createLessons={true}
         >
-          <ArrowIcon />
+          <LessonsCreate
+            courseId={courseId}
+            sectionId={id}
+            setExpanded={setCreateLesson}
+            setSections={setSections}
+          />
+        </Popup>
+      ) : null}
+      <div className={cn(styles.sectionForAdmin)}>
+        <div className={cn(styles.sectionTab)}>
+          <div className={styles.contentForAdmin} {...provided.dragHandleProps}>
+            <div className={cn(styles.titleForAdmin)}>
+              {sequence}.{'\u00A0'}
+              <form onSubmit={(e) => e.preventDefault()} onBlur={handleSubmit}>
+                <input
+                  className={cn(styles.inputForSection)}
+                  type="text"
+                  defaultValue={title}
+                  maxLength={20}
+                  placeholder="Заголовок"
+                  {...register('titleSectionForInput', {
+                    required: 'Введите заголовок для раздела',
+                  })}
+                />
+                {errors && (
+                  <Span className={styles.errorInput}>
+                    {errors.titleSectionForInput?.message}
+                  </Span>
+                )}
+                {errorPatchTitle && (
+                  <Span className={styles.errorInput}>{errorPatchTitle}</Span>
+                )}
+              </form>
+            </div>
+          </div>
+          <div className={cn(styles.buttons)}>
+            <button
+              className={cn(styles.buttonForSectionTab)}
+              onClick={handleClickButton}
+            >
+              {opened ? <AngleUp /> : <AngleDown />}
+            </button>
+            <button
+              className={cn(styles.buttonForSectionTab)}
+              onClick={() => {
+                handleDeleteSection(id);
+                setSections((state) =>
+                  state.filter((section) => section.id !== id),
+                );
+              }}
+            >
+              <TrashIcon />
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div className={styles.lessons}>
-        {lessons ? (
-          <DroppableProvider
-            onDragEnd={onDragEnd}
-            droppableId={'lessons-' + String(id)}
-          >
-            {lessons.map((lesson, index) => {
-              return (
-                <DraggableProvider
-                  key={'lesson-' + lesson.id}
-                  draggableId={String('lesson-' + lesson.id)}
-                  index={index}
-                >
-                  <LessonTab
-                    id={lesson.id}
-                    sectionId={id}
-                    courseId={courseId}
-                    key={lesson.id}
-                    title={lesson.title}
-                    type={lesson.type}
-                    sequence={index + 1}
-                    sectionSequence={sequence}
-                    opened={opened}
-                    edit={edit}
-                  />
-                </DraggableProvider>
-              );
+        <div className={styles.lessons}>
+          {lessons ? (
+            <DroppableProvider
+              onDragEnd={onDragEnd}
+              droppableId={'lessons-' + String(id)}
+            >
+              {lessons.map((lesson, index) => {
+                return (
+                  <DraggableProvider
+                    key={'lesson-' + lesson.id}
+                    draggableId={String('lesson-' + lesson.id)}
+                    index={index}
+                  >
+                    <LessonTab
+                      id={lesson.id}
+                      sectionId={id}
+                      courseId={courseId}
+                      key={lesson.id}
+                      title={lesson.title}
+                      type={lesson.type}
+                      sequence={index + 1}
+                      sectionSequence={sequence}
+                      opened={opened}
+                      edit={edit}
+                      setSections={setSections}
+                    />
+                  </DraggableProvider>
+                );
+              })}
+            </DroppableProvider>
+          ) : (
+            <></>
+          )}
+          <Button
+            appearance="primary"
+            className={cn(styles.addLesson, {
+              [styles.opened]: opened === true,
             })}
-          </DroppableProvider>
-        ) : (
-          <></>
-        )}
-        <Button
-          appearance="primary"
-          className={cn(styles.addLesson, {
-            [styles.opened]: opened === true,
-          })}
-          disabled={false}
-          onClick={() => {
-            // handleCreateLesson({ courseId, title: 'Новый раздел' });
-            console.log(lessons);
-          }}
-        >
-          Добавить урок
-        </Button>
+            disabled={false}
+            onClick={() => {
+              // handleCreateLesson({ sectionId, title: 'Новый раздел', data, type: Theory || Test || Exercise });
+              setCreateLesson(true);
+            }}
+          >
+            Добавить урок
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,0 +1,15 @@
+.lessonCreateCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+  border-radius: 20px;
+  background: white;
+  width: 250px;
+  height: 300px;
+}
+
+.active svg path {
+  stroke: var(--primary);
+}

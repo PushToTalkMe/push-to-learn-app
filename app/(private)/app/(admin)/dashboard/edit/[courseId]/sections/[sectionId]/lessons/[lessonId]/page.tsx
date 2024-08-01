@@ -16,7 +16,7 @@ export default function CreateLessons({
   }
   return (
     <div className={styles.page}>
-      <div className={styles.currentLesson}></div>
+      <div className={styles.currentCourse}></div>
       <div className={styles.textBlock}>
         <TextEditorProvider>
           <ToolPanel />

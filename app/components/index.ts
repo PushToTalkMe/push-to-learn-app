@@ -28,3 +28,5 @@ export * from './list-courses/list-courses';
 export * from './date/date';
 export * from './date/time';
 export * from './sections-for-admin/sections-for-admin';
+export * from './lessons-create/lessons-create';
+export * from './lesson-create-card/lesson-create-card';

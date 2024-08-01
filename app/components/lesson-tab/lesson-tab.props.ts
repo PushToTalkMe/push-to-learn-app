@@ -1,4 +1,5 @@
-import { LessonStatType } from '@/api/generated';
+import { LessonStatType, SectionWithLessons } from '@/api/generated';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface LessonTabProps {
   id: number;
@@ -11,6 +12,7 @@ export interface LessonTabProps {
   viewed?: boolean;
   edit?: boolean;
   opened: boolean;
+  setSections?: Dispatch<SetStateAction<SectionWithLessons[]>>;
 }
 
 export interface LessonTabForUserProps {
@@ -34,4 +36,5 @@ export interface LessonTabForAdminProps {
   sectionSequence: number;
   type: LessonStatType;
   opened: boolean;
+  setSections: Dispatch<SetStateAction<SectionWithLessons[]>>;
 }

@@ -11,5 +11,6 @@ export interface PopupProps
   background?: 'body';
   avatar?: boolean;
   editCourse?: boolean;
+  createLessons?: boolean;
   setExpanded: (value: SetStateAction<boolean>) => void;
 }

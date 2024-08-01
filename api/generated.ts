@@ -44,8 +44,8 @@ export interface LessonDto {
 export type PatchLessonDtoData = TheoryDto | TestDto | ExerciseDto;
 
 export interface PatchLessonDto {
-  data: PatchLessonDtoData;
-  sequence: number;
+  data?: PatchLessonDtoData;
+  sequence?: number;
   title: string;
 }
 
@@ -62,9 +62,7 @@ export const CreateLessonDtoType = {
 export type CreateLessonDtoData = { [key: string]: any };
 
 export interface CreateLessonDto {
-  data: CreateLessonDtoData;
   sectionId: number;
-  title: string;
   type: CreateLessonDtoType;
 }
 
@@ -87,7 +85,6 @@ export interface SectionDto {
 }
 
 export interface PatchSectionDto {
-  sequence: number;
   title: string;
 }
 
@@ -668,7 +665,7 @@ export const sectionsControllerCreate = (
   createSectionDto: BodyType<CreateSectionDto>,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<SectionDto>(
+  return createInstance<void>(
     {
       url: `/sections/create`,
       method: 'POST',
@@ -714,7 +711,7 @@ export const sectionsControllerDeleteSection = (
   sectionId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<void>(
+  return createInstance<SectionDto>(
     { url: `/sections/delete/${sectionId}`, method: 'DELETE' },
     options,
   );
@@ -724,7 +721,7 @@ export const lessonsControllerCreate = (
   createLessonDto: BodyType<CreateLessonDto>,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<void>(
+  return createInstance<LessonDto>(
     {
       url: `/lessons/create`,
       method: 'POST',
@@ -735,7 +732,7 @@ export const lessonsControllerCreate = (
   );
 };
 
-export const lessonsControllerPatchCourse = (
+export const lessonsControllerPatchLesson = (
   lessonId: number,
   patchLessonDto: BodyType<PatchLessonDto>,
   options?: SecondParameter<typeof createInstance>,
@@ -751,11 +748,26 @@ export const lessonsControllerPatchCourse = (
   );
 };
 
+export const lessonsControllerPatchSequences = (
+  patchSequences: BodyType<PatchSequences>,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<void>(
+    {
+      url: `/lessons/update/sequences`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: patchSequences,
+    },
+    options,
+  );
+};
+
 export const lessonsControllerDeletelesson = (
   lessonId: number,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<void>(
+  return createInstance<LessonDto>(
     { url: `/lessons/delete/${lessonId}`, method: 'DELETE' },
     options,
   );
@@ -887,7 +899,10 @@ export type LessonsControllerCreateResult = NonNullable<
   Awaited<ReturnType<typeof lessonsControllerCreate>>
 >;
 export type LessonsControllerPatchCourseResult = NonNullable<
-  Awaited<ReturnType<typeof lessonsControllerPatchCourse>>
+  Awaited<ReturnType<typeof lessonsControllerPatchLesson>>
+>;
+export type LessonsControllerPatchSequencesResult = NonNullable<
+  Awaited<ReturnType<typeof lessonsControllerPatchSequences>>
 >;
 export type LessonsControllerDeletelessonResult = NonNullable<
   Awaited<ReturnType<typeof lessonsControllerDeletelesson>>

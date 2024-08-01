@@ -41,7 +41,7 @@ export function SectionsForAdmin({
       section.sequence = index + 1;
       return section;
     });
-    const patchSequences = sections.map((section) => ({
+    const patchSequences = newSections.map((section) => ({
       id: section.id,
       sequence: section.sequence,
     }));
@@ -69,14 +69,14 @@ export function SectionsForAdmin({
   };
 
   useEffect(() => {
-    if (errorCreateSection) {
+    if (errorCreateSection || error) {
       alert(`Не удалось сохранить изменения на сервере.${error}`);
     }
     if (newSection) {
       const newState = [...sections, { ...newSection, lessons: [] }];
       setSections(newState);
     }
-  }, [error, newSection]);
+  }, [errorCreateSection, error, newSection]);
 
   return (
     <div className={styles.sections}>
