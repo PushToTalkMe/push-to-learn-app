@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   SectionForAdminProps,
   SectionForUserProps,
@@ -144,6 +144,7 @@ function SectionForAdmin({
   } = useSectionsPatchTitle(id);
 
   const [titleSectionForInput] = watch(['titleSectionForInput']);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { handleDeleteSection, isPending, isSuccess, error } =
     useSectionDelete();
@@ -226,7 +227,15 @@ function SectionForAdmin({
           <div className={styles.contentForAdmin} {...provided.dragHandleProps}>
             <div className={cn(styles.titleForAdmin)}>
               {sequence}.{'\u00A0'}
-              <form onSubmit={(e) => e.preventDefault()} onBlur={handleSubmit}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (inputRef.current) {
+                    inputRef.current.blur();
+                  }
+                }}
+                onBlur={handleSubmit}
+              >
                 <input
                   className={cn(styles.inputForSection)}
                   type="text"
@@ -236,6 +245,10 @@ function SectionForAdmin({
                   {...register('titleSectionForInput', {
                     required: 'Введите заголовок для раздела',
                   })}
+                  ref={(e) => {
+                    inputRef.current = e;
+                    return register('titleSectionForInput').ref(e);
+                  }}
                 />
                 {errors && (
                   <Span className={styles.errorInput}>

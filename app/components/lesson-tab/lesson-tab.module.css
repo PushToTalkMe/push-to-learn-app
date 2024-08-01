@@ -47,6 +47,7 @@
 }
 
 .activeInput {
+  border-color: white !important;
   color: var(--viewed-color);
 }
 
@@ -61,6 +62,7 @@
   font-size: 18px;
   line-height: 29px;
   font-weight: 500;
+  cursor: grab;
 }
 
 .title {
@@ -82,12 +84,12 @@
   font-size: 18px;
   line-height: 29px;
   font-weight: 500;
+  border-radius: 20px;
   background: none;
 }
 
 .inputForLesson:hover {
-  background: var(--gray-light);
-  color: var(--color);
+  border: 1px solid black;
 }
 
 .inputForLesson:focus {

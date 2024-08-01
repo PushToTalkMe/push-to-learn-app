@@ -1,6 +1,6 @@
 'use client';
 //Настроить active и viewed (поменять местами)
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   LessonTabForAdminProps,
   LessonTabForUserProps,
@@ -144,6 +144,7 @@ export function LessonTabForAdmin({
     handleSubmit,
   } = useLessonPatchTitle(courseId, id);
   const [titleLessonForInput] = watch(['titleLessonForInput']);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClickButton = () => {
     router.push(
@@ -167,7 +168,15 @@ export function LessonTabForAdmin({
         <div className={cn(styles.title)}>
           {sectionSequence}.{sequence}
           {'\u00A0'}
-          <form onSubmit={(e) => e.preventDefault()} onBlur={handleSubmit}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (inputRef.current) {
+                inputRef.current.blur();
+              }
+            }}
+            onBlur={handleSubmit}
+          >
             <input
               className={cn(styles.inputForLesson, {
                 [styles.activeInput]: pathname.includes(
@@ -179,8 +188,12 @@ export function LessonTabForAdmin({
               maxLength={25}
               placeholder="Заголовок"
               {...register('titleLessonForInput', {
-                required: 'Введите заголовок для раздела',
+                required: 'Введите заголовок для урокаы',
               })}
+              ref={(e) => {
+                inputRef.current = e;
+                return register('titleLessonForInput').ref(e);
+              }}
               onClick={(e) => {
                 e.stopPropagation();
               }}

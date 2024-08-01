@@ -85,12 +85,14 @@
   font-weight: 600;
   font-size: 22px;
   margin: 0;
+  border-radius: 20px;
 }
 
 .inputForSection:hover {
-  background: var(--gray-light);
+  border: 1px solid black;
 }
 
 .inputForSection:focus {
   background: var(--gray-light);
+  color: var(--color);
 }
