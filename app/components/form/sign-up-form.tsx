@@ -27,11 +27,16 @@ export function SignUpForm() {
         <Input
           label="Имя"
           inputValue={firstName}
+          maxLength={30}
           inputProps={{
             autoComplete: 'firstName',
             type: 'text',
             ...register('firstName', {
               required: 'Введите имя',
+              maxLength: {
+                value: 30,
+                message: 'Максимальное количество символов: 30',
+              },
             }),
           }}
         />
@@ -43,11 +48,16 @@ export function SignUpForm() {
         <Input
           label="Фамилия"
           inputValue={lastName}
+          maxLength={30}
           inputProps={{
             autoComplete: 'lastName',
             type: 'text',
             ...register('lastName', {
               required: 'Введите фамилию',
+              maxLength: {
+                value: 30,
+                message: 'Максимальное количество символов: 30',
+              },
             }),
           }}
         />
@@ -75,11 +85,16 @@ export function SignUpForm() {
         <Input
           label="Пароль"
           inputValue={password}
+          minLength={8}
           inputProps={{
             type: 'password',
             autoComplete: 'new-password',
             ...register('password', {
               required: 'Введите пароль',
+              minLength: {
+                value: 8,
+                message: 'Минимальное количество символов: 8',
+              },
             }),
           }}
         />
@@ -89,7 +104,16 @@ export function SignUpForm() {
       </div>
 
       <Button
-        disabled={isPending || !email || !password || !firstName || !lastName}
+        disabled={
+          isPending ||
+          !email ||
+          !password ||
+          password.length < 8 ||
+          firstName.length > 30 ||
+          lastName.length > 30 ||
+          !firstName ||
+          !lastName
+        }
         aria-disabled={
           isPending || !email || !password || !firstName || !lastName
         }

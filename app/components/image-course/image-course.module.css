@@ -15,3 +15,14 @@
   border-top-right-radius: 0px;
   width: 50%;
 }
+
+.editContainer {
+  display: flex;
+  width: auto;
+  align-items: center;
+}
+
+.edit {
+  width: 300px;
+  border-radius: 20px 0px 0px 20px;
+}

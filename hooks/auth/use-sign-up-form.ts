@@ -21,7 +21,9 @@ export function useSignUpForm() {
     },
   });
 
-  const errorMessage = signUpMutation.error ? 'Sign Up failed' : undefined;
+  const errorMessage = signUpMutation.error
+    ? signUpMutation.error.response?.data.message
+    : undefined;
 
   return {
     register,
