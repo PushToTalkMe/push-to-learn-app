@@ -1,6 +1,6 @@
-import { Htag, SignInForm } from '@/app/components/';
-import styles from './page.module.css';
 import Link from 'next/link';
+import styles from './page.module.css';
+import { SignInForm } from '@/app/components/pages';
 import { ROUTES } from '@/constants/routes';
 
 export default function SignIn() {
@@ -9,7 +9,7 @@ export default function SignIn() {
       <h1 className={styles.header}>Вход</h1>
       <SignInForm />
       <div className={styles.actions}>
-        <Link href={ROUTES.SIGN_IN} className={styles.link}>
+        <Link href={ROUTES.RESET} className={styles.link}>
           Восстановить пароль
         </Link>
         <Link href={ROUTES.SIGN_UP} className={styles.link}>

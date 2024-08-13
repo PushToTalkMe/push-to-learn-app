@@ -1,66 +1,15 @@
-'use client';
-import { Loader } from '@/app/components/loader/loader';
+import { CourseForBuy } from '@/app/components/pages';
 import { idValidation } from '@/helpers/id-validation';
-import { useCoursesItem } from '@/hooks/courses/use-courses-item';
-import { notFound, useSearchParams } from 'next/navigation';
-import styles from './page.module.css';
-import cn from 'classnames';
-import { Card } from '@/app/components/card/card';
-import { Button } from '@/app/components';
-import { useBuyCourse } from '@/hooks/buy';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-export default function Buy() {
-  const searchParams = useSearchParams();
+export const metadata: Metadata = {
+  title: 'Купить курс - PushToLearn',
+};
 
-  const courseId = searchParams.get('course');
-
-  if (!courseId || !idValidation(courseId)) {
+export default function Buy({ params }: { params: { courseId: number } }) {
+  if (!params.courseId || !idValidation(String(params.courseId))) {
     notFound();
   }
-
-  const { isPending, course, error } = useCoursesItem(+courseId);
-  const {
-    errorMessage,
-    isPending: isPendingBuy,
-    handleClick,
-  } = useBuyCourse(+courseId);
-  return (
-    <>
-      {isPending && <Loader />}
-      {error && (
-        <div className={cn(styles.error)}>
-          <p>{error.data.message}</p>
-          <p>Статус-код: {error.status}</p>
-        </div>
-      )}
-      {course && course.inDeveloping
-        ? notFound()
-        : course && (
-            <div className={cn(styles.buy)}>
-              <Card
-                id={course.id}
-                author={course.author}
-                title={course.title}
-                duration={course.duration}
-                tags={course.tags}
-                price={course.price}
-                img={course.img}
-                key={course.id}
-                countLessons={course.lessonCount}
-                type={'buy'}
-              />
-              <div className={cn(styles.button)}>
-                <Button
-                  appearance="primary"
-                  onClick={handleClick}
-                  disabled={isPendingBuy}
-                >
-                  Купить
-                </Button>
-              </div>
-              {errorMessage && <div>Ошибка покупки</div>}
-            </div>
-          )}
-    </>
-  );
+  return <CourseForBuy courseId={+params.courseId} />;
 }

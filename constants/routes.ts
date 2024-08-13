@@ -5,6 +5,7 @@ export const ROUTES = {
   ALL_COURSES: '/app/courses/all',
   PROFILE: '/app/profile/my',
   HELP: '/app/help',
+  RESET: '/auth/reset',
   SIGN_UP: '/auth/sign-up',
   SIGN_IN: '/auth/sign-in',
   DASHBOARD: '/app/dashboard',

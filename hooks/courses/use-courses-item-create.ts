@@ -1,12 +1,9 @@
-import {
-  authControllerSignIn,
-  CourseDto,
-  coursesControllerCreate,
-} from '@/api/generated';
+'use client';
+import { coursesControllerCreate } from '@/api/generated';
 import { ROUTES } from '@/constants/routes';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 export function useCoursesCreate() {
   const router = useRouter();

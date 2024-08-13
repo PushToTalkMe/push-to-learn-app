@@ -1,10 +1,9 @@
-'use client';
 import { idValidation } from '@/helpers/id-validation';
 import styles from './page.module.css';
 import { notFound } from 'next/navigation';
-import { TextEditorProvider } from '@/app/components/editor/context';
-import ToolPanel from '@/app/components/editor/tool-panel';
-import { TextEditor } from '@/app/components/editor/text-editor';
+import { TextEditorProvider } from '@/app/components/pages/editor/context';
+import ToolPanel from '@/app/components/pages/editor/tool-panel';
+import { TextEditor } from '@/app/components/pages/editor/text-editor';
 
 export default function CreateLessons({
   params,
@@ -18,10 +17,10 @@ export default function CreateLessons({
     <div className={styles.page}>
       <div className={styles.currentCourse}></div>
       <div className={styles.textBlock}>
-        <TextEditorProvider>
+        {/* <TextEditorProvider>
           <ToolPanel />
           <TextEditor />
-        </TextEditorProvider>
+        </TextEditorProvider> */}
       </div>
     </div>
   );

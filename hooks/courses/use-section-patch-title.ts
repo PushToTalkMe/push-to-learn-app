@@ -1,4 +1,4 @@
-import { PatchSectionDto } from '@/api/generated';
+'use client';
 import { useSectionsPatchTitleMutation } from '@/queries/courses/queries';
 import { useForm } from 'react-hook-form';
 

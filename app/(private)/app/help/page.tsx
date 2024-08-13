@@ -1,3 +1,9 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Помощь - PushToLearn',
+};
+
 export default function Help() {
-  <div>Help</div>;
+  return <div>Help</div>;
 }

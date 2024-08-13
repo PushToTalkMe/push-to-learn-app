@@ -1,5 +1,10 @@
-import { ProfileForm } from '@/app/components/form/profile-form';
+import { ProfileForm } from '@/app/components/pages';
 import styles from './page.module.css';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Личный профиль - PushToLearn',
+};
 
 export default function Profile() {
   return (

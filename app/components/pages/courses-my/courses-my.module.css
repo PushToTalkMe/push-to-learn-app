@@ -1,0 +1,6 @@
+.page {
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}

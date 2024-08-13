@@ -1,3 +1,4 @@
+'use client';
 import { useLessonPatchTitleMutation } from '@/queries/courses/queries';
 import { useForm } from 'react-hook-form';
 

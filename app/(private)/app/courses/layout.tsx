@@ -1,5 +1,10 @@
 import cn from 'classnames';
 import styles from './layout.module.css';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Курсы - PushToLearn',
+};
 
 export default function RootLayout({
   children,
