@@ -27,7 +27,7 @@ export type EditorApi = {
   toggleInlineStyle: (inlineStyle: InlineStyle) => void;
   hasInlineStyle: (inlineStyle: InlineStyle) => boolean;
   toggleInlineStyleFontSize: (inlineStyleFontSize: InlineStyleFontSize) => void;
-  currentFontSize: () => any;
+  currentFontSize: () => InlineStyleFontSize | '';
   addLink: (url: string) => void;
   setEntityData: (entityKey: string, data: any) => void;
   handleKeyCommand: (
@@ -157,10 +157,10 @@ export const useEditor = (html?: string): EditorApi => {
 
   const currentFontSize = useCallback(() => {
     const currentStyle = state.getCurrentInlineStyle();
-    const currentFontSize = currentStyle
+    const currentFontSize: InlineStyleFontSize[] = currentStyle
       .toJS()
       .filter((style: string) => style.match(/\d{1,}/));
-    return currentFontSize;
+    return currentFontSize[0] ? currentFontSize[0] : '';
   }, [state]);
 
   const addEntity = useCallback(

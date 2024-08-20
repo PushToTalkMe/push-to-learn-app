@@ -27,7 +27,6 @@ export const ToolPanel = ({
     currentFontSize,
     addLink,
   } = useEditorApi();
-  const [value, setValue] = useState('');
   const [expanded, setExpanded] = useState(false);
 
   const handleAddLink = () => {
@@ -44,7 +43,6 @@ export const ToolPanel = ({
   ) => {
     e.preventDefault();
     toggleInlineStyleFontSize(fontSize);
-    setValue(fontSize);
     setExpanded(false);
   };
 
@@ -67,7 +65,7 @@ export const ToolPanel = ({
                 <p
                   key={fontSize}
                   className={cn(styles.option, {
-                    [styles.activeOption]: fontSize === value,
+                    [styles.activeOption]: fontSize === currentFontSize(),
                   })}
                   onMouseDown={(e) => handleChange(e, fontSize)}
                 >
