@@ -12,7 +12,7 @@ export * from './use-section-patch-title';
 export * from './use-sections-patch-sequences';
 export * from './use-lesson-create';
 export * from './use-lesson-delete';
-export * from './use-lesson-item';
+export * from './use-lesson-item-with-comments';
 export * from './use-lesson-patch-title';
 export * from './use-lessons-patch-sequences';
 export * from './use-lesson-viewed';

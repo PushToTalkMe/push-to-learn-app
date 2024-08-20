@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: 'Урок PushToLearn',
+  title: 'Урок - PushToLearn',
 };
 
 export default function Layout({

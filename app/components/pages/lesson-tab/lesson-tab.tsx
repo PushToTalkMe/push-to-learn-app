@@ -158,7 +158,7 @@ export function LessonTabForAdmin({
       })}
     >
       <div
-        className={cn(styles.titleAndType, {
+        className={cn(styles.titleAndType, styles.editTitleAndType, {
           [styles.active]: pathname.includes(
             `sections/${sectionId}/lessons/${id}`,
           ),

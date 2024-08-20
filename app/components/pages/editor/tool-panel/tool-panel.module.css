@@ -1,0 +1,69 @@
+.toolPanel {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.block.active {
+  color: orange;
+  background: var(--gray-light);
+}
+
+.inlineStyle {
+  box-sizing: border-box;
+  background: none;
+}
+
+.inlineStyle.active {
+  background: var(--gray-light);
+  outline: 1px solid var(--primary) !important;
+}
+
+.selectFontSize {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+  border: 1px solid black;
+}
+
+.currentOption {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.currentOption p {
+  margin: 0;
+  padding: 0;
+}
+
+.options {
+  position: absolute;
+  top: 28px;
+  background-color: white;
+  border: 1px solid black;
+  width: 50px;
+}
+
+.option {
+  margin: 0;
+  padding: 0;
+  cursor: default;
+}
+
+.option:hover {
+  background: var(--gray-light);
+}
+
+.activeOption {
+  background: var(--primary);
+  color: white;
+}
+
+.currentOption svg {
+  transform: scale(0.5);
+}

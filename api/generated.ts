@@ -19,6 +19,14 @@ export interface CreateCommentDto {
   text: string;
 }
 
+export type PatchLessonDtoData = TheoryDto | TestDto | ExerciseDto;
+
+export interface PatchLessonDto {
+  data: PatchLessonDtoData;
+  sequence: number;
+  title: string;
+}
+
 export type LessonDtoType = (typeof LessonDtoType)[keyof typeof LessonDtoType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -27,8 +35,6 @@ export const LessonDtoType = {
   Test: 'Test',
   Exercise: 'Exercise',
 } as const;
-
-export type LessonDtoData = TheoryDto | TestDto | ExerciseDto;
 
 export interface LessonDto {
   createdAt: string;
@@ -41,14 +47,6 @@ export interface LessonDto {
   updatedAt: string;
 }
 
-export type PatchLessonDtoData = TheoryDto | TestDto | ExerciseDto;
-
-export interface PatchLessonDto {
-  data?: PatchLessonDtoData;
-  sequence?: number;
-  title: string;
-}
-
 export type CreateLessonDtoType =
   (typeof CreateLessonDtoType)[keyof typeof CreateLessonDtoType];
 
@@ -58,8 +56,6 @@ export const CreateLessonDtoType = {
   Test: 'Test',
   Exercise: 'Exercise',
 } as const;
-
-export type CreateLessonDtoData = { [key: string]: any };
 
 export interface CreateLessonDto {
   sectionId: number;
@@ -138,6 +134,8 @@ export interface TheoryDto {
   lessonId: number;
   updatedAt: string;
 }
+
+export type LessonDtoData = TheoryDto | TestDto | ExerciseDto;
 
 export type LessonDtoWithViewedData = TheoryDto | TestDto | ExerciseDto;
 
@@ -721,13 +719,23 @@ export const lessonsControllerCreate = (
   createLessonDto: BodyType<CreateLessonDto>,
   options?: SecondParameter<typeof createInstance>,
 ) => {
-  return createInstance<LessonDto>(
+  return createInstance<void>(
     {
       url: `/lessons/create`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: createLessonDto,
     },
+    options,
+  );
+};
+
+export const lessonsControllerGetLesson = (
+  lessonId: number,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<LessonDto>(
+    { url: `/lessons/${lessonId}`, method: 'GET' },
     options,
   );
 };
@@ -898,7 +906,10 @@ export type SectionsControllerDeleteSectionResult = NonNullable<
 export type LessonsControllerCreateResult = NonNullable<
   Awaited<ReturnType<typeof lessonsControllerCreate>>
 >;
-export type LessonsControllerPatchCourseResult = NonNullable<
+export type LessonsControllerGetLessonResult = NonNullable<
+  Awaited<ReturnType<typeof lessonsControllerGetLesson>>
+>;
+export type LessonsControllerPatchLessonResult = NonNullable<
   Awaited<ReturnType<typeof lessonsControllerPatchLesson>>
 >;
 export type LessonsControllerPatchSequencesResult = NonNullable<

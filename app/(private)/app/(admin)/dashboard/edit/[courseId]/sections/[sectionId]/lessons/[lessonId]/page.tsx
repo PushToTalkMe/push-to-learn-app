@@ -1,27 +1,20 @@
 import { idValidation } from '@/helpers/id-validation';
 import styles from './page.module.css';
 import { notFound } from 'next/navigation';
-import { TextEditorProvider } from '@/app/components/pages/editor/context';
-import ToolPanel from '@/app/components/pages/editor/tool-panel';
-import { TextEditor } from '@/app/components/pages/editor/text-editor';
+import { LessonEdit } from '@/app/components/pages';
 
 export default function CreateLessons({
   params,
 }: {
-  params: { courseId: number };
+  params: { lessonId: number };
 }) {
-  if (!params.courseId || !idValidation(String(params.courseId))) {
+  if (!params.lessonId || !idValidation(String(params.lessonId))) {
     notFound();
   }
+
   return (
     <div className={styles.page}>
-      <div className={styles.currentCourse}></div>
-      <div className={styles.textBlock}>
-        {/* <TextEditorProvider>
-          <ToolPanel />
-          <TextEditor />
-        </TextEditorProvider> */}
-      </div>
+      <LessonEdit lessonId={+params.lessonId} />
     </div>
   );
 }

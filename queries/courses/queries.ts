@@ -25,6 +25,7 @@ import {
   sectionsControllerPatchSection,
   sectionsControllerPatchSequences,
   PatchLessonDto,
+  lessonsControllerGetLesson,
 } from '@/api/generated';
 import { queryClient } from '@/api/query-client';
 import { Section } from '@/app/components';
@@ -45,6 +46,7 @@ const coursesItemCreateKey = ['coursesItemCreate'] as unknown[];
 const coursesSectionsListKey = ['coursesSections'] as unknown[];
 const courseWithSectionsForEditKey = ['courseWithSectionsForEdit'] as unknown[];
 const lessonItemKey = ['lessonItem'] as unknown[];
+const lessonEditItemKey = ['lessonEditItem'] as unknown[];
 const coursesProgressListKey = ['progress'];
 
 export function useCoursesAllQuery() {
@@ -109,6 +111,13 @@ export function useLessonItemQuery(
     queryKey: [lessonItemKey, courseId, sectionId, lessonId],
     queryFn: () =>
       coursesControllerGetPageLesson(courseId, sectionId, lessonId),
+  });
+}
+
+export function useLessonEditItemQuery(lessonId: number) {
+  return useQuery({
+    queryKey: [lessonEditItemKey, lessonId],
+    queryFn: () => lessonsControllerGetLesson(lessonId),
   });
 }
 

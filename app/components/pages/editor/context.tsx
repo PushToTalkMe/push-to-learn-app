@@ -1,4 +1,5 @@
-import { createContext, useContext, FC, ReactNode } from 'react';
+'use client';
+import { createContext, useContext, ReactNode } from 'react';
 import { EditorApi, useEditor } from './useEditor';
 
 const TextEditorContext = createContext<EditorApi | undefined>(undefined);

@@ -62,7 +62,6 @@
   font-size: 18px;
   line-height: 29px;
   font-weight: 500;
-  cursor: grab;
 }
 
 .title {
@@ -101,4 +100,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.editTitleAndType {
+  cursor: grab;
 }

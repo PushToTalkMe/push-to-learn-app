@@ -454,9 +454,25 @@ paths:
       responses:
         '201':
           description: ''
+  /lessons/{lessonId}:
+    get:
+      operationId: LessonsController_getLesson
+      parameters:
+        - name: lessonId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonDto'
   /lessons/update/{lessonId}:
     patch:
-      operationId: LessonsController_patchCourse
+      operationId: LessonsController_patchLesson
       parameters:
         - name: lessonId
           required: true
@@ -501,6 +517,10 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonDto'
   /buy/{courseId}:
     post:
       operationId: BuyController_buyCourse
@@ -1507,46 +1527,6 @@ components:
     CreateLessonDto:
       type: object
       properties:
-        title:
-          type: string
-          example: Введение
-        data:
-          type: object
-          example:
-            content: >-
-
-              # Работа с данными в MongoDB Compass
-
-
-              ---
-
-
-              ## Работа с данными в MongoDB Compass
-
-
-              В предыдущих темах рассматривалась работа с сервером MongoDB через
-              консольную оболочку **mongosh**. Но также мы можем работать с
-              данными через графический клиент **MongoDB Compass**. Данный
-              графический клиент довольно прост и инутивно понятен в
-              использовании, а графическое представление данных для кого-то
-              может быть проще для понимание. Соответственно кому-то, возможно,
-              через графический клиент будет проще и удобнее работать.
-
-
-              Для базовых операций, как то: создание/удаление коллекций,
-              добавление, просмотр, изменения и удаления документов есть
-              соответствующие элементы графического интерфейса:
-
-
-              <p align="center">
-                <img alt="Скриншот результата выполнения кода сверху" src="./img/2.9.png"/>
-              </p>
-
-              ```js
-
-              const a = 123
-
-              ```    
         type:
           type: string
           enum:
@@ -1557,30 +1537,8 @@ components:
           type: number
           example: 5
       required:
-        - title
-        - data
         - type
         - sectionId
-    PatchLessonDto:
-      type: object
-      properties:
-        title:
-          type: string
-          example: Введение
-        data:
-          example:
-            content: '##Введение'
-          oneOf:
-            - $ref: '#/components/schemas/TheoryDto'
-            - $ref: '#/components/schemas/TestDto'
-            - $ref: '#/components/schemas/ExerciseDto'
-        sequence:
-          type: number
-          example: 1
-      required:
-        - title
-        - data
-        - sequence
     LessonDto:
       type: object
       properties:
@@ -1653,6 +1611,26 @@ components:
         - type
         - createdAt
         - updatedAt
+    PatchLessonDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Введение
+        data:
+          example:
+            content: '##Введение'
+          oneOf:
+            - $ref: '#/components/schemas/TheoryDto'
+            - $ref: '#/components/schemas/TestDto'
+            - $ref: '#/components/schemas/ExerciseDto'
+        sequence:
+          type: number
+          example: 1
+      required:
+        - title
+        - data
+        - sequence
     CreateCommentDto:
       type: object
       properties:

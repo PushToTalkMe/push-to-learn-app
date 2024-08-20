@@ -38,9 +38,9 @@ export function CourseForEdit({
               <div className={cn(styles.info, styles.tags)}>
                 <h3>Теги:</h3>
                 {'\u00A0'}
-                {course.tags.map((tag) => (
+                {course.tags.map((tag, index) => (
                   // Взять из course-create-form(Большую часть логики впринципе брать оттуда для всех остальных потенциальных input'ов изменения курса)
-                  <p>{tag}</p>
+                  <p key={index}>{tag}</p>
                 ))}
               </div>
             </div>
@@ -73,7 +73,7 @@ export function CourseForEdit({
         <RightMenu
           expandedFromParent={true}
           title={<Htag tag="h1">Конструктор</Htag>}
-          withoutButton={true}
+          withoutButton={false}
         >
           <SectionsForAdmin
             courseId={course.id}
