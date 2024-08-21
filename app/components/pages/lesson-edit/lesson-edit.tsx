@@ -12,11 +12,11 @@ export function LessonEdit({ lessonId }: LessonEditProps) {
     <>
       {isPending && <Loader />}
       {isSuccess && lesson && (
-        <div className={cn(styles.page)}>
+        <>
           {lesson.type === 'Theory' && <TheoryEdit lesson={lesson} />}
           {lesson.type === 'Exercise' && <ExerciseEdit lesson={lesson} />}
           {lesson.type === 'Test' && <TestEdit lesson={lesson} />}
-        </div>
+        </>
       )}
     </>
   );

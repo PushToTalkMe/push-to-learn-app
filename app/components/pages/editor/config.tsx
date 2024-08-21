@@ -70,7 +70,7 @@ export const CUSTOM_STYLE_MAP = {
   },
 };
 
-export type KeyCommand = DraftEditorCommand | 'accent' | 'split-code' | 'tab'; // произвольная команда
+export type KeyCommand = DraftEditorCommand | 'accent' | 'split' | 'tab';
 
 export const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.merge(
   CUSTOM_BLOCK_RENDER_MAP,

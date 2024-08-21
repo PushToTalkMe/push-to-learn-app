@@ -45,6 +45,7 @@ export enum InlineStyleFontSize {
 
 export enum EntityType {
   link = 'link',
+  image = 'atomic:image',
 }
 
 export const BLOCK_TYPES_CODES_TRANSLATE = {

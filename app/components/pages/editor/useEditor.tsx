@@ -1,14 +1,23 @@
 import {
+  AtomicBlockUtils,
   CompositeDecorator,
+  ContentBlock,
   DraftEditorCommand,
   DraftEntityMutability,
+  DraftHandleValue,
   EditorState,
   getDefaultKeyBinding,
   KeyBindingUtil,
   Modifier,
   RichUtils,
 } from 'draft-js';
-import { useState, useMemo, useCallback, KeyboardEvent } from 'react';
+import {
+  useState,
+  useMemo,
+  useCallback,
+  KeyboardEvent,
+  ClipboardEvent,
+} from 'react';
 import {
   BlockType,
   EntityType,
@@ -18,6 +27,9 @@ import {
 } from './constants';
 import { LinkDecorator } from './link';
 import { KeyCommand } from './config';
+import { Image } from './image/image';
+import { ImageProps } from './image/image.props';
+import { imageValidation } from '@/helpers/image-validation';
 
 export type EditorApi = {
   state: EditorState;
@@ -34,9 +46,13 @@ export type EditorApi = {
     command: DraftEditorCommand,
     editorState: EditorState,
   ) => 'handled' | 'not-handled';
-  handleKeyBinding: (
-    e: KeyboardEvent,
-  ) => 'tab' | 'split-code' | 'accent' | DraftEditorCommand | null;
+  handleKeyBinding: (e: KeyboardEvent) => KeyCommand | null;
+  blockRendererFn: (contentBlock: ContentBlock) => {
+    component: ({ block, contentState }: ImageProps) => JSX.Element;
+    editable: boolean;
+  } | null;
+  insertImage: (url: string) => void;
+  handlePastedFiles: (files: Blob[]) => DraftHandleValue;
 };
 
 const decorator = new CompositeDecorator([LinkDecorator]);
@@ -166,8 +182,8 @@ export const useEditor = (html?: string): EditorApi => {
   const addEntity = useCallback(
     (
       entityType: EntityType,
-      data: Record<string, string>,
       mutability: DraftEntityMutability,
+      data: Record<string, string>,
     ) => {
       setState((currentState) => {
         /* Получаем текущий контент */
@@ -180,16 +196,23 @@ export const useEditor = (html?: string): EditorApi => {
         );
         /* Получаем уникальный ключ Entity */
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        /* Обьединяем текущее состояние с новым */
-        const newState = EditorState.set(currentState, {
-          currentContent: contentStateWithEntity,
-        });
-        /* Вставляем ссылку в указанное место */
-        return RichUtils.toggleLink(
-          newState,
-          newState.getSelection(),
-          entityKey,
-        );
+        if (entityType === EntityType.link) {
+          /* Обьединяем текущее состояние с новым */
+          const newState = EditorState.set(currentState, {
+            currentContent: contentStateWithEntity,
+          });
+          /* Вставляем ссылку в указанное место */
+          return RichUtils.toggleLink(
+            newState,
+            newState.getSelection(),
+            entityKey,
+          );
+        } else {
+          const newState = EditorState.set(currentState, {
+            currentContent: contentStateWithEntity,
+          });
+          return AtomicBlockUtils.insertAtomicBlock(newState, entityKey, ' ');
+        }
       });
     },
     [],
@@ -197,10 +220,27 @@ export const useEditor = (html?: string): EditorApi => {
 
   const addLink = useCallback(
     (url: string) => {
-      addEntity(EntityType.link, { url }, 'MUTABLE');
+      addEntity(EntityType.link, 'MUTABLE', { url });
     },
     [addEntity],
   );
+
+  const insertImage = useCallback(
+    (url: string) => {
+      addEntity(EntityType.image, 'IMMUTABLE', { src: url });
+    },
+    [addEntity],
+  );
+
+  const blockRendererFn = (contentBlock: ContentBlock) => {
+    if (contentBlock.getType() === 'atomic') {
+      return {
+        component: Image,
+        editable: false,
+      };
+    }
+    return null;
+  };
 
   const setEntityData = useCallback((entityKey: string, data: any) => {
     setState((currentState) => {
@@ -245,22 +285,19 @@ export const useEditor = (html?: string): EditorApi => {
         return 'handled';
       }
 
-      if (command === 'split-code') {
-        console.log(contentState.toJS());
-        if (block.getType() === 'code-block') {
-          const newContentState = Modifier.insertText(
-            contentState,
-            selectionState,
-            '\n',
-          );
-          const newEditorState = EditorState.push(
-            editorState,
-            newContentState,
-            'split-block',
-          );
-          setState(newEditorState);
-          return 'handled';
-        }
+      if (command === 'split') {
+        const newContentState = Modifier.insertText(
+          contentState,
+          selectionState,
+          '\n',
+        );
+        const newEditorState = EditorState.push(
+          editorState,
+          newContentState,
+          'split-block',
+        );
+        setState(newEditorState);
+        return 'handled';
       }
 
       const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -281,8 +318,8 @@ export const useEditor = (html?: string): EditorApi => {
       return 'accent';
     }
 
-    if (e.key === 'Enter' && KeyBindingUtil.hasCommandModifier(e)) {
-      return 'split-code';
+    if (e.key === 'Enter' && e.shiftKey) {
+      return 'split';
     }
 
     if (e.key === 'Tab') {
@@ -291,6 +328,21 @@ export const useEditor = (html?: string): EditorApi => {
 
     return getDefaultKeyBinding(e);
   }, []);
+
+  function handlePastedFiles(files: Blob[]) {
+    const curFiles = imageValidation(files);
+    if (!curFiles) {
+      return 'not-handled';
+    }
+    const reader = new FileReader();
+    const file = files[0];
+    reader.onload = () => {
+      const url = reader.result as string;
+      insertImage(url);
+    };
+    reader.readAsDataURL(file);
+    return 'handled';
+  }
 
   return useMemo(
     () => ({
@@ -306,6 +358,9 @@ export const useEditor = (html?: string): EditorApi => {
       handleKeyCommand,
       handleKeyBinding,
       currentFontSize,
+      blockRendererFn,
+      insertImage,
+      handlePastedFiles,
     }),
     [state],
   );

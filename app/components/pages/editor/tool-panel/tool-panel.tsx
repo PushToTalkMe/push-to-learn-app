@@ -10,8 +10,9 @@ import {
   INLINE_STYLES_CODES_FONT_SIZE,
   InlineStyleFontSize,
 } from '../constants';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { AngleDownIcon } from '@/public/icons';
+import { imageValidation } from '@/helpers/image-validation';
 
 export const ToolPanel = ({
   className,
@@ -26,6 +27,7 @@ export const ToolPanel = ({
     toggleInlineStyleFontSize,
     currentFontSize,
     addLink,
+    insertImage,
   } = useEditorApi();
   const [expanded, setExpanded] = useState(false);
 
@@ -49,6 +51,20 @@ export const ToolPanel = ({
   const handleExpanded = (e: React.SyntheticEvent) => {
     e.preventDefault();
     setExpanded(!expanded);
+  };
+
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = imageValidation(event.target.files);
+    if (!files) {
+      return;
+    }
+    const file = files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const url = reader.result as string;
+      insertImage(url);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -117,6 +133,13 @@ export const ToolPanel = ({
         );
       })}
       <button onMouseDown={handleAddLink}>Добавить ссылку</button>
+      <input
+        type="file"
+        className={cn(styles.inputFile)}
+        id="upload-file"
+        accept="image/jpeg, image/png, image/jpg, image/x-icon"
+        onChange={(event) => handleFileUpload(event)}
+      />
     </div>
   );
 };

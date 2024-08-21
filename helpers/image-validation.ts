@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export const imageValidation = (
-  files: FileList | null,
+  files: FileList | Blob[] | null,
   setState?: Dispatch<SetStateAction<string | undefined>>,
 ) => {
   if (!files || files.length === 0) {
@@ -14,9 +14,10 @@ export const imageValidation = (
   if (
     file.type !== 'image/jpeg' &&
     file.type !== 'image/png' &&
-    file.type !== 'image/jpg'
+    file.type !== 'image/jpg' &&
+    file.type !== 'image/x-icon'
   ) {
-    alert('Пожалуйста, загрузите файл в формате JPEG, JPG или PNG');
+    alert('Пожалуйста, загрузите изображение в формате JPEG, JPG, PNG или ICO');
     if (setState) {
       setState('');
     }
@@ -24,7 +25,9 @@ export const imageValidation = (
   }
 
   if (file.size > 10485760) {
-    alert('Файл слишком большой. Пожалуйста, загрузите файл размером до 10Мб.');
+    alert(
+      'Файл слишком большой. Пожалуйста, загрузите изображение размером до 10Мб.',
+    );
     if (setState) {
       setState('');
     }
