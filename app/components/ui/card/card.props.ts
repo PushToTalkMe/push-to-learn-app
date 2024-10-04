@@ -9,9 +9,8 @@ export interface CardProps {
   tags: string[];
   countLessons?: number;
   lessonCompleted?: number | 0;
-  price?: number;
   inDeveloping?: boolean;
-  type?: 'myCourses' | 'notMyCourses' | 'buy';
+  type?: 'myCourses' | 'notMyCourses' | 'buy' | 'created';
   className?: string;
 }
 
@@ -19,5 +18,6 @@ export interface CardFooterProps {
   courseId: number;
   sectionId?: number;
   lessonId?: number;
-  type?: 'myCourses' | 'notMyCourses' | 'buy';
+  inDeveloping?: boolean;
+  type?: 'myCourses' | 'notMyCourses' | 'buy' | 'created';
 }

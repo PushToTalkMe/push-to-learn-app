@@ -25,12 +25,7 @@ export function CourseCreateForm() {
     account,
   } = useAccount();
 
-  const [title, duration, price, tags] = watch([
-    'title',
-    'duration',
-    'price',
-    'tags',
-  ]);
+  const [title, duration, tags] = watch(['title', 'duration', 'tags']);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -104,30 +99,12 @@ export function CourseCreateForm() {
         {(errors.tags || tags.length <= 0) && (
           <Span className={styles.errorInput}>Заполните тэги</Span>
         )}
-        <div className={cn(styles.priceBlock)}>
-          <input
-            type="number"
-            className={cn(styles.price)}
-            autoComplete="price"
-            placeholder="Цена"
-            min={0}
-            {...register('price', {
-              required: 'Введите стоимость',
-            })}
-          />
-          <Htag tag="h3">руб.</Htag>
-        </div>
-
-        {errors.price && (
-          <Span className={styles.errorInput}>{errors.price.message}</Span>
-        )}
       </div>
       <Button
         disabled={
           isPending ||
           !title ||
           !duration ||
-          !price ||
           tags.length <= 0 ||
           tags.map((tag) => !!tag.value).includes(false)
         }
@@ -135,7 +112,6 @@ export function CourseCreateForm() {
           isPending ||
           !title ||
           !duration ||
-          !price ||
           tags.length <= 0 ||
           tags.map((tag) => !!tag.value).includes(false)
         }

@@ -11,13 +11,21 @@ import {
   InlineStyleFontSize,
 } from '../constants';
 import { ChangeEvent, useState } from 'react';
-import { AngleDownIcon } from '@/public/icons';
+import {
+  AngleDownIcon,
+  FileImageIcon,
+  LinkIcon,
+  SaveIcon,
+} from '@/public/icons';
 import { imageValidation } from '@/helpers/image-validation';
+import { PatchLessonDto } from '@/api/generated';
 
 export const ToolPanel = ({
   className,
+  handlePatchTheory,
 }: {
   className?: string;
+  handlePatchTheory?: (patch: PatchLessonDto) => void;
 }): JSX.Element => {
   const {
     toggleBlockType,
@@ -28,6 +36,7 @@ export const ToolPanel = ({
     currentFontSize,
     addLink,
     insertImage,
+    toHtml,
   } = useEditorApi();
   const [expanded, setExpanded] = useState(false);
 
@@ -120,6 +129,8 @@ export const ToolPanel = ({
           toggleBlockType(block);
         };
 
+        const Icon = BLOCK_TYPES_CODES_TRANSLATE[block].icon;
+
         return (
           <button
             key={block}
@@ -128,18 +139,38 @@ export const ToolPanel = ({
             })}
             onMouseDown={handleMouseDown}
           >
-            {BLOCK_TYPES_CODES_TRANSLATE[block].rus}
+            <Icon />
           </button>
         );
       })}
-      <button onMouseDown={handleAddLink}>Добавить ссылку</button>
-      <input
-        type="file"
-        className={cn(styles.inputFile)}
-        id="upload-file"
-        accept="image/jpeg, image/png, image/jpg, image/x-icon"
-        onChange={(event) => handleFileUpload(event)}
-      />
+      <button className={cn(styles.entity)} onMouseDown={handleAddLink}>
+        <LinkIcon />
+      </button>
+      <form id="formEditor">
+        <input
+          type="file"
+          className={cn(styles.inputFile)}
+          id="upload-file-editor"
+          form="formEditor"
+          accept="image/jpeg, image/png, image/jpg, image/x-icon"
+          onChange={(event) => handleFileUpload(event)}
+        />
+        <label className={cn(styles.entity)} htmlFor="upload-file-editor">
+          <FileImageIcon />
+        </label>
+      </form>
+
+      <button
+        className={styles.entity}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          if (handlePatchTheory) {
+            handlePatchTheory({ data: { content: toHtml() } });
+          }
+        }}
+      >
+        <SaveIcon />
+      </button>
     </div>
   );
 };

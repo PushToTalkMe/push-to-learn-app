@@ -11,13 +11,11 @@ export function useCoursesCreate() {
   const { control, register, handleSubmit, watch, formState } = useForm<{
     title: string;
     duration: string;
-    price: number;
     tags: { value: '' }[];
   }>({
     defaultValues: {
       title: '',
       duration: '',
-      price: 0,
       tags: [{ value: '' }],
     },
   });
@@ -46,7 +44,7 @@ export function useCoursesCreate() {
       if (tags.length === 0) {
         return;
       }
-      createCourseItem.mutate({ ...data, tags, price: +data.price });
+      createCourseItem.mutate({ ...data, tags });
     }),
     isPending: createCourseItem.isPending,
     watch,

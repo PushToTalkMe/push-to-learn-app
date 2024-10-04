@@ -1,19 +1,15 @@
 import { PatchSequences } from '@/api/generated';
 import { useLessonsPatchSequencesMutation } from '@/queries/courses/queries';
-import { error } from 'console';
 
-export function useLessonsPatchSequences(courseId: number, sectionId: number) {
-  const lessonsPatchSequences = useLessonsPatchSequencesMutation(
-    courseId,
-    sectionId,
-  );
+export function useLessonsPatchSequences(courseId: number) {
+  const lessonsPatchSequences = useLessonsPatchSequencesMutation(courseId);
 
   const error = lessonsPatchSequences.error?.response?.data.message;
 
   return {
     error,
-    handlePatchSequences: (patch: PatchSequences) =>
-      lessonsPatchSequences.mutate(patch),
+    handlePatchSequences: (sectionId: number, patch: PatchSequences) =>
+      lessonsPatchSequences.mutate({ sectionId, patchSequences: patch }),
     isPending: lessonsPatchSequences.isPending,
     isSuccess: lessonsPatchSequences.isSuccess,
   };

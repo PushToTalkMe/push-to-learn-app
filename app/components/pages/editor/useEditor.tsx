@@ -2,6 +2,7 @@ import {
   AtomicBlockUtils,
   CompositeDecorator,
   ContentBlock,
+  ContentState,
   DraftEditorCommand,
   DraftEntityMutability,
   DraftHandleValue,
@@ -10,6 +11,7 @@ import {
   KeyBindingUtil,
   Modifier,
   RichUtils,
+  SelectionState,
 } from 'draft-js';
 import {
   useState,
@@ -17,6 +19,7 @@ import {
   useCallback,
   KeyboardEvent,
   ClipboardEvent,
+  useEffect,
 } from 'react';
 import {
   BlockType,
@@ -30,10 +33,12 @@ import { KeyCommand } from './config';
 import { Image } from './image/image';
 import { ImageProps } from './image/image.props';
 import { imageValidation } from '@/helpers/image-validation';
+import { HTMLtoState, stateToHTML } from './convert';
 
 export type EditorApi = {
   state: EditorState;
   onChange: (state: EditorState) => void;
+  readOnly: boolean;
   toggleBlockType: (blockType: BlockType) => void;
   currentBlockType: BlockType;
   toggleInlineStyle: (inlineStyle: InlineStyle) => void;
@@ -53,14 +58,21 @@ export type EditorApi = {
   } | null;
   insertImage: (url: string) => void;
   handlePastedFiles: (files: Blob[]) => DraftHandleValue;
+  toHtml: () => string;
 };
 
 const decorator = new CompositeDecorator([LinkDecorator]);
 
-export const useEditor = (html?: string): EditorApi => {
-  const [state, setState] = useState(() => {
-    return EditorState.createEmpty(decorator);
-  });
+export const useEditor = (
+  initialReadOnly: boolean,
+  html?: string,
+): EditorApi => {
+  const [state, setState] = useState(() =>
+    html
+      ? EditorState.createWithContent(HTMLtoState(html), decorator)
+      : EditorState.createEmpty(decorator),
+  );
+  const [readOnly, setReadOnly] = useState(initialReadOnly);
 
   const toggleBlockType = useCallback((blockType: BlockType) => {
     setState((currentState) =>
@@ -179,6 +191,46 @@ export const useEditor = (html?: string): EditorApi => {
     return currentFontSize[0] ? currentFontSize[0] : '';
   }, [state]);
 
+  // const removeEmptyBlocks = (
+  //   selectionStateBeforeAtomicBlock: SelectionState,
+  //   anchorKeyBeforeAtomicBlock: string,
+  //   editorState: EditorState,
+  // ) => {
+  //   const contentAfterAtomicBlock = editorState.getCurrentContent();
+  //   const blockSelectedBefore = contentAfterAtomicBlock.getBlockForKey(
+  //     anchorKeyBeforeAtomicBlock,
+  //   );
+
+  //   const finalEditorState = (() => {
+  //     if (blockSelectedBefore === undefined) {
+  //       return state;
+  //     }
+  //     if (blockSelectedBefore.getLength() === 0) {
+  //       const keyBefore = blockSelectedBefore.getKey();
+  //       const newBlockMap = contentAfterAtomicBlock
+  //         .getBlockMap()
+  //         .delete(keyBefore);
+  //       const contentWithoutEmptyBlock: any = contentAfterAtomicBlock.set(
+  //         'blockMap',
+  //         newBlockMap,
+  //       );
+  //       const editorStateWithoutEmptyBlock = EditorState.push(
+  //         state,
+  //         contentWithoutEmptyBlock,
+  //         'remove-range',
+  //       );
+  //       return EditorState.forceSelection(
+  //         editorStateWithoutEmptyBlock,
+  //         contentWithoutEmptyBlock.getSelectionAfter(),
+  //       );
+  //     } else {
+  //       return state;
+  //     }
+  //   })();
+
+  //   return finalEditorState;
+  // };
+
   const addEntity = useCallback(
     (
       entityType: EntityType,
@@ -211,7 +263,13 @@ export const useEditor = (html?: string): EditorApi => {
           const newState = EditorState.set(currentState, {
             currentContent: contentStateWithEntity,
           });
-          return AtomicBlockUtils.insertAtomicBlock(newState, entityKey, ' ');
+          let atomicBlock = AtomicBlockUtils.insertAtomicBlock(
+            newState,
+            entityKey,
+            ' ',
+          );
+          // console.log(atomicBlock.getCurrentContent().toJS());
+          return atomicBlock;
         }
       });
     },
@@ -313,7 +371,6 @@ export const useEditor = (html?: string): EditorApi => {
   );
 
   const handleKeyBinding = useCallback((e: KeyboardEvent) => {
-    /* Проверяем нажата ли клавиша q + ctrl/cmd */
     if (e.key === 'q' && KeyBindingUtil.hasCommandModifier(e)) {
       return 'accent';
     }
@@ -344,6 +401,11 @@ export const useEditor = (html?: string): EditorApi => {
     return 'handled';
   }
 
+  const toHtml = useCallback(
+    () => stateToHTML(state.getCurrentContent()),
+    [state],
+  );
+
   return useMemo(
     () => ({
       state,
@@ -353,6 +415,8 @@ export const useEditor = (html?: string): EditorApi => {
       toggleInlineStyle,
       toggleInlineStyleFontSize,
       hasInlineStyle,
+      toHtml,
+      readOnly,
       addLink,
       setEntityData,
       handleKeyCommand,
@@ -362,6 +426,22 @@ export const useEditor = (html?: string): EditorApi => {
       insertImage,
       handlePastedFiles,
     }),
-    [state],
+    [
+      state,
+      toggleBlockType,
+      currentBlockType,
+      toggleInlineStyle,
+      toggleInlineStyleFontSize,
+      hasInlineStyle,
+      toHtml,
+      addLink,
+      setEntityData,
+      handleKeyCommand,
+      handleKeyBinding,
+      currentFontSize,
+      blockRendererFn,
+      insertImage,
+      handlePastedFiles,
+    ],
   );
 };

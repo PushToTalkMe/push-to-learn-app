@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLessonDelete, useLessonPatchTitle } from '@/hooks/courses';
 import {
@@ -30,10 +30,19 @@ export function LessonTab({
   edit,
   opened,
   setSections,
+  countLessons,
+  handleDeleteLesson,
+  handleSuccessPatchTitleLesson,
+  handleErrorPatchTitleLesson,
 }: LessonTabProps): JSX.Element {
   return (
     <>
-      {edit && setSections ? (
+      {edit &&
+      setSections &&
+      countLessons &&
+      handleDeleteLesson &&
+      handleSuccessPatchTitleLesson &&
+      handleErrorPatchTitleLesson ? (
         <LessonTabForAdmin
           id={id}
           sectionId={sectionId}
@@ -45,6 +54,10 @@ export function LessonTab({
           sectionSequence={sectionSequence}
           opened={opened}
           setSections={setSections}
+          countLessons={countLessons}
+          handleDeleteLesson={handleDeleteLesson}
+          handleSuccessPatchTitleLesson={handleSuccessPatchTitleLesson}
+          handleErrorPatchTitleLesson={handleErrorPatchTitleLesson}
         />
       ) : (
         <LessonTabForUser
@@ -130,14 +143,17 @@ export function LessonTabForAdmin({
   type,
   opened,
   setSections,
+  countLessons,
+  handleDeleteLesson,
+  handleSuccessPatchTitleLesson,
+  handleErrorPatchTitleLesson,
 }: LessonTabForAdminProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { handleDeleteLesson, isPending, isSuccess } =
-    useLessonDelete(courseId);
 
   const {
-    error: errorPatchTitle,
+    error: errorPatchTitleLesson,
+    isSuccess: isSuccessPatchTitleLesson,
     register,
     watch,
     formState: { errors },
@@ -146,11 +162,24 @@ export function LessonTabForAdmin({
   const [titleLessonForInput] = watch(['titleLessonForInput']);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  useEffect(() => {
+    if (isSuccessPatchTitleLesson) {
+      handleSuccessPatchTitleLesson(isSuccessPatchTitleLesson);
+    }
+  }, [isSuccessPatchTitleLesson, handleSuccessPatchTitleLesson]);
+
+  useEffect(() => {
+    if (errorPatchTitleLesson) {
+      handleErrorPatchTitleLesson(errorPatchTitleLesson);
+    }
+  }, [errorPatchTitleLesson, handleErrorPatchTitleLesson]);
+
   const handleClickButton = () => {
     router.push(
       `${ROUTES.EDIT_COURSE}/${courseId}/sections/${sectionId}/lessons/${id}`,
     );
   };
+
   return (
     <div
       className={cn(styles.lessonTab, styles.tabForAdmin, {
@@ -188,7 +217,7 @@ export function LessonTabForAdmin({
               maxLength={25}
               placeholder="Заголовок"
               {...register('titleLessonForInput', {
-                required: 'Введите заголовок для урокаы',
+                required: 'Введите заголовок для урока',
               })}
               ref={(e) => {
                 inputRef.current = e;
@@ -202,9 +231,6 @@ export function LessonTabForAdmin({
               <Span className={styles.errorInput}>
                 {errors.titleLessonForInput?.message}
               </Span>
-            )}
-            {errorPatchTitle && (
-              <Span className={styles.errorInput}>{errorPatchTitle}</Span>
             )}
           </form>
         </div>
@@ -232,30 +258,34 @@ export function LessonTabForAdmin({
           ),
         })}
       >
-        <button
-          className={cn(styles.buttonForLessonTab)}
-          onClick={() => {
-            handleDeleteLesson(id);
-            setSections((state) => {
-              return state.map((section) => {
-                if (section.id === sectionId) {
-                  return {
-                    ...section,
-                    lessons: section.lessons
-                      .filter((lesson) => lesson.id !== id)
-                      .map((lesson, index) => ({
-                        ...lesson,
-                        sequence: index + 1,
-                      })),
-                  };
-                }
-                return section;
+        {countLessons > 1 ? (
+          <button
+            className={cn(styles.buttonForLessonTab)}
+            onClick={() => {
+              handleDeleteLesson(id);
+              setSections((state) => {
+                return state.map((section) => {
+                  if (section.id === sectionId) {
+                    return {
+                      ...section,
+                      lessons: section.lessons
+                        .filter((lesson) => lesson.id !== id)
+                        .map((lesson, index) => ({
+                          ...lesson,
+                          sequence: index + 1,
+                        })),
+                    };
+                  }
+                  return section;
+                });
               });
-            });
-          }}
-        >
-          <TrashIcon />
-        </button>
+            }}
+          >
+            <TrashIcon />
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

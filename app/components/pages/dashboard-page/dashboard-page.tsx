@@ -9,32 +9,17 @@ import { CreateIcon, EditIcon } from '@/public/icons';
 import { InfoAboutAllUsers } from '@/api/generated';
 
 export function DashboardPage() {
-  const [createCourse, setCreateCourse] = useState(false);
   const [editCourse, setEditCourse] = useState(false);
   const { info, isPending, isSuccess, errorInfo } = useInfo();
 
   return (
     <div className={cn(styles.page)}>
-      {createCourse ? (
-        <Popup setExpanded={setCreateCourse} background="body">
-          <CourseCreateForm />
-        </Popup>
-      ) : null}
       {editCourse ? (
         <Popup setExpanded={setEditCourse} background="body" editCourse={true}>
           <ListCourses />
         </Popup>
       ) : null}
       <div className={cn(styles.settings)}>
-        <div className={cn(styles.create)}>
-          <div
-            className={cn(styles.card)}
-            onClick={() => setCreateCourse(!createCourse)}
-          >
-            <CreateIcon />
-          </div>
-          <Htag tag="h2">Создать курс</Htag>
-        </div>
         <div className={cn(styles.edit)}>
           <div
             className={cn(styles.card)}

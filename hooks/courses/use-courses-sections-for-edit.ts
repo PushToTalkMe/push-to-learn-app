@@ -6,6 +6,7 @@ export function useCourseWithSectionsForEdit(courseId: number) {
   const course = courseWithSectionsForEdit.data;
   return {
     course,
+    error: courseWithSectionsForEdit.error,
     isPending: courseWithSectionsForEdit.isPending,
     isSuccess: courseWithSectionsForEdit.isSuccess,
   };

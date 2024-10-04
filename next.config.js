@@ -17,7 +17,7 @@ module.exports = {
     });
     return config;
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
   rewrites() {
     return [
       {

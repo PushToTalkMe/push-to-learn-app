@@ -7,14 +7,22 @@ const TextEditorContext = createContext<EditorApi | undefined>(undefined);
 export const useEditorApi = () => {
   const context = useContext(TextEditorContext);
   if (context === undefined) {
-    throw new Error('useEditorApi must be used within TextEditorProvider');
+    throw new Error('useEditorApi должен быть внутри TextEditorProvider');
   }
 
   return context;
 };
 
-export const TextEditorProvider = ({ children }: { children: ReactNode }) => {
-  const editorApi = useEditor();
+export const TextEditorProvider = ({
+  children,
+  content,
+  readOnly,
+}: {
+  children: ReactNode;
+  content: string;
+  readOnly: boolean;
+}) => {
+  const editorApi = useEditor(readOnly, content);
 
   return (
     <TextEditorContext.Provider value={editorApi}>

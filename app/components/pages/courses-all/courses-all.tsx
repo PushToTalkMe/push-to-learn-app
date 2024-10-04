@@ -13,7 +13,10 @@ export function CoursesAll() {
     <div className={cn(styles.page)}>
       {isLoader && <Loader />}
       {isEmptyText && (
-        <div className="text-xl py-1 text-center">List is empty...</div>
+        <div>
+          Вы начали все курсы из всех у нас имеющихся, поздравляем, вы очень
+          любознательный человек :)
+        </div>
       )}
       {isCourses &&
         courses.map((course) => (
@@ -24,7 +27,6 @@ export function CoursesAll() {
             title={course.title}
             duration={course.duration}
             tags={course.tags}
-            price={course.price}
             inDeveloping={course.inDeveloping}
             img={course.img}
             key={course.id}

@@ -17,3 +17,4 @@ export * from './date/time';
 export * from './lesson-create-card/lesson-create-card';
 export * from './markdown/markdown';
 export * from './skeletons/input-skeleton/input-skeleton';
+export * from './side-up/side-up';

@@ -1,3 +1,4 @@
+import { CourseDto } from '@/api/generated';
 import { ReactNode } from 'react';
 
 export interface RightMenuProps {
@@ -5,4 +6,6 @@ export interface RightMenuProps {
   children?: ReactNode;
   expandedFromParent?: boolean;
   withoutButton?: boolean;
+  courseEdit?: boolean;
+  course?: CourseDto;
 }

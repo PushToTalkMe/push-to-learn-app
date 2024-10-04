@@ -1,0 +1,54 @@
+.sideUp {
+  position: fixed;
+  left: 40%;
+  top: 0;
+  transform: translateY(-100%);
+  border: 1px solid black;
+  border-top: none;
+  background-color: white;
+  width: 300px;
+  height: 100px;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes transition-sideup {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  20% {
+    transform: translateY(0%);
+  }
+
+  25% {
+    transform: translateY(-4%);
+  }
+
+  28% {
+    transform: translateY(0%);
+  }
+
+  90% {
+    transform: translateY(0%);
+  }
+}
+
+.sideUp.active {
+  animation: transition-sideup 2s;
+}
+
+.saved {
+  margin: 0;
+  padding: 0;
+  color: var(--green);
+}
+
+.error {
+  margin: 0;
+  padding: 0;
+  color: var(--primary);
+}

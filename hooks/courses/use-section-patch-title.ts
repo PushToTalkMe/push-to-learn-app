@@ -2,8 +2,8 @@
 import { useSectionsPatchTitleMutation } from '@/queries/courses/queries';
 import { useForm } from 'react-hook-form';
 
-export function useSectionsPatchTitle(sectionId: number) {
-  const sectionsPatchTitle = useSectionsPatchTitleMutation(sectionId);
+export function useSectionsPatchTitle() {
+  const sectionsPatchTitle = useSectionsPatchTitleMutation();
 
   const { control, register, handleSubmit, watch, formState } = useForm<{
     titleSectionForInput: string;
@@ -11,11 +11,20 @@ export function useSectionsPatchTitle(sectionId: number) {
 
   const error = sectionsPatchTitle.error?.response?.data.message;
 
+  const onSubmit = (data: any, sectionId: number) => {
+    return sectionsPatchTitle.mutateAsync({
+      patchSectionDto: { title: data.titleSectionForInput },
+      sectionId,
+    });
+  };
+
+  const handleCustomSubmit = (sectionId: number) => {
+    return handleSubmit((data) => onSubmit(data, sectionId));
+  };
+
   return {
     error,
-    handleSubmit: handleSubmit((data) =>
-      sectionsPatchTitle.mutate({ title: data.titleSectionForInput }),
-    ),
+    handleSubmit: handleCustomSubmit,
     register,
     formState,
     watch,

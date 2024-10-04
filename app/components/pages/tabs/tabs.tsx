@@ -27,6 +27,14 @@ function Tabs({}: TabsProps): JSX.Element {
       >
         Все курсы
       </Link>
+      <Link
+        className={cn(styles.tab, {
+          [styles.active]: pathname.includes('/courses/created'),
+        })}
+        href={ROUTES.CREATED_COURSES}
+      >
+        Редактор курсов
+      </Link>
     </div>
   );
 }

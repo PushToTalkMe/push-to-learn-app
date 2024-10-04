@@ -13,8 +13,8 @@ export function Card({
   author,
   duration,
   tags,
+  img,
   countLessons,
-  price,
   type,
   className,
   inDeveloping,
@@ -27,12 +27,12 @@ export function Card({
         [styles.buy]: type === 'buy',
       })}
     >
-      {inDeveloping && (
+      {inDeveloping && type !== 'created' && (
         <div className={cn(styles.stub)}>
           <InDevelopingIcon />
         </div>
       )}
-      <ImageCourse type={type} />
+      <ImageCourse type={type} url={img} />
       <div className={cn(styles.cardContent)}>
         {type === 'myCourses' ? <Progress courseId={id} /> : <></>}
         <Htag tag="h2">{title}</Htag>
@@ -45,20 +45,20 @@ export function Card({
             <Tag key={index}>{tag}</Tag>
           ))}
         </div>
-        {type === 'myCourses' ? <></> : <Htag tag="h3">{price} руб.</Htag>}
-        {countLessons && type === 'buy' ? (
+        {countLessons && (type === 'buy' || type === 'created') ? (
           <P>Количество уроков: {countLessons}</P>
         ) : (
           <></>
         )}
       </div>
-      {inDeveloping ? (
+      {inDeveloping && type !== 'created' ? (
         <div className={cn(styles.cardFooter, styles.cardFooterHtag)}>
           <Htag tag="h1">Курс в разработке</Htag>
         </div>
       ) : (
         <CardFooter
           type={type}
+          inDeveloping={inDeveloping}
           courseId={+id}
           sectionId={sectionId}
           lessonId={lessonId}

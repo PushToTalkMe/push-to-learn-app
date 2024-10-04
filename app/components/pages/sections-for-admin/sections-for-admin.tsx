@@ -1,11 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Draggable, OnDragEndResponder } from '@hello-pangea/dnd';
-import { useSectionsPatchSequences, useSectionCreate } from '@/hooks/courses';
+import {
+  useSectionsPatchSequences,
+  useSectionCreate,
+  useSectionDelete,
+  useSectionsPatchTitle,
+  useLessonDelete,
+  useLessonsPatchSequences,
+} from '@/hooks/courses';
 import { DroppableProvider } from '@/app/providers/droppable.provider';
 import styles from './sections-for-admin.module.css';
 import { SectionsForAdminProps } from './sections-for-admin.props';
-import { Button } from '@/app/components/ui';
+import { Button, SideUp } from '@/app/components/ui';
 import { Section } from '@/app/components/pages';
 
 export function SectionsForAdmin({
@@ -14,9 +21,66 @@ export function SectionsForAdmin({
   paramsSectionId,
 }: SectionsForAdminProps) {
   const [sections, setSections] = useState(sectionsWithLessons);
+  const [isSuccessPatchTitleSection, setIsSuccessPatchTitleSection] =
+    useState(false);
+  const [errorPatchTitleSection, setErrorPatchTitleSection] = useState('');
+  const [isSuccessPatchTitleLesson, setIsSuccessPatchTitleLesson] =
+    useState(false);
+  const [errorsPatchTitleLesson, setErrorPatchTitleLesson] = useState('');
 
-  const { handlePatchSequences, isPending, isSuccess, error } =
-    useSectionsPatchSequences();
+  const handleSuccessPatchTitleSection = useCallback((isSuccess: boolean) => {
+    setIsSuccessPatchTitleSection(isSuccess);
+
+    if (isSuccess) {
+      setTimeout(() => {
+        setIsSuccessPatchTitleSection(false);
+      }, 2000);
+    }
+  }, []);
+
+  const handleErrorPatchTitleSection = useCallback((error: string) => {
+    setErrorPatchTitleSection(error);
+
+    if (error) {
+      setTimeout(() => {
+        setErrorPatchTitleSection('');
+      }, 2000);
+    }
+  }, []);
+
+  const handleSuccessPatchTitleLesson = useCallback((isSuccess: boolean) => {
+    setIsSuccessPatchTitleLesson(isSuccess);
+
+    if (isSuccess) {
+      setTimeout(() => {
+        setIsSuccessPatchTitleLesson(false);
+      }, 2000);
+    }
+  }, []);
+
+  const handleErrorPatchTitleLesson = useCallback((error: string) => {
+    setErrorPatchTitleLesson(error);
+
+    if (error) {
+      setTimeout(() => {
+        setErrorPatchTitleLesson('');
+      }, 2000);
+    }
+  }, []);
+
+  const {
+    handlePatchSequences,
+    isPending: isPendingPatchSequencesSection,
+    isSuccess: isSuccessPatchSequencesSection,
+    error: errorPatchSequencesSection,
+  } = useSectionsPatchSequences();
+
+  const {
+    handleDeleteSection,
+    isPending: isPendingDeleteSection,
+    isSuccess: isSuccessDeleteSection,
+    error: errorDeleteSection,
+  } = useSectionDelete();
 
   const {
     handleCreateSection,
@@ -68,14 +132,25 @@ export function SectionsForAdmin({
   };
 
   useEffect(() => {
-    if (errorCreateSection || error) {
-      alert(`Не удалось сохранить изменения на сервере.${error}`);
-    }
     if (newSection) {
-      const newState = [...sections, { ...newSection, lessons: [] }];
+      const newState = [...sections, newSection];
       setSections(newState);
     }
-  }, [errorCreateSection, error, newSection]);
+  }, [newSection]);
+
+  const {
+    handlePatchSequences: handleLessonsPatchSequences,
+    isPending: isPendingLessonsPatchSequences,
+    isSuccess: isSuccessLessonsPatchSequences,
+    error: errorLessonPatchSequences,
+  } = useLessonsPatchSequences(courseId);
+
+  const {
+    handleDeleteLesson,
+    isPending: isPendingDeleteLesson,
+    isSuccess: isSuccessDeleteLesson,
+    error: errorDeleteLesson,
+  } = useLessonDelete(courseId);
 
   return (
     <div className={styles.sections}>
@@ -98,9 +173,23 @@ export function SectionsForAdmin({
                       title={section.title}
                       sequence={index + 1}
                       lessons={section.lessons}
+                      countSections={sections.length}
                       edit={true}
                       setSections={setSections}
                       provided={provided}
+                      handleDeleteSection={handleDeleteSection}
+                      handleSuccessPatchTitleSection={
+                        handleSuccessPatchTitleSection
+                      }
+                      handleDeleteLesson={handleDeleteLesson}
+                      handleLessonsPatchSequences={handleLessonsPatchSequences}
+                      handleErrorPatchTitleSection={
+                        handleErrorPatchTitleSection
+                      }
+                      handleSuccessPatchTitleLesson={
+                        handleSuccessPatchTitleLesson
+                      }
+                      handleErrorPatchTitleLesson={handleErrorPatchTitleLesson}
                     />
                   </div>
                 )}
@@ -118,6 +207,48 @@ export function SectionsForAdmin({
       >
         Добавить раздел
       </Button>
+      {isSuccessPatchSequencesSection && (
+        <SideUp status="success">Порядок разделов успешно изменен</SideUp>
+      )}
+      {!!errorPatchSequencesSection && (
+        <SideUp status="error">{errorPatchSequencesSection}</SideUp>
+      )}
+      {isSuccessCreateSection && (
+        <SideUp status="success">Раздел успешно создан</SideUp>
+      )}
+      {!!errorCreateSection && (
+        <SideUp status="error">{errorCreateSection}</SideUp>
+      )}
+      {isSuccessDeleteSection && (
+        <SideUp status="success">Раздел успешно удален</SideUp>
+      )}
+      {!!errorDeleteSection && (
+        <SideUp status="error">{errorDeleteSection}</SideUp>
+      )}
+      {isSuccessPatchTitleSection && (
+        <SideUp status="success">Заголовок раздела успешно изменен</SideUp>
+      )}
+      {!!errorPatchTitleSection && (
+        <SideUp status="error">{errorPatchTitleSection}</SideUp>
+      )}
+      {isSuccessDeleteLesson && (
+        <SideUp status="success">Урок успешно удален</SideUp>
+      )}
+      {!!errorDeleteLesson && (
+        <SideUp status="error">{errorDeleteLesson}</SideUp>
+      )}
+      {isSuccessLessonsPatchSequences && (
+        <SideUp status="success">Порядок уроков успешно изменен</SideUp>
+      )}
+      {!!errorLessonPatchSequences && (
+        <SideUp status="error">{errorLessonPatchSequences}</SideUp>
+      )}
+      {isSuccessPatchTitleLesson && (
+        <SideUp status="success">Заголовок урока успешно изменен</SideUp>
+      )}
+      {!!errorsPatchTitleLesson && (
+        <SideUp status="error">{errorPatchTitleSection}</SideUp>
+      )}
     </div>
   );
 }

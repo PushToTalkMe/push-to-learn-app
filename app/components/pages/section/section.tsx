@@ -15,7 +15,7 @@ import {
 } from './section.props';
 import styles from './section.module.css';
 import cn from 'classnames';
-import { Button, Htag, Popup, Span } from '@/app/components/ui';
+import { Button, Htag, Popup, SideUp, Span } from '@/app/components/ui';
 import { LessonsCreate, LessonTab } from '@/app/components/pages';
 import { AngleDownIcon, AngleUpIcon, TrashIcon } from '@/public/icons';
 
@@ -26,24 +26,51 @@ export function Section({
   sequence,
   lessonsStat,
   lessons,
+  countSections,
   paramsSectionId,
   edit,
   setSections,
   provided,
+  handleDeleteSection,
+  handleSuccessPatchTitleSection,
+  handleDeleteLesson,
+  handleLessonsPatchSequences,
+  handleErrorPatchTitleSection,
+  handleSuccessPatchTitleLesson,
+  handleErrorPatchTitleLesson,
 }: SectionProps): JSX.Element {
   return (
     <>
-      {edit && setSections && lessons && provided ? (
+      {edit &&
+      setSections &&
+      lessons &&
+      provided &&
+      countSections &&
+      handleDeleteSection &&
+      handleSuccessPatchTitleSection &&
+      handleDeleteLesson &&
+      handleLessonsPatchSequences &&
+      handleErrorPatchTitleSection &&
+      handleErrorPatchTitleLesson &&
+      handleSuccessPatchTitleLesson ? (
         <SectionForAdmin
           id={id}
           title={title}
           courseId={courseId}
           sequence={sequence}
           lessons={lessons}
+          countSections={countSections}
           edit={edit}
           paramsSectionId={paramsSectionId}
           setSections={setSections}
           provided={provided}
+          handleDeleteSection={handleDeleteSection}
+          handleSuccessPatchTitleSection={handleSuccessPatchTitleSection}
+          handleDeleteLesson={handleDeleteLesson}
+          handleLessonsPatchSequences={handleLessonsPatchSequences}
+          handleErrorPatchTitleSection={handleErrorPatchTitleSection}
+          handleSuccessPatchTitleLesson={handleSuccessPatchTitleLesson}
+          handleErrorPatchTitleLesson={handleErrorPatchTitleLesson}
         />
       ) : (
         <SectionForUser
@@ -67,16 +94,16 @@ function SectionForUser({
   lessonsStat,
   paramsSectionId,
 }: SectionForUserProps): JSX.Element {
-  const [opened, setOpened] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (paramsSectionId === id) {
-      setOpened(true);
+      setOpen(true);
     }
   }, []);
 
   const handleClickButton = () => {
-    setOpened(() => !opened);
+    setOpen(() => !open);
   };
 
   return (
@@ -86,7 +113,7 @@ function SectionForUser({
           {sequence}. {title}
         </Htag>
         <div className={cn(styles.buttonForSectionTab)}>
-          {opened ? <AngleUpIcon /> : <AngleDownIcon />}
+          {open ? <AngleUpIcon /> : <AngleDownIcon />}
         </div>
       </button>
       <div className={styles.lessons}>
@@ -103,7 +130,7 @@ function SectionForUser({
                 viewed={lesson.viewed}
                 sequence={lesson.sequence}
                 sectionSequence={sequence}
-                opened={opened}
+                opened={open}
               />
             );
           })
@@ -122,42 +149,53 @@ function SectionForAdmin({
   sequence,
   lessons,
   paramsSectionId,
+  countSections,
   edit,
   setSections,
   provided,
+  handleDeleteSection,
+  handleSuccessPatchTitleSection,
+  handleDeleteLesson,
+  handleLessonsPatchSequences,
+  handleErrorPatchTitleSection,
+  handleSuccessPatchTitleLesson,
+  handleErrorPatchTitleLesson,
 }: SectionForAdminProps): JSX.Element {
-  const [opened, setOpened] = useState(false);
+  const [open, setOpen] = useState(false);
   const [createLesson, setCreateLesson] = useState(false);
 
   const {
-    handlePatchSequences,
-    isPending: isPendingLessonsPatchSequences,
-    isSuccess: isSuccessLessonsPatchSequences,
-    error: errorLessonPatchSequences,
-  } = useLessonsPatchSequences(courseId, id);
-
-  const {
-    error: errorPatchTitle,
+    error: errorPatchTitleSection,
+    isSuccess: isSuccessPatchTitleSection,
     register,
     watch,
     formState: { errors },
     handleSubmit,
-  } = useSectionsPatchTitle(id);
+  } = useSectionsPatchTitle();
 
   const [titleSectionForInput] = watch(['titleSectionForInput']);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { handleDeleteSection, isPending, isSuccess, error } =
-    useSectionDelete();
-
   useEffect(() => {
     if (paramsSectionId === id) {
-      setOpened(true);
+      setOpen(true);
     }
   }, []);
 
+  useEffect(() => {
+    if (isSuccessPatchTitleSection) {
+      handleSuccessPatchTitleSection(isSuccessPatchTitleSection);
+    }
+  }, [isSuccessPatchTitleSection, handleSuccessPatchTitleSection]);
+
+  useEffect(() => {
+    if (errorPatchTitleSection) {
+      handleErrorPatchTitleSection(errorPatchTitleSection);
+    }
+  }, [errorPatchTitleSection, handleErrorPatchTitleSection]);
+
   const handleClickButton = () => {
-    setOpened(() => !opened);
+    setOpen(() => !open);
   };
 
   function moveLessons({
@@ -178,7 +216,7 @@ function SectionForAdmin({
       id: lessons.id,
       sequence: lessons.sequence,
     }));
-    handlePatchSequences({ patch: patchSequences });
+    handleLessonsPatchSequences(id, { patch: patchSequences });
     setSections((state) =>
       state.map((section) => {
         if (section.id === id) {
@@ -235,7 +273,7 @@ function SectionForAdmin({
                     inputRef.current.blur();
                   }
                 }}
-                onBlur={handleSubmit}
+                onBlur={(e) => handleSubmit(id)(e)}
               >
                 <input
                   className={cn(styles.inputForSection)}
@@ -256,9 +294,6 @@ function SectionForAdmin({
                     {errors.titleSectionForInput?.message}
                   </Span>
                 )}
-                {errorPatchTitle && (
-                  <Span className={styles.errorInput}>{errorPatchTitle}</Span>
-                )}
               </form>
             </div>
           </div>
@@ -267,19 +302,23 @@ function SectionForAdmin({
               className={cn(styles.buttonForSectionTab)}
               onClick={handleClickButton}
             >
-              {opened ? <AngleUpIcon /> : <AngleDownIcon />}
+              {open ? <AngleUpIcon /> : <AngleDownIcon />}
             </button>
-            <button
-              className={cn(styles.buttonForSectionTab)}
-              onClick={() => {
-                handleDeleteSection(id);
-                setSections((state) =>
-                  state.filter((section) => section.id !== id),
-                );
-              }}
-            >
-              <TrashIcon />
-            </button>
+            {countSections > 1 ? (
+              <button
+                className={cn(styles.buttonForSectionTab)}
+                onClick={() => {
+                  handleDeleteSection(id);
+                  setSections((state) =>
+                    state.filter((section) => section.id !== id),
+                  );
+                }}
+              >
+                <TrashIcon />
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className={styles.lessons}>
@@ -302,11 +341,17 @@ function SectionForAdmin({
                       key={lesson.id}
                       title={lesson.title}
                       type={lesson.type}
+                      countLessons={lessons.length}
                       sequence={index + 1}
                       sectionSequence={sequence}
-                      opened={opened}
+                      opened={open}
                       edit={edit}
                       setSections={setSections}
+                      handleDeleteLesson={handleDeleteLesson}
+                      handleSuccessPatchTitleLesson={
+                        handleSuccessPatchTitleLesson
+                      }
+                      handleErrorPatchTitleLesson={handleErrorPatchTitleLesson}
                     />
                   </DraggableProvider>
                 );
@@ -318,11 +363,10 @@ function SectionForAdmin({
           <Button
             appearance="primary"
             className={cn(styles.addLesson, {
-              [styles.opened]: opened === true,
+              [styles.opened]: open === true,
             })}
             disabled={false}
             onClick={() => {
-              // handleCreateLesson({ sectionId, title: 'Новый раздел', data, type: Theory || Test || Exercise });
               setCreateLesson(true);
             }}
           >

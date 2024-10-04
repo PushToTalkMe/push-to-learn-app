@@ -12,15 +12,19 @@ import BoldIcon from './bold.svg';
 import BurgerIcon from './burger.svg';
 import CheckIcon from './check.svg';
 import CloseIcon from './close.svg';
+import CodeIcon from './code.svg';
 import CoursesIcon from './courses.svg';
 import CreateIcon from './create.svg';
 import DashboardIcon from './dashboard.svg';
 import EditIcon from './edit.svg';
 import ExerciseMiniIcon from './exercise-mini.svg';
 import ExerciseIcon from './exercise.svg';
+import FileImageIcon from './file-image.svg';
+import FootNoteIcon from './footnote.svg';
 import HelpIcon from './help.svg';
 import InDevelopingIcon from './in-developing.svg';
 import ItalicIcon from './italic.svg';
+import LinkIcon from './link.svg';
 import ListIcon from './list.svg';
 import LogoIcon from './logo.svg';
 import LogoutIcon from './logout.svg';
@@ -28,6 +32,7 @@ import OrderedListIcon from './ordered-list.svg';
 import ParagraphIcon from './paragraph.svg';
 import ProfileIcon from './profile.svg';
 import QuoteIcon from './quote.svg';
+import SaveIcon from './save.svg';
 import TestMiniIcon from './test-mini.svg';
 import TestIcon from './test.svg';
 import TextSizeIcon from './text-size.svg';
@@ -51,15 +56,19 @@ export {
   BurgerIcon,
   CheckIcon,
   CloseIcon,
+  CodeIcon,
   CoursesIcon,
   CreateIcon,
   DashboardIcon,
   EditIcon,
   ExerciseMiniIcon,
   ExerciseIcon,
+  FileImageIcon,
+  FootNoteIcon,
   HelpIcon,
   InDevelopingIcon,
   ItalicIcon,
+  LinkIcon,
   ListIcon,
   LogoIcon,
   LogoutIcon,
@@ -67,6 +76,7 @@ export {
   ParagraphIcon,
   ProfileIcon,
   QuoteIcon,
+  SaveIcon,
   TestMiniIcon,
   TestIcon,
   TextSizeIcon,

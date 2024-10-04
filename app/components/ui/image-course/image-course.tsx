@@ -4,7 +4,7 @@ import { ImageCourseProps } from './image-course.props';
 import cn from 'classnames';
 import CourseImageDefault from '@/public/images/course-image-default.png';
 
-export function ImageCourse({ url, type }: ImageCourseProps) {
+export function ImageCourse({ url, type, src }: ImageCourseProps) {
   return (
     <div
       className={cn(styles.imgContainer, {

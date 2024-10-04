@@ -6,5 +6,6 @@ export interface ImageCourseProps
     HTMLImageElement
   > {
   url?: string;
-  type?: 'myCourses' | 'notMyCourses' | 'buy' | 'edit';
+  src?: string;
+  type?: 'myCourses' | 'notMyCourses' | 'buy' | 'edit' | 'created';
 }

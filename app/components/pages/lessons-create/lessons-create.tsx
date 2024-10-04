@@ -4,7 +4,7 @@ import { useLessonCreate } from '@/hooks/courses';
 import styles from './lessons-create.module.css';
 import { LessonsCreateProps } from './lessons-create.props';
 import { LessonStatType } from '@/api/generated';
-import { Button, Htag, P, LessonCreateCard } from '@/app/components/ui';
+import { Button, Htag, P, LessonCreateCard, SideUp } from '@/app/components/ui';
 import {
   DESCRIPTION_EXERCISE,
   DESCRIPTION_TEST,
@@ -82,6 +82,7 @@ export function LessonsCreate({
       >
         Выбрать
       </Button>
+      {!!error && <SideUp status="error">{error}</SideUp>}
     </div>
   );
 }

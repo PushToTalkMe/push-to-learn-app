@@ -176,7 +176,6 @@ export interface CourseWithSectionsForEdit {
   id: number;
   img: string;
   inDeveloping: boolean;
-  price: number;
   sectionsWithLessons: SectionWithLessons[];
   tags: string[];
   title: string;
@@ -222,7 +221,6 @@ export interface CourseDtoWithSections {
   inDeveloping: boolean;
   lessonCompleted: number;
   lessonCount: number;
-  price: number;
   sectionsWithLessonsStat: SectionsWithLessonsStatDto[];
   tags: string[];
   title: string;
@@ -240,7 +238,6 @@ export interface CourseDtoWithUserStat {
   inDeveloping: boolean;
   lessonCompleted: number;
   lessonCount: number;
-  price: number;
   tags: string[];
   title: string;
   updatedAt: string;
@@ -254,7 +251,6 @@ export interface CourseDtoWithLessonCount {
   img: string;
   inDeveloping: boolean;
   lessonCount: number;
-  price: number;
   tags: string[];
   title: string;
   updatedAt: string;
@@ -269,7 +265,6 @@ export interface CourseDtoLastLessons {
   inDeveloping: boolean;
   lastLessonId: number;
   lastSectionId: number;
-  price: number;
   tags: string[];
   title: string;
   updatedAt: string;
@@ -286,7 +281,6 @@ export interface CourseDto {
   id: number;
   img: string;
   inDeveloping: boolean;
-  price: number;
   tags: string[];
   title: string;
   updatedAt: string;
@@ -294,14 +288,12 @@ export interface CourseDto {
 
 export interface PatchCourseDto {
   duration: string;
-  price: number;
   tags: string[];
   title: string;
 }
 
 export interface CreateCourseDto {
   duration: string;
-  price: number;
   tags: string[];
   title: string;
 }
@@ -609,6 +601,15 @@ export const coursesControllerGetMyCourses = (
   );
 };
 
+export const coursesControllerGetCreatedCourses = (
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<CourseDtoWithUserStat[]>(
+    { url: `/courses/created`, method: 'GET' },
+    options,
+  );
+};
+
 export const coursesControllerGetCourseById = (
   courseId: number,
   options?: SecondParameter<typeof createInstance>,
@@ -878,6 +879,9 @@ export type CoursesControllerGetNotMyCourseByIdResult = NonNullable<
 >;
 export type CoursesControllerGetMyCoursesResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerGetMyCourses>>
+>;
+export type CoursesControllerGetCreatedCoursesResult = NonNullable<
+  Awaited<ReturnType<typeof coursesControllerGetCreatedCourses>>
 >;
 export type CoursesControllerGetCourseByIdResult = NonNullable<
   Awaited<ReturnType<typeof coursesControllerGetCourseById>>

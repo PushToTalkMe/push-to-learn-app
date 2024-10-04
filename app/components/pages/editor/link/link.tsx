@@ -15,14 +15,15 @@ export const Link: React.FC<LinkProps> = ({
   entityKey,
   children,
 }) => {
-  /* Получаем url с помощью уникального ключа Entity */
-  const { setEntityData } = useEditorApi();
+  const { readOnly, setEntityData } = useEditorApi();
   const { url } = contentState.getEntity(entityKey).getData();
 
   const handleClick = () => {
-    const newUrl = prompt('URL:', url);
-    if (newUrl) {
-      setEntityData(entityKey, { url: newUrl });
+    if (!readOnly) {
+      const newUrl = prompt('URL:', url);
+      if (newUrl) {
+        setEntityData(entityKey, { url: newUrl });
+      }
     }
   };
 

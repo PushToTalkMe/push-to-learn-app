@@ -1,3 +1,5 @@
-import { ReactNode } from 'react';
+import { CourseDto } from '@/api/generated';
 
-export interface CourseInfoForEditProps {}
+export interface CourseInfoForEditProps {
+  course: CourseDto;
+}

@@ -1,0 +1,55 @@
+.page {
+  max-width: 1400px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.create {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.cardCreate {
+  display: flex;
+  width: 387px;
+  height: 585px;
+  border-radius: 10px;
+  background: var(--card-background);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 1s ease-in-out;
+}
+
+.cardCreate:hover {
+  box-shadow: 10px 5px 5px var(--primary);
+}
+
+.cardCreate > h1 {
+  transition: transform 1s ease-in-out;
+}
+
+.cardCreate > svg {
+  transition: all 1s ease-in-out;
+}
+
+.cardCreate:hover > svg {
+  width: 108px;
+  height: 108px;
+  transform: translateY(-200px);
+}
+
+.cardCreate:hover > h1 {
+  transform: translateY(-200px);
+}
+
+.cardCreate:hover > svg path {
+  stroke: var(--primary);
+}
+
+.cardCreate:hover > h1 {
+  color: var(--primary);
+}

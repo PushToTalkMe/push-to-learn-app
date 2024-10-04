@@ -11,6 +11,7 @@ export function CardFooter({
   courseId,
   sectionId,
   lessonId,
+  inDeveloping,
   type,
 }: CardFooterProps) {
   const router = useRouter();
@@ -18,17 +19,10 @@ export function CardFooter({
   return type === 'notMyCourses' ? (
     <div className={cn(styles.cardFooter)}>
       <Button
-        appearance="ghost"
-        className={cn(styles.ghost)}
-        onClick={() => router.push(ROUTES.COURSES + `/${courseId}`)}
-      >
-        О курсе
-      </Button>
-      <Button
         appearance="primary"
-        onClick={() => router.push(ROUTES.BUY + `?course=${courseId}`)}
+        onClick={() => router.push(ROUTES.BUY + `/${courseId}`)}
       >
-        Начать
+        Подробнее
       </Button>
     </div>
   ) : type === 'myCourses' ? (
@@ -46,6 +40,27 @@ export function CardFooter({
       >
         Продолжить
       </Button>
+    </div>
+  ) : type === 'created' ? (
+    <div className={cn(styles.cardFooter)}>
+      <Button
+        appearance="primary"
+        onClick={() =>
+          router.push(
+            ROUTES.EDIT_COURSE +
+              `/${courseId}` +
+              `/sections/${sectionId}` +
+              `/lessons/${lessonId}`,
+          )
+        }
+      >
+        Редактировать
+      </Button>
+      {inDeveloping ? (
+        <p style={{ textAlign: 'center' }}>Курс в разработке</p>
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
     <></>

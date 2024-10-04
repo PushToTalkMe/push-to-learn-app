@@ -13,6 +13,10 @@ export interface LessonTabProps {
   edit?: boolean;
   opened: boolean;
   setSections?: Dispatch<SetStateAction<SectionWithLessons[]>>;
+  countLessons?: number;
+  handleDeleteLesson?: (lessonId: number) => void;
+  handleSuccessPatchTitleLesson?: (isSuccess: boolean) => void;
+  handleErrorPatchTitleLesson?: (error: string) => void;
 }
 
 export interface LessonTabForUserProps {
@@ -36,5 +40,9 @@ export interface LessonTabForAdminProps {
   sectionSequence: number;
   type: LessonStatType;
   opened: boolean;
+  countLessons: number;
   setSections: Dispatch<SetStateAction<SectionWithLessons[]>>;
+  handleDeleteLesson: (lessonId: number) => void;
+  handleSuccessPatchTitleLesson: (isSuccess: boolean) => void;
+  handleErrorPatchTitleLesson: (error: string) => void;
 }

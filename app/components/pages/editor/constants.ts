@@ -4,6 +4,11 @@ import {
   UnderlineIcon,
   ParagraphIcon,
   AlignCenterIcon,
+  ListIcon,
+  OrderedListIcon,
+  QuoteIcon,
+  CodeIcon,
+  FootNoteIcon,
 } from '@/public/icons';
 
 export enum BlockType {
@@ -49,12 +54,12 @@ export enum EntityType {
 }
 
 export const BLOCK_TYPES_CODES_TRANSLATE = {
-  blockquote: { rus: 'Цитата' },
-  'code-block': { rus: 'Блок кода' },
-  'unordered-list-item': { rus: 'Список' },
-  'ordered-list-item': { rus: 'Нумерованный список' },
-  cite: { rus: 'Сноска' },
-  unstyled: { rus: 'Обычный' },
+  blockquote: { rus: 'Цитата', icon: QuoteIcon },
+  'code-block': { rus: 'Блок кода', icon: CodeIcon },
+  'unordered-list-item': { rus: 'Список', icon: ListIcon },
+  'ordered-list-item': { rus: 'Нумерованный список', icon: OrderedListIcon },
+  cite: { rus: 'Сноска', icon: FootNoteIcon },
+  unstyled: { rus: 'Обычный', icon: ParagraphIcon },
 };
 
 export const INLINE_STYLES_CODES_TRANSLATE = {

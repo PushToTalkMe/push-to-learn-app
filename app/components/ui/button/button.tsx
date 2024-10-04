@@ -15,6 +15,7 @@ export const Button = ({
 }: ButtonProps): JSX.Element => {
   return (
     <button
+      disabled={disabled}
       className={cn(className, styles.button, {
         [styles.primary]: appearance === 'primary',
         [styles.ghost]: appearance === 'ghost',

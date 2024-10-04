@@ -32,3 +32,5 @@ export * from './lesson-edit/lesson-edit';
 export * from './theory-edit/theory-edit';
 export * from './test-edit/test-edit';
 export * from './exercise-edit/exercise-edit';
+export * from './courses-created/courses-created';
+export * from './course-info-for-edit/course-info-for-edit';

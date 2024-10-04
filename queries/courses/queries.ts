@@ -26,6 +26,13 @@ import {
   sectionsControllerPatchSequences,
   PatchLessonDto,
   lessonsControllerGetLesson,
+  coursesControllerGetCreatedCourses,
+  coursesControllerPatchCourseImage,
+  PatchCourseImageDto,
+  coursesControllerReleaseCourse,
+  CourseDto,
+  coursesControllerPatchCourse,
+  PatchCourseDto,
 } from '@/api/generated';
 import { queryClient } from '@/api/query-client';
 import { Section } from '@/app/components';
@@ -41,13 +48,16 @@ interface ProgressProps {
 const coursesAllForEdit = ['coursesAllForEdit'] as unknown[];
 const coursesAllListKey = ['coursesAllList'] as unknown[];
 const coursesMyListKey = ['coursesMyList'] as unknown[];
+const coursesCreatedListKey = ['coursesMyList'] as unknown[];
 const coursesItemKey = ['coursesItem'] as unknown[];
 const coursesItemCreateKey = ['coursesItemCreate'] as unknown[];
 const coursesSectionsListKey = ['coursesSections'] as unknown[];
 const courseWithSectionsForEditKey = ['courseWithSectionsForEdit'] as unknown[];
 const lessonItemKey = ['lessonItem'] as unknown[];
 const lessonEditItemKey = ['lessonEditItem'] as unknown[];
-const coursesProgressListKey = ['progress'];
+const coursesProgressListKey = ['progress'] as unknown[];
+const courseAvatarKey = ['courseAvatar'] as unknown[];
+const courseRelease = ['courseRelease'] as unknown[];
 
 export function useCoursesAllQuery() {
   return useQuery({
@@ -70,6 +80,13 @@ export function useCoursesMyListQuery() {
   });
 }
 
+export function useCoursesCreatedListQuery() {
+  return useQuery({
+    queryKey: coursesCreatedListKey,
+    queryFn: coursesControllerGetCreatedCourses,
+  });
+}
+
 export function useCourseSectionsListQuery(courseId: number) {
   return useQuery({
     queryKey: [coursesSectionsListKey, courseId],
@@ -81,6 +98,120 @@ export function useCourseSectionsListForEditQuery(courseId: number) {
   return useQuery({
     queryKey: [courseWithSectionsForEditKey, courseId],
     queryFn: () => coursesControllerGetCourseByIdForEdit(courseId),
+  });
+}
+
+export function useCourseAvatarUpdateQuery(courseId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: PatchCourseImageDto) =>
+      coursesControllerPatchCourseImage(courseId, body),
+    onSuccess(data) {
+      const courseWithSectionsForEdit =
+        queryClient.getQueryData<CourseWithSectionsForEdit>([
+          courseWithSectionsForEditKey,
+          courseId,
+        ]);
+      queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+        ...courseWithSectionsForEdit,
+        img: data.img,
+      });
+    },
+    async onSettled() {
+      await queryClient.invalidateQueries({
+        queryKey: [courseAvatarKey, courseId],
+      });
+    },
+  });
+}
+
+export function useCoursePatchTitleMutation(courseId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (patchCourseDto: PatchCourseDto) =>
+      coursesControllerPatchCourse(courseId, patchCourseDto),
+    onSuccess(data) {
+      const courseWithSectionsForEdit =
+        queryClient.getQueryData<CourseWithSectionsForEdit>([
+          courseWithSectionsForEditKey,
+          courseId,
+        ]);
+      queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+        ...courseWithSectionsForEdit,
+        title: data.title,
+      });
+    },
+    async onSettled() {
+      await queryClient.invalidateQueries({
+        queryKey: [courseAvatarKey, courseId],
+      });
+    },
+  });
+}
+
+export function useCoursePatchDurationMutation(courseId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (patchCourseDto: PatchCourseDto) =>
+      coursesControllerPatchCourse(courseId, patchCourseDto),
+    onSuccess(data) {
+      const courseWithSectionsForEdit =
+        queryClient.getQueryData<CourseWithSectionsForEdit>([
+          courseWithSectionsForEditKey,
+          courseId,
+        ]);
+      queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+        ...courseWithSectionsForEdit,
+        duration: data.duration,
+      });
+    },
+    async onSettled() {
+      await queryClient.invalidateQueries({
+        queryKey: [courseAvatarKey, courseId],
+      });
+    },
+  });
+}
+
+export function useCoursePatchTagsMutation(courseId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (patchCourseDto: PatchCourseDto) =>
+      coursesControllerPatchCourse(courseId, patchCourseDto),
+    onSuccess(data) {
+      const courseWithSectionsForEdit =
+        queryClient.getQueryData<CourseWithSectionsForEdit>([
+          courseWithSectionsForEditKey,
+          courseId,
+        ]);
+      queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+        ...courseWithSectionsForEdit,
+        tags: data.tags,
+      });
+    },
+    async onSettled() {
+      await queryClient.invalidateQueries({
+        queryKey: [courseAvatarKey, courseId],
+      });
+    },
+  });
+}
+
+export function useCoursesReleaseMutation(courseId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => coursesControllerReleaseCourse(courseId),
+    onSuccess() {
+      const courseWithSectionsForEdit =
+        queryClient.getQueryData<CourseWithSectionsForEdit>([
+          courseWithSectionsForEditKey,
+          courseId,
+        ]);
+      queryClient.setQueryData([courseWithSectionsForEditKey, courseId], {
+        ...courseWithSectionsForEdit,
+        inDeveloping: false,
+      });
+    },
   });
 }
 
@@ -220,15 +351,21 @@ export function useSectionsPatchSequencesMutation() {
   });
 }
 
-export function useLessonsPatchSequencesMutation(
-  courseId: number,
-  sectionId: number,
-) {
+export function useLessonsPatchSequencesMutation(courseId: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (patchSequences: PatchSequences) =>
-      lessonsControllerPatchSequences(patchSequences),
-    onSuccess(data: any) {
+    mutationFn: ({
+      sectionId,
+      patchSequences,
+    }: {
+      sectionId: number;
+      patchSequences: PatchSequences;
+    }) => lessonsControllerPatchSequences(patchSequences),
+    onMutate(variables) {
+      return { sectionId: variables.sectionId };
+    },
+    onSuccess(data: any, variables) {
+      const { sectionId } = variables;
       const resCourseWithSectionsForEdit:
         | CourseWithSectionsForEdit
         | undefined = queryClient.getQueryData([
@@ -257,18 +394,27 @@ export function useLessonsPatchSequencesMutation(
   });
 }
 
-export function useSectionsPatchTitleMutation(sectionId: number) {
+export function useSectionsPatchTitleMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (patchSectionDto: PatchSectionDto) =>
-      sectionsControllerPatchSection(sectionId, patchSectionDto),
-    onSuccess(data: SectionDto) {
+    mutationFn: ({
+      sectionId,
+      patchSectionDto,
+    }: {
+      sectionId: number;
+      patchSectionDto: PatchSectionDto;
+    }) => sectionsControllerPatchSection(sectionId, patchSectionDto),
+    onMutate(variables) {
+      return { sectionId: variables.sectionId };
+    },
+    onSuccess(data: SectionDto, variables) {
       const resCourseWithSectionsForEdit:
         | CourseWithSectionsForEdit
         | undefined = queryClient.getQueryData([
         courseWithSectionsForEditKey,
         data.courseId,
       ]);
+      const { sectionId } = variables;
       if (resCourseWithSectionsForEdit) {
         const newSections =
           resCourseWithSectionsForEdit.sectionsWithLessons.map((section) => {
@@ -326,6 +472,17 @@ export function useLessonPatchTitleMutation(
   });
 }
 
+export function useLessonPatchTheoryMutation(lessonId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (patchLessonDto: PatchLessonDto) =>
+      lessonsControllerPatchLesson(lessonId, patchLessonDto),
+    onSuccess(data: LessonDto) {
+      queryClient.setQueryData([lessonEditItemKey, lessonId], data);
+    },
+  });
+}
+
 export function useSectionsCreateMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -340,7 +497,7 @@ export function useSectionsCreateMutation() {
       if (resCourseWithSectionsForEdit) {
         const newSections = [
           ...resCourseWithSectionsForEdit.sectionsWithLessons,
-          { ...data, lessons: [] },
+          data,
         ];
         queryClient.setQueryData(
           [courseWithSectionsForEditKey, data.courseId],

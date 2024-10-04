@@ -10,7 +10,7 @@ import { useEditorApi } from '../context';
 import cn from 'classnames';
 import styles from './text-editor.module.css';
 import { BLOCK_RENDER_MAP, CUSTOM_STYLE_MAP } from '../config';
-import { DragEvent } from 'react';
+import { DragEvent, useState } from 'react';
 import { imageValidation } from '@/helpers/image-validation';
 
 export const TextEditor = ({ className }: { className?: string }) => {
@@ -22,6 +22,7 @@ export const TextEditor = ({ className }: { className?: string }) => {
     blockRendererFn,
     insertImage,
     handlePastedFiles,
+    readOnly,
   } = useEditorApi();
 
   function handleDragOver(event: DragEvent<HTMLDivElement>) {
@@ -46,8 +47,8 @@ export const TextEditor = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(styles.textEditor, className)}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
+      onDragOver={readOnly ? undefined : handleDragOver}
+      onDrop={readOnly ? undefined : handleDrop}
     >
       <Editor
         editorState={state}
@@ -58,6 +59,7 @@ export const TextEditor = ({ className }: { className?: string }) => {
         keyBindingFn={handleKeyBinding}
         blockRendererFn={blockRendererFn}
         handlePastedFiles={handlePastedFiles}
+        readOnly={readOnly}
       />
     </div>
   );

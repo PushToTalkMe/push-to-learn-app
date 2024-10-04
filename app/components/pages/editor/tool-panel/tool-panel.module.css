@@ -1,21 +1,43 @@
 .toolPanel {
   display: flex;
   flex-wrap: wrap;
+  gap: 1px;
+  align-items: center;
+  justify-content: center;
 }
 
-.block.active {
-  color: orange;
-  background: var(--gray-light);
+.block {
+  box-sizing: border-box;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.block:hover svg path {
+  stroke: orange;
+}
+
+.block.active svg path {
+  stroke: orange;
 }
 
 .inlineStyle {
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   background: none;
+}
+
+.inlineStyle:hover {
+  background: var(--gray-light);
 }
 
 .inlineStyle.active {
   background: var(--gray-light);
-  outline: 1px solid var(--primary) !important;
 }
 
 .selectFontSize {
@@ -66,4 +88,29 @@
 
 .currentOption svg {
   transform: scale(0.5);
+}
+
+.uploadImage {
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputFile {
+  display: none;
+}
+
+.entity {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: none;
+  padding: 1px 6px;
+}
+
+.entity:hover svg path {
+  stroke: var(--primary);
 }
